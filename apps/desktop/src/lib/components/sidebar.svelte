@@ -1,0 +1,82 @@
+<script lang="ts">
+	import { Button } from '@haptic/ui/components/button';
+	import { cn } from '@/utils';
+	import Icon from './shared/icon.svelte';
+
+	let selected: 'notes' | 'daily' | 'tasks' | null = null;
+
+	const handleSelected = (value: 'notes' | 'daily' | 'tasks' | null) => {
+		if (selected === value) {
+			return (selected = null);
+		}
+
+		selected = value;
+	};
+</script>
+
+<div class="fixed left-0 h-full flex flex-col justify-between items-center w-12 py-12 border-r">
+	<div class="flex flex-col items-center gap-2">
+		<a href={selected === 'notes' ? '/notes' : '/'}>
+			<Button
+				size="icon"
+				variant="ghost"
+				class={cn(
+					'h-7 w-7 fill-foreground/50 hover:fill-foreground',
+					selected === 'notes' && 'fill-foreground bg-accent'
+				)}
+				scale="md"
+				on:click={() => handleSelected('notes')}
+			>
+				<Icon name="inboxFull" class="w-[18px] h-[18px]" />
+			</Button>
+		</a>
+		<a href="/daily">
+			<Button
+				size="icon"
+				variant="ghost"
+				class={cn(
+					'h-7 w-7 fill-foreground/50 hover:fill-foreground',
+					selected === 'daily' && 'fill-foreground'
+				)}
+				scale="md"
+				on:click={() => handleSelected('daily')}
+			>
+				<Icon name="calendarEdit" class="w-[18px] h-[18px]" />
+			</Button>
+		</a>
+		<a href="tasks">
+			<Button
+				size="icon"
+				variant="ghost"
+				class={cn(
+					'h-7 w-7 fill-foreground/50 hover:fill-foreground',
+					selected === 'tasks' && 'fill-foreground'
+				)}
+				scale="md"
+				on:click={() => handleSelected('tasks')}
+			>
+				<Icon name="checkSquare" class="w-[18px] h-[18px]" />
+			</Button>
+		</a>
+	</div>
+
+	<div class="flex flex-col items-center gap-2">
+		<Button
+			size="icon"
+			variant="ghost"
+			class="h-7 w-7 fill-foreground/50 hover:fill-foreground group"
+			scale="md"
+		>
+			<Icon name="folder" class="w-[18px] h-[18px] group-hover:hidden" />
+			<Icon name="folderOpen" class="w-[18px] h-[18px] hidden group-hover:block" />
+		</Button>
+		<Button
+			size="icon"
+			variant="ghost"
+			class="h-7 w-7 fill-foreground/50 hover:fill-foreground"
+			scale="md"
+		>
+			<Icon name="settings" class="w-[18px] h-[18px]" />
+		</Button>
+	</div>
+</div>
