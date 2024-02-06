@@ -2,4 +2,6 @@
 	import Editor from '@/components/tiptap/editor.svelte';
 </script>
 
-<Editor />
+<div class="flex flex-col w-full h-full px-4 py-2 items-start bg-secondary-background">
+	<Editor />
+</div>

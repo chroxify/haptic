@@ -2,9 +2,11 @@
 	import NotesSidebar from './notes-sidebar.svelte';
 </script>
 
-<NotesSidebar />
 <div
-	class="flex flex-col w-full h-screen items-center justify-center bg-secondary-background ml-64 py-12"
+	class="flex flex-col w-full h-[calc(100vh-4.5rem)] bg-secondary-background ml-12 overflow-hidden"
 >
-	<slot />
+	<NotesSidebar />
+	<div class="pl-52 h-full overflow-y-auto">
+		<slot />
+	</div>
 </div>

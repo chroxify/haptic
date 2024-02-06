@@ -3,27 +3,43 @@
 	import Icon from '@/components/shared/icon.svelte';
 	import { readDir } from '@tauri-apps/api/fs';
 	import type { FileEntry } from '@tauri-apps/api/fs';
+	import Folder from './folder.svelte';
 	let entries: FileEntry[] = [];
 
 	// Set paths to the entries in the given directory
-	async function processEntries(path: string) {
-		const entries = await readDir(path, { recursive: true });
+	async function processEntries(path: string, sort: 'name' | 'date' = 'name') {
+		entries = await readDir(path, { recursive: true });
 
-		return entries.forEach((entry) => {
-			entries.push(entry);
-		});
+		if (sort === 'name') {
+			entries.sort((a, b) => a.name!.localeCompare(b.name!));
+		}
+
+		// Remove hidden files
+		function filterEntries(entries: FileEntry[]): FileEntry[] {
+			return entries.filter((entry) => {
+				if (entry.name!.startsWith('.')) {
+					return false;
+				}
+				if (entry.children) {
+					entry.children = filterEntries(entry.children);
+				}
+				return true;
+			});
+		}
+
+		entries = filterEntries(entries);
 	}
 
-	processEntries('/Users/christo/Documents/Obsidian/Personal');
-
-	console.log(entries);
+	processEntries('').then(() => {
+		console.log(entries);
+	});
 </script>
 
 <div
-	class="fixed left-12 h-full flex flex-col justify-between items-center w-52 py-12 border-r px-4"
+	class="fixed left-12 h-full flex flex-col justify-start items-center w-52 border-r gap-2 bg-background"
 >
 	<!-- Controls -->
-	<div class="flex flex-row items-center justify-start gap-2 w-full">
+	<div class="flex flex-row items-center justify-start gap-2 w-full px-3.5 py-1.5 border-b">
 		<Button
 			size="icon"
 			variant="ghost"
@@ -55,4 +71,7 @@
 	</div>
 
 	<!-- Folders -->
+	<div class="flex flex-col items-start gap-2 w-full px-2">
+		<Folder {entries} />
+	</div>
 </div>

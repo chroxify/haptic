@@ -1,64 +1,48 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
+	import { editor } from '@/store';
 	import StarterKit from '@tiptap/starter-kit';
 	import { Markdown } from 'tiptap-markdown';
 
 	let element: HTMLDivElement;
-	let editor: Editor;
+	let tiptapEditor: Editor;
+	let timeout: number;
 
 	onMount(() => {
-		editor = new Editor({
+		tiptapEditor = new Editor({
 			element: element,
 			extensions: [StarterKit, Markdown],
 			content: '<p>Hello World! 🌍️ </p>',
 			editorProps: {
 				attributes: {
-					class:
-						'prose dark:prose-invert prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none'
+					class: 'prose dark:prose-invert mx-auto focus:outline-none'
 				}
 			},
 			onTransaction: () => {
 				// force re-render so `editor.isActive` works as expected
-				editor = editor;
+				tiptapEditor = tiptapEditor;
+				editor.set(tiptapEditor);
+			},
+			onUpdate: () => {
+				// If timeout before 500ms, clear it
+				if (timeout) {
+					clearTimeout(timeout);
+				}
+
+				// Set timeout to update the store
+				timeout = setTimeout(() => {
+					console.log('Stopped typing');
+				}, 750);
 			}
 		});
 	});
 
 	onDestroy(() => {
 		if (editor) {
-			editor.destroy();
+			tiptapEditor.destroy();
 		}
 	});
 </script>
 
-{#if editor}
-	<button
-		on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-		class:active={editor.isActive('heading', { level: 1 })}
-	>
-		H1
-	</button>
-	<button
-		on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-		class:active={editor.isActive('heading', { level: 2 })}
-	>
-		H2
-	</button>
-	<button
-		on:click={() => editor.chain().focus().setParagraph().run()}
-		class:active={editor.isActive('paragraph')}
-	>
-		P
-	</button>
-	<button on:click={() => editor.commands.setContent('- [ ] **test**')}> Set content </button>
-{/if}
-
 <div bind:this={element} />
-
-<style>
-	button.active {
-		background: black;
-		color: white;
-	}
-</style>
