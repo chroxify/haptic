@@ -18,12 +18,9 @@
 	{transition}
 	{transitionConfig}
 	{sideOffset}
-	class={cn(
-		'z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground',
-		className
-	)}
+	class={cn('z-50 rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground', className)}
 	{...$$restProps}
 >
-	<TooltipPrimitive.Arrow />
+	<TooltipPrimitive.Arrow class="bg-primary rounded-[1.5px]" />
 	<slot />
 </TooltipPrimitive.Content>
