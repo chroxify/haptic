@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { Button } from '@haptic/ui/components/button';
-	import { cn } from '@/utils';
+	import { cn } from '@haptic/ui/lib/utils';
 	import Icon from './shared/icon.svelte';
+	import { open } from '@tauri-apps/api/dialog';
+	import { collection } from '@/store';
 
 	let selected: 'notes' | 'daily' | 'tasks' | null = null;
 
@@ -11,6 +13,11 @@
 		}
 
 		selected = value;
+	};
+
+	const handleCollection = async () => {
+		const path = (await open({ directory: true })) as string;
+		collection.set(path);
 	};
 </script>
 
@@ -64,8 +71,9 @@
 		<Button
 			size="icon"
 			variant="ghost"
-			class="h-7 w-7 fill-foreground/50 hover:fill-foreground group"
+			class="h-7 w-7 fill-foreground/50 hover:fill-foreground group relative"
 			scale="md"
+			on:click={handleCollection}
 		>
 			<Icon name="folder" class="w-[18px] h-[18px] group-hover:hidden" />
 			<Icon name="folderOpen" class="w-[18px] h-[18px] hidden group-hover:block" />

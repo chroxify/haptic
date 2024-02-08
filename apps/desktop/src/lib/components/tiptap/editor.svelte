@@ -3,6 +3,7 @@
 	import { Editor } from '@tiptap/core';
 	import { editor } from '@/store';
 	import StarterKit from '@tiptap/starter-kit';
+	import Document from '@tiptap/extension-document';
 	import { Markdown } from 'tiptap-markdown';
 
 	let element: HTMLDivElement;
@@ -12,11 +13,25 @@
 	onMount(() => {
 		tiptapEditor = new Editor({
 			element: element,
-			extensions: [StarterKit, Markdown],
+			extensions: [
+				StarterKit.configure({
+					document: false,
+					hardBreak: false,
+					paragraph: {
+						HTMLAttributes: {
+							class: 'my-0'
+						}
+					}
+				}),
+				Document.extend({
+					content: 'heading block*'
+				}),
+				Markdown
+			],
 			content: '<p>Hello World! 🌍️ </p>',
 			editorProps: {
 				attributes: {
-					class: 'prose dark:prose-invert mx-auto focus:outline-none'
+					class: 'prose dark:prose-invert mx-auto focus:outline-none h-full'
 				}
 			},
 			onTransaction: () => {
@@ -45,4 +60,4 @@
 	});
 </script>
 
-<div bind:this={element} />
+<div bind:this={element} class="w-full h-full" />

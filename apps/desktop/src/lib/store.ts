@@ -3,4 +3,8 @@ import { Editor } from '@tiptap/core';
 
 const editor = writable<Editor>();
 
-export { editor };
+const activeFile = writable<string | null>(null);
+
+const collection = writable<string>();
+
+export { editor, activeFile, collection };

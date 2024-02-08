@@ -4,6 +4,7 @@
 	import { readDir } from '@tauri-apps/api/fs';
 	import type { FileEntry } from '@tauri-apps/api/fs';
 	import Folder from './folder.svelte';
+	import { collection } from '@/store';
 	let entries: FileEntry[] = [];
 
 	// Set paths to the entries in the given directory
@@ -30,13 +31,13 @@
 		entries = filterEntries(entries);
 	}
 
-	processEntries('').then(() => {
-		console.log(entries);
+	collection.subscribe((value) => {
+		processEntries(value);
 	});
 </script>
 
 <div
-	class="fixed left-12 h-full flex flex-col justify-start items-center w-52 border-r gap-2 bg-background"
+	class="fixed left-12 h-full flex flex-col justify-start items-center w-52 border-r gap-2 bg-background overflow-y-auto"
 >
 	<!-- Controls -->
 	<div class="flex flex-row items-center justify-start gap-2 w-full px-3.5 py-1.5 border-b">
