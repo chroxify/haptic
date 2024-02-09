@@ -44,6 +44,9 @@ importers:
       '@tiptap/extension-document':
         specifier: ^2.2.2
         version: 2.2.2(@tiptap/core@2.2.1)
+      '@tiptap/extension-typography':
+        specifier: ^2.2.2
+        version: 2.2.2(@tiptap/core@2.2.1)
       '@tiptap/pm':
         specifier: ^2.2.1
         version: 2.2.1
@@ -171,6 +174,9 @@ importers:
       lucide-svelte:
         specifier: ^0.321.0
         version: 0.321.0(svelte@4.2.8)
+      radix-icons-svelte:
+        specifier: ^1.2.1
+        version: 1.2.1
       tailwind-merge:
         specifier: ^2.2.1
         version: 2.2.1
@@ -1047,6 +1053,14 @@ packages:
 
   /@tiptap/extension-text@2.2.2(@tiptap/core@2.2.1):
     resolution: {integrity: sha512-Zj53Vp/9MSQj5uiaObFaD3y7grUpMy+PfHmrK5XAZSFhRx+QpGUp+oItlKod6IJEIu8rq4dChgE7i6kT9uwWlA==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+    dependencies:
+      '@tiptap/core': 2.2.1(@tiptap/pm@2.2.1)
+    dev: false
+
+  /@tiptap/extension-typography@2.2.2(@tiptap/core@2.2.1):
+    resolution: {integrity: sha512-mMK/VZQhwes/8HK5qoNbcgfBcNLorL+bZcISCmqHdXfhW6npJuuuzXBbfF3/dJr6pjdPO+qAVyrYkiCm1rr5Ow==}
     peerDependencies:
       '@tiptap/core': ^2.0.0
     dependencies:

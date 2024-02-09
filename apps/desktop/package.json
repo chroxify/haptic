@@ -43,6 +43,7 @@
 		"@tauri-apps/api": "^1.5.3",
 		"@tiptap/core": "^2.2.1",
 		"@tiptap/extension-document": "^2.2.2",
+		"@tiptap/extension-typography": "^2.2.2",
 		"@tiptap/pm": "^2.2.1",
 		"@tiptap/starter-kit": "^2.2.1",
 		"bits-ui": "^0.15.1",

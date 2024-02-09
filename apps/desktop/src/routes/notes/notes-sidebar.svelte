@@ -37,10 +37,12 @@
 </script>
 
 <div
-	class="fixed left-12 h-full flex flex-col justify-start items-center w-52 border-r gap-2 bg-background overflow-y-auto"
+	class="fixed left-12 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center w-52 border-r gap-2 bg-background overflow-y-auto pb-4"
 >
 	<!-- Controls -->
-	<div class="flex flex-row items-center justify-start gap-2 w-full px-3.5 py-1.5 border-b">
+	<div
+		class="sticky top-0 flex flex-row items-center justify-start gap-2 w-full px-3.5 py-1.5 border-b bg-background"
+	>
 		<Button
 			size="icon"
 			variant="ghost"

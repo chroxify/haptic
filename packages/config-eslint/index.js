@@ -27,5 +27,11 @@ module.exports = {
         parser: '@typescript-eslint/parser'
       }
     }
-  ]
+  ],
+  rules: {
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      { varsIgnorePattern: '^\\$\\$(Props|Events|Slots)$' }
+    ]
+  }
 };
