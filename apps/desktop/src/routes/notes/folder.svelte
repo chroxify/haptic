@@ -4,11 +4,12 @@
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import * as Collapsible from '@haptic/ui/components/collapsible';
 	import Icon from '@/components/shared/icon.svelte';
-	import { activeFile, editor } from '@/store';
+	import { activeFile, collection, editor } from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
 	import { EditorState } from '@tiptap/pm/state';
 
 	export let entries: FileEntry[];
+	let folderOpenStates: boolean[] = new Array(entries.length).fill(false);
 
 	function resetEditorContent(content: string, title: string) {
 		// Set document title
@@ -35,11 +36,18 @@
 		resetEditorContent(fileContent, path.split('/').pop()!.split('.').shift()!);
 		activeFile.set(path);
 	}
+
+	// Root padding is 0.75rem
+	// Each level of nesting adds 0.75rem
+	// Subtract file path length from collection path length for relative path depth
+	function calculateDepth(path: string) {
+		return `${(path.split('/').length - $collection.split('/').length) * 0.75}rem`;
+	}
 </script>
 
-{#each entries as entry}
+{#each entries as entry, i}
 	{#if entry.children}
-		<Collapsible.Root class="w-full">
+		<Collapsible.Root class="w-full" bind:open={folderOpenStates[i]}>
 			<Collapsible.Trigger asChild let:builder>
 				<Button
 					builders={[builder]}
@@ -47,8 +55,13 @@
 					variant="ghost"
 					scale="sm"
 					class="h-7 w-full fill-foreground/50 hover:fill-foreground transition-all flex items-center gap-2 justify-start"
+					style={`padding-left: ${calculateDepth(entry.path)}`}
 				>
-					<Icon name="folder" class="w-[18px] h-[18px]" />
+					<Icon name="folder" class={cn('w-[18px] h-[18px]', folderOpenStates[i] && 'hidden')} />
+					<Icon
+						name="folderOpen"
+						class={cn('w-[18px] h-[18px]', !folderOpenStates[i] && 'hidden')}
+					/>
 					<span class="text-xs">{entry.name}</span>
 				</Button>
 			</Collapsible.Trigger>
@@ -62,9 +75,10 @@
 			variant="ghost"
 			scale="sm"
 			class={cn(
-				'h-7 w-full transition-all flex items-center gap-2 justify-start pl-10',
+				'h-7 w-full transition-all flex items-center gap-2 justify-start',
 				$activeFile === entry.path && 'bg-accent'
 			)}
+			style={`padding-left: ${calculateDepth(entry.path)}`}
 			on:click={() => openFile(entry.path)}
 		>
 			<span class="text-xs truncate">{entry.name}</span>
