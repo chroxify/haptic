@@ -7,4 +7,6 @@ const activeFile = writable<string | null>(null);
 
 const collection = writable<string>();
 
-export { editor, activeFile, collection };
+const tooltipsOpen = writable(0);
+
+export { editor, activeFile, collection, tooltipsOpen };
