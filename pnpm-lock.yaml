@@ -71,6 +71,9 @@ importers:
       tailwind-variants:
         specifier: ^0.1.20
         version: 0.1.20(tailwindcss@3.4.1)
+      tauri-plugin-fs-watch-api:
+        specifier: github:tauri-apps/tauri-plugin-fs-watch#v1
+        version: github.com/tauri-apps/tauri-plugin-fs-watch/f74123edf269381171c5ef40a9599c3e87bb096a
       tiptap-markdown:
         specifier: ^0.8.9
         version: 0.8.9(@tiptap/core@2.2.1)
@@ -3595,3 +3598,11 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  github.com/tauri-apps/tauri-plugin-fs-watch/f74123edf269381171c5ef40a9599c3e87bb096a:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-watch/tar.gz/f74123edf269381171c5ef40a9599c3e87bb096a}
+    name: tauri-plugin-fs-watch-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.5.3
+    dev: false

@@ -2,6 +2,10 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
+import { type FileEntry } from '@tauri-apps/api/fs';
+import { get } from 'svelte/store';
+import { editor } from './store';
+import { EditorState } from '@tiptap/pm/state';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -54,3 +58,42 @@ export const flyAndScale = (
 		easing: cubicOut
 	};
 };
+
+// Filter out all hidden file entries (dotfiles)
+export function hideDotFiles(entries: FileEntry[]) {
+	return entries.filter((entry) => {
+		if (entry.name!.startsWith('.')) {
+			return false;
+		}
+		if (entry.children) {
+			entry.children = hideDotFiles(entry.children);
+		}
+		return true;
+	});
+}
+
+/**
+ * Resets the editors document title, updating the editor state, and focusing on the
+ * first element after the heading.
+ */
+export function resetEditorContent(content: string, title: string) {
+	const $editor = get(editor);
+
+	// Set document title
+	content = `# ${title}\n\n${content}`;
+
+	// Set content of the editor
+	$editor.commands.setContent(content);
+
+	// Update the editor state
+	const newEditorState = EditorState.create({
+		doc: $editor.state.doc,
+		plugins: $editor.state.plugins,
+		schema: $editor.state.schema
+	});
+	$editor.view.updateState(newEditorState);
+
+	// Focus first element after heading
+	const headingEndPos = content.indexOf('\n\n');
+	$editor.chain().focus().setTextSelection(headingEndPos).run();
+}

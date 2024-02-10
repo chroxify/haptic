@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { FileEntry } from '@tauri-apps/api/fs';
-	import { readTextFile } from '@tauri-apps/api/fs';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import * as Collapsible from '@haptic/ui/components/collapsible';
 	import * as ContextMenu from '@haptic/ui/components/context-menu';
 	import Icon from '@/components/shared/icon.svelte';
-	import { activeFile, collection, editor } from '@/store';
+	import { activeFile, collection } from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
-	import { EditorState } from '@tiptap/pm/state';
+	import { createNote, deleteNote, openNote } from '@/api/notes';
+	import { createFolder, deleteFolder } from '@/api/folders';
 
 	export let entries: FileEntry[];
 	let folderOpenStates: boolean[] = new Array(entries.length).fill(false);
@@ -15,32 +15,6 @@
 	// Get all directories in the collection
 	function getDirectories(entries: FileEntry[]): FileEntry[] {
 		return entries.filter((entry) => entry.children);
-	}
-
-	function resetEditorContent(content: string, title: string) {
-		// Set document title
-		content = `# ${title}\n\n${content}`;
-
-		// Set content of the editor
-		$editor.commands.setContent(content);
-
-		// Update the editor state
-		const newEditorState = EditorState.create({
-			doc: $editor.state.doc,
-			plugins: $editor.state.plugins,
-			schema: $editor.state.schema
-		});
-		$editor.view.updateState(newEditorState);
-
-		// Focus first element after heading
-		const headingEndPos = content.indexOf('\n\n');
-		$editor.chain().focus().setTextSelection(headingEndPos).run();
-	}
-
-	async function openFile(path: string) {
-		const fileContent = await readTextFile(path);
-		resetEditorContent(fileContent, path.split('/').pop()!.split('.').shift()!);
-		activeFile.set(path);
 	}
 
 	// Root padding is 0.75rem
@@ -78,7 +52,13 @@
 					</Collapsible.Trigger>
 				</ContextMenu.Trigger>
 				<ContextMenu.Content class="w-44">
-					<ContextMenu.Item class="flex items-center gap-2 font-base group">
+					<ContextMenu.Item
+						class="flex items-center gap-2 font-base group"
+						on:click={() => {
+							createNote(entry.path);
+							folderOpenStates[i] = true;
+						}}
+					>
 						<Icon
 							name="notePlus"
 							class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
@@ -86,7 +66,13 @@
 						New note
 						<ContextMenu.Shortcut>N</ContextMenu.Shortcut>
 					</ContextMenu.Item>
-					<ContextMenu.Item class="flex items-center gap-2 font-base group">
+					<ContextMenu.Item
+						class="flex items-center gap-2 font-base group"
+						on:click={() => {
+							createFolder(entry.path);
+							folderOpenStates[i] = true;
+						}}
+					>
 						<Icon
 							name="folderPlus"
 							class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
@@ -131,6 +117,7 @@
 					<ContextMenu.Separator />
 					<ContextMenu.Item
 						class="flex text-destructive data-[highlighted]:bg-destructive/20 data-[highlighted]:text-destructive items-center gap-2 font-base group"
+						on:click={() => deleteFolder(entry.path)}
 					>
 						<Icon name="bin" class="w-3.5 h-3.5 fill-destructive/70 group-hover:fill-destructive" />
 						Delete
@@ -154,7 +141,7 @@
 						$activeFile === entry.path && 'bg-accent'
 					)}
 					style={`padding-left: ${calculateDepth(entry.path)}`}
-					on:click={() => openFile(entry.path)}
+					on:click={() => openNote(entry.path)}
 				>
 					<span class="text-xs truncate">{entry.name}</span>
 				</Button>
@@ -213,6 +200,7 @@
 				<ContextMenu.Separator />
 				<ContextMenu.Item
 					class="flex text-destructive data-[highlighted]:bg-destructive/20 data-[highlighted]:text-destructive items-center gap-2 font-base group"
+					on:click={() => deleteNote(entry.path)}
 				>
 					<Icon name="bin" class="w-3.5 h-3.5 fill-destructive/70 group-hover:fill-destructive" />
 					Delete

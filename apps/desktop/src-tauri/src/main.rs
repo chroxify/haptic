@@ -17,6 +17,7 @@ fn main() {
 
         Ok(())
     })
+    .plugin(tauri_plugin_fs_watch::init())
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }

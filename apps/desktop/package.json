@@ -52,6 +52,7 @@
 		"radix-icons-svelte": "^1.2.1",
 		"tailwind-merge": "^2.2.1",
 		"tailwind-variants": "^0.1.20",
+		"tauri-plugin-fs-watch-api": "github:tauri-apps/tauri-plugin-fs-watch#v1",
 		"tiptap-markdown": "^0.8.9"
 	}
 }

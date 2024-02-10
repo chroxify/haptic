@@ -1,38 +1,38 @@
 <script lang="ts">
 	import { Button } from '@haptic/ui/components/button';
 	import Icon from '@/components/shared/icon.svelte';
-	import { readDir } from '@tauri-apps/api/fs';
-	import type { FileEntry } from '@tauri-apps/api/fs';
 	import Folder from './folder.svelte';
 	import { collection } from '@/store';
+	import { createNote } from '@/api/notes';
+	import { watchImmediate } from 'tauri-plugin-fs-watch-api';
+	import type { FileEntry } from '@tauri-apps/api/fs';
+	import { fetchCollectionEntries } from '@/api/collection';
+	import type { UnlistenFn } from '@tauri-apps/api/event';
+	import { createFolder } from '@/api/folders';
+
 	let entries: FileEntry[] = [];
+	let stopWatching: UnlistenFn;
 
-	// Set paths to the entries in the given directory
-	async function processEntries(path: string, sort: 'name' | 'date' = 'name') {
-		entries = await readDir(path, { recursive: true });
+	// Watch for changes in the collection
+	async function watchCollection() {
+		const stopWatching = await watchImmediate(
+			$collection,
+			async () => {
+				entries = await fetchCollectionEntries($collection);
+			},
+			{ recursive: true }
+		);
 
-		if (sort === 'name') {
-			entries.sort((a, b) => a.name!.localeCompare(b.name!));
-		}
-
-		// Remove hidden files
-		function filterEntries(entries: FileEntry[]): FileEntry[] {
-			return entries.filter((entry) => {
-				if (entry.name!.startsWith('.')) {
-					return false;
-				}
-				if (entry.children) {
-					entry.children = filterEntries(entry.children);
-				}
-				return true;
-			});
-		}
-
-		entries = filterEntries(entries);
+		return stopWatching;
 	}
 
-	collection.subscribe((value) => {
-		processEntries(value);
+	collection.subscribe(async (value) => {
+		entries = await fetchCollectionEntries(value);
+
+		if (value) {
+			if (stopWatching) stopWatching();
+			stopWatching = await watchCollection();
+		}
 	});
 </script>
 
@@ -47,6 +47,7 @@
 			size="icon"
 			variant="ghost"
 			class="h-7 w-7 fill-foreground/50 hover:fill-foreground transition-all"
+			on:click={async () => createNote($collection)}
 		>
 			<Icon name="notePlus" class="w-[18px] h-[18px]" />
 		</Button>
@@ -54,6 +55,7 @@
 			size="icon"
 			variant="ghost"
 			class="h-7 w-7 fill-foreground/50 hover:fill-foreground transition-all"
+			on:click={async () => createFolder($collection)}
 		>
 			<Icon name="folderPlus" class="w-[18px] h-[18px]" />
 		</Button>
