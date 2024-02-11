@@ -8,6 +8,7 @@
 	import { cn } from '@haptic/ui/lib/utils';
 	import { createNote, deleteNote, openNote } from '@/api/notes';
 	import { createFolder, deleteFolder } from '@/api/folders';
+	import { showInFolder } from '@/utils';
 
 	export let entries: FileEntry[];
 	let folderOpenStates: boolean[] = new Array(entries.length).fill(false);
@@ -109,7 +110,10 @@
 						</ContextMenu.SubContent>
 					</ContextMenu.Sub>
 					<ContextMenu.Separator />
-					<ContextMenu.Item class="flex items-center gap-2 font-base group">
+					<ContextMenu.Item
+						class="flex items-center gap-2 font-base group"
+						on:click={() => showInFolder(entry.path)}
+					>
 						<Icon name="eye" class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground" />
 						Show in Finder
 						<ContextMenu.Shortcut>⌘E</ContextMenu.Shortcut>
@@ -161,7 +165,10 @@
 					<ContextMenu.Shortcut>D</ContextMenu.Shortcut>
 				</ContextMenu.Item>
 				<ContextMenu.Separator />
-				<ContextMenu.Item class="flex items-center gap-2 font-base group">
+				<ContextMenu.Item
+					class="flex items-center gap-2 font-base group"
+					on:click={() => showInFolder(entry.path)}
+				>
 					<Icon name="eye" class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground" />
 					Show in Finder
 					<ContextMenu.Shortcut>⌘E</ContextMenu.Shortcut>

@@ -6,6 +6,7 @@ import { type FileEntry } from '@tauri-apps/api/fs';
 import { get } from 'svelte/store';
 import { editor } from './store';
 import { EditorState } from '@tiptap/pm/state';
+import { invoke } from '@tauri-apps/api/tauri';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -96,4 +97,9 @@ export function resetEditorContent(content: string, title: string) {
 	// Focus first element after heading
 	const headingEndPos = content.indexOf('\n\n');
 	$editor.chain().focus().setTextSelection(headingEndPos).run();
+}
+
+// Show in folder
+export async function showInFolder(path: string) {
+	await invoke('show_in_folder', { path });
 }

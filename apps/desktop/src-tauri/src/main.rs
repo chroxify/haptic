@@ -3,6 +3,7 @@
 
 #[cfg(target_os = "macos")]
 mod mac;
+mod commands;
 
 fn main() {
   tauri::Builder::default()
@@ -17,6 +18,7 @@ fn main() {
 
         Ok(())
     })
+    .invoke_handler(tauri::generate_handler![commands::folder::show_in_folder])
     .plugin(tauri_plugin_fs_watch::init())
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
