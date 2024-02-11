@@ -33,7 +33,7 @@
 			content: '<p>Hello World! 🌍️ </p>',
 			editorProps: {
 				attributes: {
-					class: 'prose dark:prose-invert mx-auto focus:outline-none min-h-full py-6'
+					class: 'prose prose-theme mx-auto focus:outline-none min-h-full py-6 select-text'
 				}
 			},
 			onTransaction: () => {

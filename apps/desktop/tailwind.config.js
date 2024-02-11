@@ -57,7 +57,29 @@ const config = {
 			},
 			fontFamily: {
 				sans: [...fontFamily.sans]
-			}
+			},
+			typography: () => ({
+				theme: {
+					css: {
+						'--tw-prose-body': 'hsl(var(--foreground) / 0.9)',
+						'--tw-prose-headings': 'hsl(var(--foreground) / 1)',
+						'--tw-prose-lead': 'hsl(var(--foreground) / 0.9)',
+						'--tw-prose-links': 'hsl(var(--primary) / 1)',
+						'--tw-prose-bold': 'hsl(var(--foreground) / 1)',
+						'--tw-prose-counters': 'hsl(var(--foreground) / 0.3)',
+						'--tw-prose-bullets': 'hsl(var(--foreground) / 0.3)',
+						'--tw-prose-hr': 'hsl(var(--border) / 1)',
+						'--tw-prose-quotes': 'hsl(var(--foreground) / 0.9)',
+						'--tw-prose-quote-borders': 'hsl(var(--border) / 1)',
+						'--tw-prose-captions': 'hsl(var(--foreground) / 0.6)',
+						'--tw-prose-code': 'hsl(var(--foreground) / 1)',
+						'--tw-prose-pre-code': 'hsl(var(--foreground) / 1)',
+						'--tw-prose-pre-bg': 'hsl(var(--background) / 1)',
+						'--tw-prose-th-borders': 'hsl(var(--border) / 1)',
+						'--tw-prose-td-borders': 'hsl(var(--border) / 1)'
+					}
+				}
+			})
 		}
 	},
 	plugins: [
