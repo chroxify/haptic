@@ -11,7 +11,10 @@
 	import { showInFolder } from '@/utils';
 
 	export let entries: FileEntry[];
-	let folderOpenStates: boolean[] = new Array(entries.length).fill(false);
+	export let toggleState: 'collapse' | 'expand';
+	let folderOpenStates: boolean[] = [];
+
+	$: toggleState = folderOpenStates.every((state) => state === false) ? 'expand' : 'collapse';
 
 	// Get all directories in the collection
 	function getDirectories(entries: FileEntry[]): FileEntry[] {
@@ -23,6 +26,18 @@
 	// Subtract file path length from collection path length for relative path depth
 	function calculateDepth(path: string) {
 		return `${(path.split('/').length - $collection.split('/').length) * 0.75}rem`;
+	}
+
+	export function toggleFolderStates() {
+		folderOpenStates = folderOpenStates.map(() => (toggleState === 'expand' ? true : false));
+	}
+
+	// Watch for entries changes and update folderOpenStates array
+	// This is necessary as the folderOpenStates array would be empty until collapsible is used to set the initial state
+	$: {
+		if (folderOpenStates.length !== entries.length) {
+			folderOpenStates = new Array(entries.length).fill(false);
+		}
 	}
 </script>
 

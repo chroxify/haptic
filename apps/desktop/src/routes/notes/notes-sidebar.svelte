@@ -12,6 +12,8 @@
 	import Tooltip from '@/components/shared/tooltip.svelte';
 
 	let entries: FileEntry[] = [];
+	let folderToggleState: 'collapse' | 'expand';
+	let toggleFolderStates: () => void;
 	let stopWatching: UnlistenFn;
 
 	// Watch for changes in the collection
@@ -29,7 +31,6 @@
 
 	collection.subscribe(async (value) => {
 		entries = await fetchCollectionEntries(value);
-
 		if (value) {
 			if (stopWatching) stopWatching();
 			stopWatching = await watchCollection();
@@ -66,6 +67,26 @@
 				<Icon name="folderPlus" class="w-[18px] h-[18px]" />
 			</Button>
 		</Tooltip>
+		<Tooltip
+			text={folderToggleState === 'collapse' ? 'Collapse folders' : 'Expand folders'}
+			side="bottom"
+		>
+			<Button
+				size="icon"
+				variant="ghost"
+				scale="md"
+				class="h-7 w-7 fill-foreground/50 hover:fill-foreground"
+				on:click={async () => {
+					toggleFolderStates();
+				}}
+			>
+				<Icon
+					name="collapse"
+					class="w-[18px] h-[18px] transition-all"
+					style={`transform: rotate(${folderToggleState === 'collapse' ? '0deg' : '180deg'})`}
+				/>
+			</Button>
+		</Tooltip>
 		<Button
 			size="icon"
 			variant="ghost"
@@ -84,6 +105,6 @@
 
 	<!-- Folders -->
 	<div class="flex flex-col items-start gap-2 w-full px-2">
-		<Folder {entries} />
+		<Folder {entries} bind:toggleFolderStates bind:toggleState={folderToggleState} />
 	</div>
 </div>
