@@ -2,6 +2,7 @@ import { writeTextFile, readDir, readTextFile, renameFile } from '@tauri-apps/ap
 import { activeFile } from '@/store';
 import { resetEditorContent } from '@/utils';
 import { homeDir } from '@tauri-apps/api/path';
+import { get } from 'svelte/store';
 
 // Create a new note
 export const createNote = async (dirPath: string) => {
@@ -39,4 +40,9 @@ export const deleteNote = async (path: string) => {
 export const renameNote = async (path: string, name: string) => {
 	await renameFile(path, `${path.split('/').slice(0, -1).join('/')}/${name}`);
 	activeFile.set(`${path.split('/').slice(0, -1).join('/')}/${name}`);
+};
+
+// Save active note
+export const saveNote = async (path: string, content: string) => {
+	await writeTextFile(path, content);
 };

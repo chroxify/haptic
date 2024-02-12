@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
-	import { editor } from '@/store';
+	import { editor, activeFile } from '@/store';
 	import StarterKit from '@tiptap/starter-kit';
 	import Document from '@tiptap/extension-document';
 	import { Typography } from '@tiptap/extension-typography';
 	import { Markdown } from 'tiptap-markdown';
+	import { saveNote } from '@/api/notes';
 
 	let element: HTMLDivElement;
 	let tiptapEditor: Editor;
@@ -20,7 +21,7 @@
 					hardBreak: false,
 					paragraph: {
 						HTMLAttributes: {
-							class: 'my-0'
+							class: 'my-0 leading-5'
 						}
 					}
 				}),
@@ -28,7 +29,9 @@
 					content: 'heading block*'
 				}),
 				Typography,
-				Markdown
+				Markdown.configure({
+					transformPastedText: true
+				})
 			],
 			content: '<p>Hello World! 🌍️ </p>',
 			editorProps: {
@@ -41,7 +44,7 @@
 				tiptapEditor = tiptapEditor;
 				editor.set(tiptapEditor);
 			},
-			onUpdate: () => {
+			onUpdate: async () => {
 				// If timeout before 500ms, clear it
 				if (timeout) {
 					clearTimeout(timeout);
@@ -49,8 +52,15 @@
 
 				// Set timeout to update the store
 				timeout = setTimeout(() => {
-					console.log('Stopped typing');
-					// const title = tiptapEditor.getHTML().split('</h1>')[0].split('<h1>')[1];
+					// Save file
+					let content = tiptapEditor.storage.markdown.getMarkdown();
+
+					// Remove the first heading title
+					content = content.replace(/^# .*\n/, '');
+
+					saveNote($activeFile!, content).catch((error) => {
+						console.error('Error saving note:', error);
+					});
 				}, 750);
 			}
 		});
@@ -63,4 +73,4 @@
 	});
 </script>
 
-<div bind:this={element} class="w-full h-full" />
+<div bind:this={element} spellcheck="false" autocorrect="false" class="w-full h-full" />
