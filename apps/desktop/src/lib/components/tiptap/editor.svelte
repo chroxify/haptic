@@ -7,6 +7,9 @@
 	import { Typography } from '@tiptap/extension-typography';
 	import { Markdown } from 'tiptap-markdown';
 	import { saveNote } from '@/api/notes';
+	import { TaskList } from '@tiptap/extension-task-list';
+	import { TaskItem } from '@tiptap/extension-task-item';
+	import { Link } from '@tiptap/extension-link';
 
 	let element: HTMLDivElement;
 	let tiptapEditor: Editor;
@@ -29,7 +32,22 @@
 					content: 'heading block*'
 				}),
 				Typography,
+				TaskList,
+				TaskItem.configure({
+					HTMLAttributes: {
+						class:
+							'flex items-start pl-1.5 gap-2 [&>div]:mb-0 [&>label]:mt-0 [&>div]:w-full [&>div>p]:inline-block [&>label]:inline-flex [&>label]:items-center [&>label>input]:rounded-md'
+					},
+					nested: true
+				}),
+				Link.configure({
+					HTMLAttributes: {
+						class:
+							'text-primary underline hover:text-primary/80 transition-all cursor-pointer text-base [&>*]:font-normal'
+					}
+				}),
 				Markdown.configure({
+					linkify: true,
 					transformPastedText: true
 				})
 			],
@@ -73,4 +91,63 @@
 	});
 </script>
 
-<div bind:this={element} spellcheck="false" autocorrect="false" class="w-full h-full" />
+<div bind:this={element} spellcheck="false" autocorrect="false" class="w-full h-full px-8" />
+
+<style>
+	div :global(ul[data-type='taskList']) {
+		list-style: none;
+		padding: 0;
+		user-select: none;
+	}
+
+	div :global(ul[data-type='taskList'] li > label input[type='checkbox']) {
+		-webkit-appearance: none;
+		appearance: none;
+		transition: 120ms all ease-in-out;
+		/* background-color: hsl(var(--background) / 1); */
+		margin: 0;
+		cursor: pointer;
+		width: 1.2em;
+		height: 1.2em;
+		position: relative;
+		top: 5px;
+		border: 1px solid hsl(var(--border) / 1);
+		display: grid;
+		place-content: center;
+
+		&:hover {
+			background-color: hsl(var(--accent) / 1);
+			border: 1px solid hsl(var(--foreground) / 0.6);
+		}
+
+		/* &:checked {
+			background-color: hsl(var(--primary) / 1);
+		} */
+
+		&::before {
+			content: '';
+			width: 0.65em;
+			height: 0.65em;
+			transform: scale(0);
+			transition: 120ms transform ease-in-out;
+			box-shadow: inset 1em 1em;
+			transform-origin: center;
+			clip-path: polygon(10% 44%, 0 65%, 40% 100%, 100% 10%, 80% 0%, 43% 62%);
+		}
+
+		&:checked::before {
+			transform: scale(1);
+		}
+	}
+
+	div :global(ul[data-type='taskList'] li[data-checked='true'] > div > p) {
+		color: hsl(var(--foreground) / 0.6);
+		text-decoration: line-through;
+		text-decoration-thickness: 1px;
+	}
+
+	div :global(ul[data-type='taskList'] li > label) {
+		margin-right: 0.2rem;
+		user-select: none;
+	}
+</style>
