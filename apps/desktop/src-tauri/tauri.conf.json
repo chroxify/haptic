@@ -59,11 +59,13 @@
     },
     "windows": [
       {
-        "fullscreen": false,
-        "height": 600,
-        "resizable": true,
         "title": "Haptic",
-        "width": 800
+        "width": 1020,
+        "minWidth": 350,
+        "height": 750,
+        "minHeight": 250,
+        "fullscreen": false,
+        "resizable": true
       }
     ]
   }
