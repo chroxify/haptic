@@ -24,7 +24,7 @@
 					hardBreak: false,
 					paragraph: {
 						HTMLAttributes: {
-							class: 'my-0 leading-5'
+							class: 'min-w-[1px] my-1 leading-5'
 						}
 					}
 				}),
