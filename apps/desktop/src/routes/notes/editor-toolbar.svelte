@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from '@haptic/ui/lib/utils';
 	import Icon from '@/components/shared/icon.svelte';
-	import { activeFile, collection, editor } from '@/store';
+	import { activeFile, collection, editor, isNotesSidebarOpen } from '@/store';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import Tooltip from '@/components/shared/tooltip.svelte';
 
@@ -12,13 +12,22 @@
 	class="sticky gap-2 min-h-10 top-0 px-3 z-10 flex items-center justify-between w-full bg-secondary-background"
 >
 	<div class="flex gap-1.5 select-none">
-		<Tooltip text="Collapse" side="bottom">
+		<Tooltip text={$isNotesSidebarOpen ? 'Collapse' : 'Expand'} side="bottom">
 			<Button
 				size="icon"
 				variant="ghost"
 				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				on:click={() => {
+					isNotesSidebarOpen.update((state) => !state);
+				}}
 			>
-				<Icon name="sidebarArrow" class="w-4 h-4 transform rotate-180" />
+				<Icon
+					name="sidebarArrow"
+					class={cn(
+						'w-4 h-4 transform transition-transform',
+						$isNotesSidebarOpen ? 'rotate-180' : ''
+					)}
+				/>
 			</Button>
 		</Tooltip>
 		<Tooltip text="Previous note" side="bottom">

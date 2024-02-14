@@ -7,6 +7,18 @@ const activeFile = writable<string | null>(null);
 
 const collection = writable<string>();
 
-const tooltipsOpen = writable(0);
+const tooltipsOpen = writable<number>(0);
 
-export { editor, activeFile, collection, tooltipsOpen };
+const isNotesSidebarOpen = writable<boolean>(true);
+const notesSidebarWidth = writable<number>(200);
+const resizingNotesSidebar = writable<boolean>(false);
+
+export {
+	editor,
+	activeFile,
+	collection,
+	tooltipsOpen,
+	isNotesSidebarOpen,
+	notesSidebarWidth,
+	resizingNotesSidebar
+};
