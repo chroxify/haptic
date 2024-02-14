@@ -1,11 +1,17 @@
 <script lang="ts">
 	import { cn } from '@haptic/ui/lib/utils';
 	import Icon from '@/components/shared/icon.svelte';
-	import { activeFile, collection, editor, isNotesSidebarOpen } from '@/store';
+	import { activeFile, collection, editor, isNotesSidebarOpen, noteHistory } from '@/store';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import Tooltip from '@/components/shared/tooltip.svelte';
+	import { openNote } from '@/api/notes';
 
 	let mode: 'edit' | 'view' = 'edit';
+	let historyIndex: number = 0;
+
+	noteHistory.subscribe((value) => {
+		historyIndex = value.length - 1;
+	});
 </script>
 
 <div
@@ -35,6 +41,14 @@
 				size="icon"
 				variant="ghost"
 				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				disabled={!$noteHistory?.length || $noteHistory?.length === 1 || historyIndex === 0}
+				on:click={() => {
+					// Decrement the history index
+					historyIndex--;
+
+					// Set the active file to the previous note
+					openNote($noteHistory[historyIndex], true);
+				}}
 			>
 				<Icon name="arrowLeft" class="w-4 h-4" />
 			</Button>
@@ -44,6 +58,16 @@
 				size="icon"
 				variant="ghost"
 				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				disabled={!$noteHistory?.length ||
+					$noteHistory?.length === 1 ||
+					historyIndex === $noteHistory?.length - 1}
+				on:click={() => {
+					// Increment the history index
+					historyIndex++;
+
+					// Set the active file to the next note
+					openNote($noteHistory[historyIndex], true);
+				}}
 			>
 				<Icon name="arrowRight" class="w-4 h-4" />
 			</Button>

@@ -1,5 +1,5 @@
 import { writeTextFile, readDir, readTextFile, renameFile } from '@tauri-apps/api/fs';
-import { activeFile } from '@/store';
+import { activeFile, noteHistory } from '@/store';
 import { resetEditorContent } from '@/utils';
 import { homeDir } from '@tauri-apps/api/path';
 import { get } from 'svelte/store';
@@ -23,10 +23,18 @@ export const createNote = async (dirPath: string) => {
 };
 
 // Open a note
-export async function openNote(path: string) {
+export async function openNote(path: string, skipHistory = false) {
 	const fileContent = await readTextFile(path);
 	resetEditorContent(fileContent, path.split('/').pop()!.split('.').shift()!);
 	activeFile.set(path);
+	if (!skipHistory) {
+		noteHistory.update((history) => {
+			if (history[history.length - 1] !== path) {
+				return [...history, path];
+			}
+			return history;
+		});
+	}
 }
 
 // Delete a note

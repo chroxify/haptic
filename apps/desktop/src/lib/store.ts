@@ -4,6 +4,7 @@ import { Editor } from '@tiptap/core';
 const editor = writable<Editor>();
 
 const activeFile = writable<string | null>(null);
+const noteHistory = writable<string[]>([]);
 
 const collection = writable<string>();
 
@@ -20,5 +21,6 @@ export {
 	tooltipsOpen,
 	isNotesSidebarOpen,
 	notesSidebarWidth,
-	resizingNotesSidebar
+	resizingNotesSidebar,
+	noteHistory
 };
