@@ -46,3 +46,44 @@ export const renameNote = async (path: string, name: string) => {
 export const saveNote = async (path: string, content: string) => {
 	await writeTextFile(path, content);
 };
+
+export const moveNote = async (source: string, target: string) => {
+	// Get target directory
+	const files = await readDir(target);
+
+	// Make sure there are no name conflicts
+	const noteName = source.split('/').pop()!;
+
+	if (files.some((file) => file.name === noteName && file.children === undefined)) {
+		throw new Error('Name conflict');
+	}
+
+	await renameFile(source, target + '/' + noteName);
+	openNote(target + '/' + noteName);
+};
+
+// Duplicate a note (format: "<name> (<number>).<ext>") - <number> is incremented if there are any existing notes with the same name
+export const duplicateNote = async (path: string) => {
+	// Fetch the content of the note
+	const content = await readTextFile(path);
+
+	// Extract the name and extension of the note
+	const name = path
+		.split('/')
+		.pop()!
+		.split('.')
+		.shift()!
+		.replace(/\s\(\d+\)$/, '');
+	const ext = path.split('.').pop()!;
+
+	// Get current index of the note
+	const files = await readDir(path.split('/').slice(0, -1).join('/'));
+	const notes = files.filter((file) => file.name?.startsWith(name) && file.children === undefined);
+
+	// Write the new note
+	const newName = `${name} (${notes.length}).${ext}`;
+	await writeTextFile(`${path.split('/').slice(0, -1).join('/')}/${newName}`, content);
+
+	// Open the new note
+	openNote(`${path.split('/').slice(0, -1).join('/')}/${newName}`);
+};

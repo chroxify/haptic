@@ -47,3 +47,18 @@ export const deleteFolder = async (path: string, recursive = false) => {
 export const renameFolder = async (path: string, name: string) => {
 	await renameFile(path, `${path.split('/').slice(0, -1).join('/')}/${name}`);
 };
+
+// Move a folder
+export const moveFolder = async (source: string, target: string) => {
+	// Get target directory
+	const files = await readDir(target);
+
+	// Make sure there are no name conflicts
+	const folderName = source.split('/').pop()!;
+
+	if (files.some((file) => file.name === folderName && file.children !== undefined)) {
+		throw new Error('Name conflict');
+	}
+
+	await renameFile(source, `${target}/${folderName}`);
+};

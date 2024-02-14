@@ -6,7 +6,7 @@
 	import Icon from '@/components/shared/icon.svelte';
 	import { activeFile, collection } from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
-	import { createNote, deleteNote, openNote } from '@/api/notes';
+	import { createNote, deleteNote, duplicateNote, moveNote, openNote } from '@/api/notes';
 	import { createFolder, deleteFolder } from '@/api/folders';
 	import { showInFolder } from '@/utils';
 
@@ -113,7 +113,10 @@
 						<ContextMenu.SubContent class="w-40">
 							{#each getDirectories(entries) as directory}
 								{#if directory.name !== entry.name}
-									<ContextMenu.Item class="flex items-center gap-2 font-base group">
+									<ContextMenu.Item
+										class="flex items-center gap-2 font-base group"
+										on:click={() => moveNote(entry.path, directory.path)}
+									>
 										<Icon
 											name="folder"
 											class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
@@ -174,7 +177,10 @@
 					Rename
 					<ContextMenu.Shortcut>R</ContextMenu.Shortcut>
 				</ContextMenu.Item>
-				<ContextMenu.Item class="flex items-center gap-2 font-base group">
+				<ContextMenu.Item
+					class="flex items-center gap-2 font-base group"
+					on:click={() => duplicateNote(entry.path)}
+				>
 					<Icon name="copy" class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground" />
 					Duplicate
 					<ContextMenu.Shortcut>D</ContextMenu.Shortcut>
@@ -197,7 +203,10 @@
 					<ContextMenu.SubContent class="w-40">
 						{#each getDirectories(entries) as directory}
 							{#if directory.name !== entry.name}
-								<ContextMenu.Item class="flex items-center gap-2 font-base group">
+								<ContextMenu.Item
+									class="flex items-center gap-2 font-base group"
+									on:click={() => moveNote(entry.path, directory.path)}
+								>
 									<Icon
 										name="folder"
 										class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
