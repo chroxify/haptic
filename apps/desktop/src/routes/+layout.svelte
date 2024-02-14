@@ -43,3 +43,21 @@
 	<slot />
 </main>
 <Footer />
+
+<style>
+	/* Custom scrollbar */
+	:global(::-webkit-scrollbar) {
+		width: 14px;
+	}
+
+	:global(::-webkit-scrollbar-thumb) {
+		border: 4px solid rgba(0, 0, 0, 0);
+		background-clip: padding-box;
+		border-radius: 50px;
+		background-color: hsl(var(--border) / 1);
+
+		&:hover {
+			background-color: hsl(var(--foreground) / 0.15);
+		}
+	}
+</style>
