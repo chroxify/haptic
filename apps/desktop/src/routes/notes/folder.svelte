@@ -52,18 +52,22 @@
 							size="sm"
 							variant="ghost"
 							scale="sm"
-							class="h-7 w-full fill-foreground/50 hover:fill-foreground transition-all flex items-center gap-2 justify-start"
+							class="h-7 w-full fill-foreground/50 hover:fill-foreground transition-all flex items-center justify-between"
 							style={`padding-left: ${calculateDepth(entry.path)}`}
 						>
-							<Icon
-								name="folder"
-								class={cn('w-[18px] h-[18px]', folderOpenStates[i] && 'hidden')}
-							/>
-							<Icon
-								name="folderOpen"
-								class={cn('w-[18px] h-[18px]', !folderOpenStates[i] && 'hidden')}
-							/>
-							<span class="text-xs">{entry.name}</span>
+							<div class="flex items-center gap-2">
+								<Icon
+									name="folder"
+									class={cn('w-[18px] h-[18px]', folderOpenStates[i] && 'hidden')}
+								/>
+								<Icon
+									name="folderOpen"
+									class={cn('w-[18px] h-[18px]', !folderOpenStates[i] && 'hidden')}
+								/>
+								<span class="text-xs">{entry.name}</span>
+							</div>
+							<!-- TODO: Make this an optional feature -->
+							<span class="text-xs text-foreground/40 font-light">{entry.children.length}</span>
 						</Button>
 					</Collapsible.Trigger>
 				</ContextMenu.Trigger>
