@@ -1,5 +1,5 @@
 import { writeTextFile, readDir, readTextFile, renameFile } from '@tauri-apps/api/fs';
-import { activeFile, noteHistory } from '@/store';
+import { activeFile, editor, noteHistory } from '@/store';
 import { resetEditorContent } from '@/utils';
 import { homeDir } from '@tauri-apps/api/path';
 import { get } from 'svelte/store';
@@ -51,7 +51,13 @@ export const renameNote = async (path: string, name: string) => {
 };
 
 // Save active note
-export const saveNote = async (path: string, content: string) => {
+export const saveNote = async (path: string) => {
+	// Get note content
+	let content = get(editor).storage.markdown.getMarkdown();
+
+	// Remove the first heading title
+	content = content.replace(/^# .*\n/, '');
+
 	await writeTextFile(path, content);
 };
 

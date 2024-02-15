@@ -70,13 +70,7 @@
 
 				// Set timeout to update the store
 				timeout = setTimeout(() => {
-					// Save file
-					let content = tiptapEditor.storage.markdown.getMarkdown();
-
-					// Remove the first heading title
-					content = content.replace(/^# .*\n/, '');
-
-					saveNote($activeFile!, content).catch((error) => {
+					saveNote($activeFile!).catch((error) => {
 						console.error('Error saving note:', error);
 					});
 				}, 750);

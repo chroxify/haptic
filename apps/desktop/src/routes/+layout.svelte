@@ -6,6 +6,7 @@
 	import Sidebar from '@/components/sidebar.svelte';
 	import { collection } from '@/store';
 	import { readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
+	import Command from '@/components/command-menu/command.svelte';
 
 	// Prevent right-clicking in production
 	// TODO: Test if this even works in production (not sure if tauri has access to env variables)
@@ -36,6 +37,7 @@
 </script>
 
 <ModeWatcher />
+<Command />
 
 <Header />
 <Sidebar />

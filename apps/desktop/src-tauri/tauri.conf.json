@@ -61,9 +61,9 @@
       {
         "title": "Haptic",
         "width": 1020,
-        "minWidth": 350,
+        "minWidth": 800,
         "height": 750,
-        "minHeight": 250,
+        "minHeight": 600,
         "fullscreen": false,
         "resizable": true
       }

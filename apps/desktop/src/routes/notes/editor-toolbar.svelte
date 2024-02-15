@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { cn } from '@haptic/ui/lib/utils';
 	import Icon from '@/components/shared/icon.svelte';
-	import { activeFile, collection, editor, isNotesSidebarOpen, noteHistory } from '@/store';
+	import {
+		activeFile,
+		collection,
+		editor,
+		editorMode,
+		isNotesSidebarOpen,
+		noteHistory
+	} from '@/store';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import Tooltip from '@/components/shared/tooltip.svelte';
 	import { openNote } from '@/api/notes';
-
-	let mode: 'edit' | 'view' = 'edit';
 	let historyIndex: number = 0;
 
 	noteHistory.subscribe((value) => {
@@ -96,26 +101,25 @@
 		</p>
 	</div>
 	<div class="flex gap-1.5">
-		<Tooltip text={mode === 'edit' ? 'Edit mode' : 'View mode'} side="bottom">
+		<Tooltip text={$editorMode === 'edit' ? 'View mode' : 'Edit mode'} side="bottom">
 			<Button
 				size="icon"
 				variant="ghost"
 				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
 				on:click={() => {
 					// TODO: Implement source mode in future
-					// Loop through modes in order: edit -> view -> edit
-					mode = mode === 'edit' ? 'view' : 'edit';
-
 					// Set the mode
-					if (mode === 'edit') {
-						$editor.setEditable(true);
-					} else if (mode === 'view') {
+					if ($editorMode === 'edit') {
 						$editor.setEditable(false);
+						editorMode.set('view');
+					} else if ($editorMode === 'view') {
+						$editor.setEditable(true);
+						editorMode.set('edit');
 					}
 				}}
 			>
-				<Icon name="editPencil" class={cn('w-4 h-4', mode !== 'edit' && 'hidden')} />
-				<Icon name="glasses" class={cn('w-4 h-4', mode !== 'view' && 'hidden')} />
+				<Icon name="editPencil" class={cn('w-4 h-4', $editorMode === 'edit' && 'hidden')} />
+				<Icon name="glasses" class={cn('w-4 h-4', $editorMode === 'view' && 'hidden')} />
 			</Button>
 		</Tooltip>
 		<Tooltip text="Expand" side="bottom">

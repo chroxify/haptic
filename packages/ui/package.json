@@ -14,6 +14,7 @@
   "dependencies": {
     "bits-ui": "^0.16.0",
     "clsx": "^2.1.0",
+    "cmdk-sv": "^0.0.13",
     "lucide-svelte": "^0.321.0",
     "radix-icons-svelte": "^1.2.1",
     "tailwind-merge": "^2.2.1",
