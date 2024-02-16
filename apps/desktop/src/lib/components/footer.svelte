@@ -14,7 +14,7 @@
 				on:click={toggleMode}
 				size="icon"
 				variant="ghost"
-				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				scale="md"
 			>
 				<Icon name="moon" class="w-4 h-4 hidden dark:block" />
@@ -26,7 +26,7 @@
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				scale="md"
 			>
 				<Icon name="cloudX" class="w-4 h-4" />
@@ -39,7 +39,7 @@
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				scale="md"
 			>
 				<Icon name="lifebouy" class="w-4 h-4" />
@@ -49,7 +49,7 @@
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				scale="md"
 			>
 				<Icon name="bolt" class="w-4 h-4" />
@@ -59,7 +59,7 @@
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				scale="md"
 			>
 				<Icon name="share" class="w-4 h-4" />

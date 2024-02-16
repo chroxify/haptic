@@ -52,7 +52,7 @@
 							size="sm"
 							variant="ghost"
 							scale="sm"
-							class="h-7 w-full fill-foreground/50 hover:fill-foreground transition-all flex items-center justify-between"
+							class="h-7 w-full fill-muted-foreground hover:fill-foreground transition-all flex items-center justify-between"
 							style={`padding-left: ${calculateDepth(entry.path)}`}
 						>
 							<div class="flex items-center gap-2">

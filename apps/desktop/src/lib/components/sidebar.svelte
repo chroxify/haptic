@@ -26,7 +26,7 @@
 					size="icon"
 					variant="ghost"
 					class={cn(
-						'h-7 w-7 fill-foreground/50 hover:fill-foreground',
+						'h-7 w-7 fill-muted-foreground hover:fill-foreground',
 						selected === 'notes' && 'fill-foreground bg-accent'
 					)}
 					scale="md"
@@ -42,7 +42,7 @@
 					size="icon"
 					variant="ghost"
 					class={cn(
-						'h-7 w-7 fill-foreground/50 hover:fill-foreground',
+						'h-7 w-7 fill-muted-foreground hover:fill-foreground',
 						selected === 'daily' && 'fill-foreground'
 					)}
 					scale="md"
@@ -58,7 +58,7 @@
 					size="icon"
 					variant="ghost"
 					class={cn(
-						'h-7 w-7 fill-foreground/50 hover:fill-foreground',
+						'h-7 w-7 fill-muted-foreground hover:fill-foreground',
 						selected === 'tasks' && 'fill-foreground'
 					)}
 					scale="md"
@@ -75,7 +75,7 @@
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-7 w-7 fill-foreground/50 hover:fill-foreground group relative"
+				class="h-7 w-7 fill-muted-foreground hover:fill-foreground group relative"
 				scale="md"
 				on:click={loadCollection}
 			>
@@ -87,7 +87,7 @@
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-7 w-7 fill-foreground/50 hover:fill-foreground"
+				class="h-7 w-7 fill-muted-foreground hover:fill-foreground"
 				scale="md"
 			>
 				<Icon name="settings" class="w-[18px] h-[18px]" />
