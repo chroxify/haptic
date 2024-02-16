@@ -24,7 +24,25 @@
 		if (!newPage) {
 			open = false;
 			openedWithShortcut = '';
+		} else {
+			// Add bounce animation for page change
+			const dialog = document.querySelector('[data-dialog-content]');
+
+			if (dialog) {
+				dialog.animate(
+					[
+						{ transform: 'scale(1)' },
+						{ transform: 'scale(0.98, 0.98)' },
+						{ transform: 'scale(1, 1)' }
+					],
+					{
+						duration: 225,
+						easing: 'ease'
+					}
+				);
+			}
 		}
+
 		page = newPage;
 		search = '';
 	}
@@ -73,10 +91,16 @@
 	bind:value
 	loop
 	onKeydown={(e) => {
-		// TODO: Implement page closing with backspace key
-		if (e.key === 'Escape' || (e.key === 'Backspace' && !search)) {
+		if (e.key === 'Escape') {
 			handlePageState(undefined);
 			openedWithShortcut = '';
+		} else if (
+			e.key === 'Backspace' &&
+			!search &&
+			page !== 'default' &&
+			openedWithShortcut === 'cmd+k'
+		) {
+			handlePageState('default');
 		}
 	}}
 >
