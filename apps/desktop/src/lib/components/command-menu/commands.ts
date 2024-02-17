@@ -1,6 +1,6 @@
 import { createFolder } from '@/api/folders';
 import { createNote, deleteNote, duplicateNote, saveNote } from '@/api/notes';
-import { collection, editor, editorMode, isNotesSidebarOpen } from '@/store';
+import { collection, editor, editorMode, editorSearchActive, isNotesSidebarOpen } from '@/store';
 import { get } from 'svelte/store';
 import { loadCollection } from '@/api/collection';
 import type { IconKey } from '../shared/icon.svelte';
@@ -63,7 +63,10 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Find in note',
 				icon: 'searchDocument',
-				shortcut: ['cmd', 'f']
+				shortcut: ['cmd', 'f'],
+				onSelect: () => {
+					editorSearchActive.set(true);
+				}
 			}
 		]
 	},

@@ -68,12 +68,12 @@ importers:
       clsx:
         specifier: ^2.1.0
         version: 2.1.0
+      lucide-svelte:
+        specifier: ^0.321.0
+        version: 0.321.0(svelte@4.2.8)
       mode-watcher:
         specifier: ^0.1.2
         version: 0.1.2(svelte@4.2.8)
-      radix-icons-svelte:
-        specifier: ^1.2.1
-        version: 1.2.1
       tailwind-merge:
         specifier: ^2.2.1
         version: 2.2.1

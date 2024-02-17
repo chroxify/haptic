@@ -10,6 +10,7 @@
 	import { TaskList } from '@tiptap/extension-task-list';
 	import { TaskItem } from '@tiptap/extension-task-item';
 	import { Link } from '@tiptap/extension-link';
+	import SearchAndReplace from './extensions';
 
 	let element: HTMLDivElement;
 	let tiptapEditor: Editor;
@@ -30,6 +31,10 @@
 				}),
 				Document.extend({
 					content: 'heading block*'
+				}),
+				SearchAndReplace.configure({
+					searchResultClass: 'search-result',
+					disableRegex: false
 				}),
 				Typography,
 				TaskList,
@@ -143,5 +148,13 @@
 	div :global(ul[data-type='taskList'] li > label) {
 		margin-right: 0.2rem;
 		user-select: none;
+	}
+
+	div :global(.search-result) {
+		background-color: hsl(var(--muted));
+	}
+
+	div :global(.search-result-current) {
+		background-color: rgba(248, 160, 30, 0.5);
 	}
 </style>

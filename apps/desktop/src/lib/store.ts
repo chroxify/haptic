@@ -6,6 +6,7 @@ const editor = writable<Editor>();
 const activeFile = writable<string | null>(null);
 const noteHistory = writable<string[]>([]);
 const editorMode = writable<'edit' | 'view'>('edit');
+const editorSearchActive = writable<boolean>(false);
 
 const collection = writable<string>();
 
@@ -24,5 +25,6 @@ export {
 	notesSidebarWidth,
 	resizingNotesSidebar,
 	noteHistory,
-	editorMode
+	editorMode,
+	editorSearchActive
 };
