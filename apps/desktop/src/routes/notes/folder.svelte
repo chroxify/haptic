@@ -8,7 +8,9 @@
 	import { cn } from '@haptic/ui/lib/utils';
 	import { createNote, deleteNote, duplicateNote, moveNote, openNote } from '@/api/notes';
 	import { createFolder, deleteFolder } from '@/api/folders';
-	import { showInFolder } from '@/utils';
+	import { shortcutToString, showInFolder } from '@/utils';
+	import Shortcut from '@/components/shared/shortcut.svelte';
+	import { SHORTCUTS } from '@/shortcuts';
 
 	export let entries: FileEntry[];
 	export let toggleState: 'collapse' | 'expand';
@@ -55,6 +57,22 @@
 							class="h-7 w-full fill-muted-foreground hover:fill-foreground transition-all flex items-center justify-between"
 							style={`padding-left: ${calculateDepth(entry.path)}`}
 						>
+							<Shortcut
+								options={SHORTCUTS['folder:create']}
+								callback={() => createFolder(entry.path)}
+							/>
+							<Shortcut
+								options={SHORTCUTS['folder:create-note']}
+								callback={() => createNote(entry.path)}
+							/>
+							<Shortcut
+								options={SHORTCUTS['folder:delete']}
+								callback={() => deleteFolder(entry.path)}
+							/>
+							<Shortcut
+								options={SHORTCUTS['folder:show-in-folder']}
+								callback={() => showInFolder(entry.path)}
+							/>
 							<div class="flex items-center gap-2">
 								<Icon
 									name="folder"
@@ -84,7 +102,9 @@
 							class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
 						/>
 						New note
-						<ContextMenu.Shortcut>N</ContextMenu.Shortcut>
+						<ContextMenu.Shortcut
+							>{shortcutToString(SHORTCUTS['folder:create-note'])}</ContextMenu.Shortcut
+						>
 					</ContextMenu.Item>
 					<ContextMenu.Item
 						class="flex items-center gap-2 font-base group"
@@ -98,7 +118,9 @@
 							class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
 						/>
 						New folder
-						<ContextMenu.Shortcut>F</ContextMenu.Shortcut>
+						<ContextMenu.Shortcut
+							>{shortcutToString(SHORTCUTS['folder:create'])}</ContextMenu.Shortcut
+						>
 					</ContextMenu.Item>
 					<ContextMenu.Separator />
 					<ContextMenu.Item class="flex items-center gap-2 font-base group">
@@ -107,7 +129,8 @@
 							class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
 						/>
 						Rename
-						<ContextMenu.Shortcut>R</ContextMenu.Shortcut>
+						<ContextMenu.Shortcut>{shortcutToString(SHORTCUTS['note:rename'])}</ContextMenu.Shortcut
+						>
 					</ContextMenu.Item>
 					<ContextMenu.Sub>
 						<ContextMenu.SubTrigger class="flex items-center gap-2 font-base group">
@@ -138,7 +161,9 @@
 					>
 						<Icon name="eye" class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground" />
 						Show in Finder
-						<ContextMenu.Shortcut>⌘E</ContextMenu.Shortcut>
+						<ContextMenu.Shortcut
+							>{shortcutToString(SHORTCUTS['folder:show-in-folder'])}</ContextMenu.Shortcut
+						>
 					</ContextMenu.Item>
 					<ContextMenu.Separator />
 					<ContextMenu.Item
@@ -147,7 +172,9 @@
 					>
 						<Icon name="bin" class="w-3.5 h-3.5 fill-destructive/70 group-hover:fill-destructive" />
 						Delete
-						<ContextMenu.Shortcut class="text-destructive/60">⌘⌫</ContextMenu.Shortcut>
+						<ContextMenu.Shortcut class="text-destructive/60"
+							>{shortcutToString(SHORTCUTS['folder:delete'])}</ContextMenu.Shortcut
+						>
 					</ContextMenu.Item>
 				</ContextMenu.Content>
 			</ContextMenu.Root>
@@ -169,6 +196,15 @@
 					style={`padding-left: ${calculateDepth(entry.path)}`}
 					on:click={() => openNote(entry.path)}
 				>
+					<Shortcut
+						options={SHORTCUTS['note:duplicate']}
+						callback={() => duplicateNote(entry.path)}
+					/>
+					<Shortcut options={SHORTCUTS['note:delete']} callback={() => deleteNote(entry.path)} />
+					<Shortcut
+						options={SHORTCUTS['note:show-in-folder']}
+						callback={() => showInFolder(entry.path)}
+					/>
 					<span class="text-xs truncate">{entry.name}</span>
 				</Button>
 			</ContextMenu.Trigger>
@@ -179,7 +215,7 @@
 						class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
 					/>
 					Rename
-					<ContextMenu.Shortcut>R</ContextMenu.Shortcut>
+					<ContextMenu.Shortcut>{shortcutToString(SHORTCUTS['note:rename'])}</ContextMenu.Shortcut>
 				</ContextMenu.Item>
 				<ContextMenu.Item
 					class="flex items-center gap-2 font-base group"
@@ -187,7 +223,9 @@
 				>
 					<Icon name="copy" class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground" />
 					Duplicate
-					<ContextMenu.Shortcut>D</ContextMenu.Shortcut>
+					<ContextMenu.Shortcut
+						>{shortcutToString(SHORTCUTS['note:duplicate'])}</ContextMenu.Shortcut
+					>
 				</ContextMenu.Item>
 				<ContextMenu.Separator />
 				<ContextMenu.Item
@@ -196,7 +234,9 @@
 				>
 					<Icon name="eye" class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground" />
 					Show in Finder
-					<ContextMenu.Shortcut>⌘E</ContextMenu.Shortcut>
+					<ContextMenu.Shortcut
+						>{shortcutToString(SHORTCUTS['note:show-in-folder'])}</ContextMenu.Shortcut
+					>
 				</ContextMenu.Item>
 				<ContextMenu.Sub>
 					<ContextMenu.SubTrigger class="flex items-center gap-2 font-base group">
@@ -239,7 +279,9 @@
 				>
 					<Icon name="bin" class="w-3.5 h-3.5 fill-destructive/70 group-hover:fill-destructive" />
 					Delete
-					<ContextMenu.Shortcut class="text-destructive/60">⌘⌫</ContextMenu.Shortcut>
+					<ContextMenu.Shortcut class="text-destructive/60"
+						>{shortcutToString(SHORTCUTS['note:delete'])}</ContextMenu.Shortcut
+					>
 				</ContextMenu.Item>
 			</ContextMenu.Content>
 		</ContextMenu.Root>

@@ -12,6 +12,8 @@
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import Tooltip from '@/components/shared/tooltip.svelte';
 	import { openNote } from '@/api/notes';
+	import { SHORTCUTS } from '@/shortcuts';
+	import Shortcut from '@/components/shared/shortcut.svelte';
 	let historyIndex: number = 0;
 
 	noteHistory.subscribe((value) => {
@@ -23,15 +25,21 @@
 	class="sticky gap-2 min-h-10 top-0 px-3 z-10 flex items-center justify-between w-full bg-secondary-background"
 >
 	<div class="flex gap-1.5 select-none">
-		<Tooltip text={$isNotesSidebarOpen ? 'Collapse' : 'Expand'} side="bottom">
+		<Tooltip
+			text={$isNotesSidebarOpen ? 'Collapse' : 'Expand'}
+			side="bottom"
+			shortcut={SHORTCUTS['notes:toggle-sidebar']}
+		>
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				scale="md"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				on:click={() => {
 					isNotesSidebarOpen.update((state) => !state);
 				}}
 			>
+				<Shortcut options={SHORTCUTS['notes:toggle-sidebar']} />
 				<Icon
 					name="sidebarArrow"
 					class={cn(
@@ -45,7 +53,8 @@
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				scale="md"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				disabled={!$noteHistory?.length || $noteHistory?.length === 1 || historyIndex === 0}
 				on:click={() => {
 					// Decrement the history index
@@ -62,7 +71,8 @@
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				scale="md"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				disabled={!$noteHistory?.length ||
 					$noteHistory?.length === 1 ||
 					historyIndex === $noteHistory?.length - 1}
@@ -79,14 +89,15 @@
 		</Tooltip>
 	</div>
 	<div class="flex gap-1.5">
-		<p class="text-xs flex items-center text-foreground/50 fill-foreground/50">
+		<p class="text-xs flex items-center text-muted-foreground fill-muted-foreground">
 			{#each $activeFile?.replace($collection, '').split('/') ?? [] as folder, i}
 				{#if i !== 0}
 					<Button
 						size="sm"
 						variant="ghost"
+						scale="sm"
 						class={cn(
-							'h-6 text-[13px] w-fit px-1.5 fill-foreground/50 hover:fill-foreground transition-all font-normal',
+							'h-6 text-[13px] w-fit px-1.5 fill-muted-foreground hover:fill-foreground transition-all font-normal',
 							i === ($activeFile?.replace($collection, '').split('/') ?? [])?.length - 1 &&
 								'text-foreground font-medium'
 						)}
@@ -101,11 +112,16 @@
 		</p>
 	</div>
 	<div class="flex gap-1.5">
-		<Tooltip text={$editorMode === 'edit' ? 'View mode' : 'Edit mode'} side="bottom">
+		<Tooltip
+			text={$editorMode === 'edit' ? 'View mode' : 'Edit mode'}
+			side="bottom"
+			shortcut={SHORTCUTS['editor:toggle-mode']}
+		>
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				scale="md"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				on:click={() => {
 					// TODO: Implement source mode in future
 					// Set the mode
@@ -118,6 +134,7 @@
 					}
 				}}
 			>
+				<Shortcut options={SHORTCUTS['editor:toggle-mode']} />
 				<Icon name="editPencil" class={cn('w-4 h-4', $editorMode === 'edit' && 'hidden')} />
 				<Icon name="glasses" class={cn('w-4 h-4', $editorMode === 'view' && 'hidden')} />
 			</Button>
@@ -126,7 +143,8 @@
 			<Button
 				size="icon"
 				variant="ghost"
-				class="h-6 w-6 fill-foreground/50 hover:fill-foreground transition-all"
+				scale="md"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 			>
 				<Icon name="sidebarArrow" class="w-4 h-4 transform rotate-180" />
 			</Button>

@@ -7,6 +7,7 @@ import { get } from 'svelte/store';
 import { editor } from './store';
 import { EditorState } from '@tiptap/pm/state';
 import { invoke } from '@tauri-apps/api/tauri';
+import type { ShortcutParams } from './shortcuts';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -102,4 +103,48 @@ export function resetEditorContent(content: string, title: string) {
 // Show in folder
 export async function showInFolder(path: string) {
 	await invoke('show_in_folder', { path });
+}
+
+// Shortcut to string
+export function shortcutToString(shortcut: ShortcutParams) {
+	const keys = [];
+
+	if (shortcut.command) keys.push('⌘');
+	if (shortcut.alt) keys.push('⌥');
+	if (shortcut.shift) keys.push('⇧');
+
+	switch (shortcut.key) {
+		case 'Backspace':
+			keys.push('⌫');
+			break;
+		case 'Enter':
+			keys.push('⏎');
+			break;
+		case 'Tab':
+			keys.push('⇥');
+			break;
+		case 'Delete':
+			keys.push('⌦');
+			break;
+		case 'Escape':
+			keys.push('⎋');
+			break;
+		case 'ArrowUp':
+			keys.push('↑');
+			break;
+		case 'ArrowDown':
+			keys.push('↓');
+			break;
+		case 'ArrowLeft':
+			keys.push('←');
+			break;
+		case 'ArrowRight':
+			keys.push('→');
+			break;
+		default:
+			keys.push(shortcut.key.toUpperCase());
+			break;
+	}
+
+	return keys.join('');
 }

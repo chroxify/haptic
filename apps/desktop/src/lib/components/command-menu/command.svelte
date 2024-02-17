@@ -7,6 +7,7 @@
 	import { getAllItems } from './helpers';
 	import { mainCommands as commands, createNoteCommands } from './commands';
 	import { setMode, mode } from 'mode-watcher';
+	import Shortcut from '../shared/shortcut.svelte';
 
 	let open = false;
 	let search = '';
@@ -16,7 +17,8 @@
 
 	const shortcutKeyMap: Record<string, string | undefined> = {
 		'cmd+k': 'default',
-		'cmd+j': 'open_note'
+		'cmd+j': 'open_note',
+		'cmd+shift+m': 'move_note'
 	};
 
 	// If a page is provided, it opens that page, otherwise it closes the menu
@@ -49,11 +51,13 @@
 
 	onMount(() => {
 		function handleKeydown(e: KeyboardEvent) {
-			const keyPressed = `${e.metaKey || e.ctrlKey ? 'cmd+' : ''}${e.key}`;
+			const keyPressed = `${e.metaKey || e.ctrlKey ? 'cmd+' : ''}${e.shiftKey ? 'shift+' : ''}${
+				e.key
+			}`;
 			if (
-				(e.metaKey || e.ctrlKey) &&
+				(e.metaKey || e.ctrlKey || e.shiftKey) &&
 				shortcutKeyMap[keyPressed] &&
-				(openedWithShortcut === `cmd+${e.key}` || openedWithShortcut === '')
+				(openedWithShortcut === keyPressed || openedWithShortcut === '')
 			) {
 				e.preventDefault();
 				openedWithShortcut = keyPressed;

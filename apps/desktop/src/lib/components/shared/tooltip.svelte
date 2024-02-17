@@ -1,7 +1,10 @@
-<script>
+<script lang="ts">
 	import { tooltipsOpen } from '@/store';
 	import * as Tooltip from '@haptic/ui/components/tooltip';
+	import type { ShortcutParams } from '@/shortcuts';
+	import { shortcutToString } from '@/utils';
 	export let text = 'Tooltip';
+	export let shortcut: ShortcutParams | undefined = undefined;
 
 	// TODO: Find out why sometimes it needs refresh to work properly again after a while #BUG
 </script>
@@ -22,5 +25,12 @@
 	<Tooltip.Trigger><slot /></Tooltip.Trigger>
 	<Tooltip.Content {...$$props} transitionConfig={{ duration: $tooltipsOpen > 1 ? 125 : 175 }}>
 		{text}
+		{#if shortcut}
+			<span
+				class="pointer-events-none inline-flex h-[18px] pl-1.5 tracking-widest -mr-2 select-none items-center gap-1 rounded bg-muted px-1 font-mono font-medium text-foreground/70 opacity-100"
+			>
+				{shortcutToString(shortcut)}
+			</span>
+		{/if}
 	</Tooltip.Content>
 </Tooltip.Root>
