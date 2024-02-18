@@ -60,6 +60,13 @@
 		}
 	};
 
+	const getCurrentTextSelection = () => {
+		if (!$editor) return;
+
+		const { from, to } = $editor.state.selection;
+		return $editor.state.doc.textBetween(from, to);
+	};
+
 	const close = () => {
 		searchValue = '';
 		replaceValue = '';
@@ -93,6 +100,7 @@
 			if ($editorSearchActive) {
 				close();
 			} else {
+				searchValue = getCurrentTextSelection() || '';
 				editorSearchActive.set(true);
 			}
 		}}
