@@ -217,16 +217,16 @@
 									options={SHORTCUTS['folder:show-in-folder']}
 									callback={() => showInFolder(entry.path)}
 								/>
-								<div class="flex items-center gap-2">
+								<div class="flex items-center w-[calc(100%-20px)] gap-2">
 									<Icon
 										name="folder"
-										class={cn('w-[18px] h-[18px]', folderOpenStates[i] && 'hidden')}
+										class={cn('w-[18px] h-[18px] shrink-0', folderOpenStates[i] && 'hidden')}
 									/>
 									<Icon
 										name="folderOpen"
-										class={cn('w-[18px] h-[18px]', !folderOpenStates[i] && 'hidden')}
+										class={cn('w-[18px] h-[18px] shrink-0', !folderOpenStates[i] && 'hidden')}
 									/>
-									<span class="text-xs">{entry.name}</span>
+									<span class="text-xs truncate">{entry.name}</span>
 								</div>
 								<!-- TODO: Make this an optional feature -->
 								<span class="text-xs text-foreground/40 font-light">{entry.children.length}</span>
