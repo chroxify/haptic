@@ -7,7 +7,7 @@
 	import { activeFile, collection } from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
 	import { createNote, deleteNote, duplicateNote, moveNote, openNote } from '@/api/notes';
-	import { createFolder, deleteFolder } from '@/api/folders';
+	import { createFolder, deleteFolder, moveFolder } from '@/api/folders';
 	import { shortcutToString, showInFolder } from '@/utils';
 	import Shortcut from '@/components/shared/shortcut.svelte';
 	import { SHORTCUTS } from '@/shortcuts';
@@ -15,7 +15,8 @@
 	export let entries: FileEntry[];
 	export let toggleState: 'collapse' | 'expand';
 	let folderOpenStates: boolean[] = [];
-	let dragItem: HTMLElement | null = null; // Reference to the dragged item
+	let dragItem: HTMLElement | null = null; // Reference to the original element being dragged
+	let dragPreviewItem: HTMLElement | null = null; // Reference to the custom drag preview element
 	let previousHighlightedElement: HTMLElement | null = null;
 
 	$: toggleState = folderOpenStates.every((state) => state === false) ? 'expand' : 'collapse';
@@ -49,17 +50,20 @@
 		// Specify the effect allowed for the drag
 		event.dataTransfer!.effectAllowed = 'move';
 
+		// Set dragItem to the original element being dragged
+		dragItem = event.currentTarget as HTMLElement;
+
 		// Create a custom drag preview element
-		dragItem = document.createElement('div');
-		dragItem.classList.add('drag-item');
-		dragItem.textContent = filename;
-		document.body.appendChild(dragItem);
+		dragPreviewItem = document.createElement('div');
+		dragPreviewItem.classList.add('drag-item');
+		dragPreviewItem.textContent = filename;
+		document.body.appendChild(dragPreviewItem);
 
 		// Set the opacity of the original element
 		(event.currentTarget as HTMLElement).style.opacity = '0.5';
 
 		// Set the drag image to the custom element
-		event.dataTransfer?.setDragImage(dragItem, 0, 0);
+		event.dataTransfer?.setDragImage(dragPreviewItem, 0, 0);
 
 		// Add dragover event listener to document
 		document.addEventListener('dragover', handleDragOver);
@@ -73,13 +77,36 @@
 		// Check for collapsible root
 		const collapsibleTriggerElement = element.closest('[data-collapsible-root]');
 		if (collapsibleTriggerElement) {
-			highlightElement = collapsibleTriggerElement as HTMLElement;
+			if (
+				dragItem?.hasAttribute('data-is-folder') &&
+				collapsibleTriggerElement === dragItem?.closest('[data-collapsible-root]')
+			) {
+				// Select the next collapsible root parent, if none select the collection root itself
+				let parentElement: HTMLElement | null = collapsibleTriggerElement.parentElement;
+
+				// Loop through the parent elements until finding a root collapsible parent
+				while (parentElement) {
+					if (parentElement !== dragItem?.closest('[data-collapsible-root]')) {
+						highlightElement = parentElement.parentElement as HTMLElement;
+						break;
+					}
+					parentElement = parentElement.parentElement;
+				}
+
+				// If no collapsible parent is found, select the collection root
+				if (!highlightElement) {
+					const collectionRoot = document.querySelector('[data-collection-root]');
+					if (collectionRoot) {
+						highlightElement = collectionRoot as HTMLElement;
+					}
+				}
+			} else {
+				highlightElement = collapsibleTriggerElement as HTMLElement;
+			}
 		} else {
 			// Check for collection folder only if collapsible root is not present
 			const collectionFolderElement = element.closest('[data-collection-root]');
-			if (collectionFolderElement && !dragItem?.contains(collectionFolderElement)) {
-				highlightElement = collectionFolderElement as HTMLElement;
-			}
+			highlightElement = collectionFolderElement as HTMLElement;
 		}
 
 		if (highlightElement) {
@@ -102,29 +129,44 @@
 	}
 
 	// Function to handle drag end
-	function handleDragEnd(event: DragEvent, path: string) {
-		if (dragItem) {
+	function handleDragEnd(event: DragEvent, path: string, isFolder: boolean = false) {
+		if (dragPreviewItem) {
 			// Remove the custom element
-			document.body.removeChild(dragItem);
-			dragItem = null;
+			document.body.removeChild(dragPreviewItem);
+			dragPreviewItem = null;
 		}
+
+		// Reset the dragItem
+		dragItem = null;
 
 		// Reset the opacity of the original element
 		(event.currentTarget as HTMLElement).style.opacity = '';
 
 		if (previousHighlightedElement) {
 			// Check if the note is not being dropped in the same folder it's currently in
-			if (
-				previousHighlightedElement.getAttribute('data-path') !==
-					path.split('/').slice(0, -1).join('/') &&
-				previousHighlightedElement.firstElementChild?.getAttribute('data-path') !==
-					path.split('/').slice(0, -1).join('/')
-			) {
+			const isSameFolder =
+				previousHighlightedElement.getAttribute('data-path') ===
+					path.split('/').slice(0, -1).join('/') ||
+				previousHighlightedElement.firstElementChild?.getAttribute('data-path') ===
+					path.split('/').slice(0, -1).join('/');
+
+			if (!isSameFolder) {
 				// Move the note to the folder
 				if (previousHighlightedElement.hasAttribute('data-collection-root')) {
-					moveNote(path, previousHighlightedElement.getAttribute('data-path')!);
+					if (isFolder) {
+						moveFolder(path, previousHighlightedElement.getAttribute('data-path')!);
+					} else {
+						moveNote(path, previousHighlightedElement.getAttribute('data-path')!);
+					}
 				} else if (previousHighlightedElement.firstElementChild?.getAttribute('data-path')) {
-					moveNote(path, previousHighlightedElement.firstElementChild.getAttribute('data-path')!);
+					if (isFolder) {
+						moveFolder(
+							path,
+							previousHighlightedElement.firstElementChild.getAttribute('data-path')!
+						);
+					} else {
+						moveNote(path, previousHighlightedElement.firstElementChild.getAttribute('data-path')!);
+					}
 				}
 			}
 
@@ -143,46 +185,58 @@
 		<Collapsible.Root class="w-full" bind:open={folderOpenStates[i]}>
 			<ContextMenu.Root>
 				<ContextMenu.Trigger data-path={entry.path}>
-					<Collapsible.Trigger asChild let:builder>
-						<Button
-							builders={[builder]}
-							size="sm"
-							variant="ghost"
-							scale="sm"
-							class="h-7 w-full fill-muted-foreground hover:fill-foreground transition-all flex items-center justify-between"
-							style={`padding-left: ${calculateDepth(entry.path)}`}
-						>
-							<Shortcut
-								options={SHORTCUTS['folder:create']}
-								callback={() => createFolder(entry.path)}
-							/>
-							<Shortcut
-								options={SHORTCUTS['folder:create-note']}
-								callback={() => createNote(entry.path)}
-							/>
-							<Shortcut
-								options={SHORTCUTS['folder:delete']}
-								callback={() => deleteFolder(entry.path)}
-							/>
-							<Shortcut
-								options={SHORTCUTS['folder:show-in-folder']}
-								callback={() => showInFolder(entry.path)}
-							/>
-							<div class="flex items-center gap-2">
-								<Icon
-									name="folder"
-									class={cn('w-[18px] h-[18px]', folderOpenStates[i] && 'hidden')}
+					<div
+						class="w-full h-full"
+						role="button"
+						on:dragstart={(e) => handleDragStart(e, entry.name || '')}
+						tabindex="0"
+						on:dragend={(e) => {
+							handleDragEnd(e, entry.path, true);
+						}}
+						data-is-folder
+					>
+						<Collapsible.Trigger asChild let:builder>
+							<Button
+								builders={[builder]}
+								size="sm"
+								variant="ghost"
+								scale="sm"
+								class="h-7 w-full fill-muted-foreground hover:fill-foreground transition-all flex items-center justify-between"
+								style={`padding-left: ${calculateDepth(entry.path)}`}
+								draggable
+							>
+								<Shortcut
+									options={SHORTCUTS['folder:create']}
+									callback={() => createFolder(entry.path)}
 								/>
-								<Icon
-									name="folderOpen"
-									class={cn('w-[18px] h-[18px]', !folderOpenStates[i] && 'hidden')}
+								<Shortcut
+									options={SHORTCUTS['folder:create-note']}
+									callback={() => createNote(entry.path)}
 								/>
-								<span class="text-xs">{entry.name}</span>
-							</div>
-							<!-- TODO: Make this an optional feature -->
-							<span class="text-xs text-foreground/40 font-light">{entry.children.length}</span>
-						</Button>
-					</Collapsible.Trigger>
+								<Shortcut
+									options={SHORTCUTS['folder:delete']}
+									callback={() => deleteFolder(entry.path)}
+								/>
+								<Shortcut
+									options={SHORTCUTS['folder:show-in-folder']}
+									callback={() => showInFolder(entry.path)}
+								/>
+								<div class="flex items-center gap-2">
+									<Icon
+										name="folder"
+										class={cn('w-[18px] h-[18px]', folderOpenStates[i] && 'hidden')}
+									/>
+									<Icon
+										name="folderOpen"
+										class={cn('w-[18px] h-[18px]', !folderOpenStates[i] && 'hidden')}
+									/>
+									<span class="text-xs">{entry.name}</span>
+								</div>
+								<!-- TODO: Make this an optional feature -->
+								<span class="text-xs text-foreground/40 font-light">{entry.children.length}</span>
+							</Button>
+						</Collapsible.Trigger>
+					</div>
 				</ContextMenu.Trigger>
 				<ContextMenu.Content class="w-44">
 					<ContextMenu.Item
