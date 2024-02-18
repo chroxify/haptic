@@ -15,6 +15,8 @@
 	export let entries: FileEntry[];
 	export let toggleState: 'collapse' | 'expand';
 	let folderOpenStates: boolean[] = [];
+	let dragItem: HTMLElement | null = null; // Reference to the dragged item
+	let previousHighlightedElement: HTMLElement | null = null;
 
 	$: toggleState = folderOpenStates.every((state) => state === false) ? 'expand' : 'collapse';
 
@@ -41,13 +43,106 @@
 			folderOpenStates = new Array(entries.length).fill(false);
 		}
 	}
+
+	// Function to handle drag start
+	function handleDragStart(event: DragEvent, filename: string) {
+		// Specify the effect allowed for the drag
+		event.dataTransfer!.effectAllowed = 'move';
+
+		// Create a custom drag preview element
+		dragItem = document.createElement('div');
+		dragItem.classList.add('drag-item');
+		dragItem.textContent = filename;
+		document.body.appendChild(dragItem);
+
+		// Set the opacity of the original element
+		(event.currentTarget as HTMLElement).style.opacity = '0.5';
+
+		// Set the drag image to the custom element
+		event.dataTransfer?.setDragImage(dragItem, 0, 0);
+
+		// Add dragover event listener to document
+		document.addEventListener('dragover', handleDragOver);
+	}
+
+	// Function to handle drag over
+	function handleDragOver(event: DragEvent) {
+		const element = event.target as HTMLElement;
+		let highlightElement: HTMLElement | null = null;
+
+		// Check for collapsible root
+		const collapsibleTriggerElement = element.closest('[data-collapsible-root]');
+		if (collapsibleTriggerElement) {
+			highlightElement = collapsibleTriggerElement as HTMLElement;
+		} else {
+			// Check for collection folder only if collapsible root is not present
+			const collectionFolderElement = element.closest('[data-collection-root]');
+			if (collectionFolderElement && !dragItem?.contains(collectionFolderElement)) {
+				highlightElement = collectionFolderElement as HTMLElement;
+			}
+		}
+
+		if (highlightElement) {
+			// If any parent or ancestor of the current element has the attribute data-collapsible-root or data-collection-root
+			if (previousHighlightedElement && previousHighlightedElement !== highlightElement) {
+				// Reset the background color of the previously highlighted element
+				previousHighlightedElement.removeAttribute('data-highlighted');
+			}
+			// Highlight the element by setting a custom attribute
+			highlightElement.setAttribute('data-highlighted', 'true');
+			// Update the previousHighlightedElement variable
+			previousHighlightedElement = highlightElement;
+		} else {
+			// If no element with the attribute data-collapsible-root or data-collection-root is found, reset the background color & previousHighlightedElement
+			if (previousHighlightedElement) {
+				previousHighlightedElement.removeAttribute('data-highlighted');
+				previousHighlightedElement = null;
+			}
+		}
+	}
+
+	// Function to handle drag end
+	function handleDragEnd(event: DragEvent, path: string) {
+		if (dragItem) {
+			// Remove the custom element
+			document.body.removeChild(dragItem);
+			dragItem = null;
+		}
+
+		// Reset the opacity of the original element
+		(event.currentTarget as HTMLElement).style.opacity = '';
+
+		if (previousHighlightedElement) {
+			// Check if the note is not being dropped in the same folder it's currently in
+			if (
+				previousHighlightedElement.getAttribute('data-path') !==
+					path.split('/').slice(0, -1).join('/') &&
+				previousHighlightedElement.firstElementChild?.getAttribute('data-path') !==
+					path.split('/').slice(0, -1).join('/')
+			) {
+				// Move the note to the folder
+				if (previousHighlightedElement.hasAttribute('data-collection-root')) {
+					moveNote(path, previousHighlightedElement.getAttribute('data-path')!);
+				} else if (previousHighlightedElement.firstElementChild?.getAttribute('data-path')) {
+					moveNote(path, previousHighlightedElement.firstElementChild.getAttribute('data-path')!);
+				}
+			}
+
+			// Reset background color & previousHighlightedElement
+			previousHighlightedElement.removeAttribute('data-highlighted');
+			previousHighlightedElement = null;
+		}
+
+		// Remove dragover event listener from document
+		document.removeEventListener('dragover', handleDragOver);
+	}
 </script>
 
 {#each entries as entry, i}
 	{#if entry.children}
 		<Collapsible.Root class="w-full" bind:open={folderOpenStates[i]}>
 			<ContextMenu.Root>
-				<ContextMenu.Trigger>
+				<ContextMenu.Trigger data-path={entry.path}>
 					<Collapsible.Trigger asChild let:builder>
 						<Button
 							builders={[builder]}
@@ -185,28 +280,39 @@
 	{:else}
 		<ContextMenu.Root>
 			<ContextMenu.Trigger class="w-full">
-				<Button
-					size="sm"
-					variant="ghost"
-					scale="sm"
-					class={cn(
-						'h-7 w-full transition-all flex items-center gap-2 justify-start',
-						$activeFile === entry.path && 'bg-accent'
-					)}
-					style={`padding-left: ${calculateDepth(entry.path)}`}
-					on:click={() => openNote(entry.path)}
+				<div
+					class="w-full h-full"
+					role="button"
+					on:dragstart={(e) => handleDragStart(e, entry.name || '')}
+					tabindex="0"
+					on:dragend={(e) => {
+						handleDragEnd(e, entry.path);
+					}}
 				>
-					<Shortcut
-						options={SHORTCUTS['note:duplicate']}
-						callback={() => duplicateNote(entry.path)}
-					/>
-					<Shortcut options={SHORTCUTS['note:delete']} callback={() => deleteNote(entry.path)} />
-					<Shortcut
-						options={SHORTCUTS['note:show-in-folder']}
-						callback={() => showInFolder(entry.path)}
-					/>
-					<span class="text-xs truncate">{entry.name}</span>
-				</Button>
+					<Button
+						size="sm"
+						variant="ghost"
+						scale="sm"
+						class={cn(
+							'h-7 w-full transition-all flex items-center gap-2 justify-start',
+							$activeFile === entry.path && 'bg-accent'
+						)}
+						style={`padding-left: ${calculateDepth(entry.path)}`}
+						on:click={() => openNote(entry.path)}
+						draggable
+					>
+						<Shortcut
+							options={SHORTCUTS['note:duplicate']}
+							callback={() => duplicateNote(entry.path)}
+						/>
+						<Shortcut options={SHORTCUTS['note:delete']} callback={() => deleteNote(entry.path)} />
+						<Shortcut
+							options={SHORTCUTS['note:show-in-folder']}
+							callback={() => showInFolder(entry.path)}
+						/>
+						<span class="text-xs truncate">{entry.name}</span>
+					</Button>
+				</div>
 			</ContextMenu.Trigger>
 			<ContextMenu.Content class="w-44">
 				<ContextMenu.Item class="flex items-center gap-2 font-base group">
@@ -287,3 +393,31 @@
 		</ContextMenu.Root>
 	{/if}
 {/each}
+
+<style>
+	:global(.drag-item) {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background-color: hsl(var(--secondary));
+		border: 1px solid hsl(var(--border));
+		padding-top: 5px;
+		padding-bottom: 3px;
+		padding-right: 10px;
+		padding-left: 20px;
+		font-size: 12px;
+		width: fit-content;
+		height: fit-content;
+		border-radius: calc(var(--radius) - 2px);
+		z-index: 100;
+	}
+
+	:global([data-highlighted]) {
+		background-color: hsl(var(--accent));
+	}
+
+	:global([data-collapsible-root]) {
+		border-radius: calc(var(--radius) - 2px);
+	}
+</style>

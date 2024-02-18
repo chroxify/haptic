@@ -184,7 +184,11 @@
 
 	<!-- Folders -->
 	<!-- Set y paddings here instead of in the parent as gap so scrollbar is not affected -->
-	<div class="flex flex-col items-start gap-2 w-full px-2 overflow-auto pt-2 pb-4">
+	<div
+		class="flex flex-col items-start gap-2 w-full px-2 h-full overflow-auto pt-2 pb-4"
+		data-collection-root
+		data-path={$collection}
+	>
 		<Folder {entries} bind:toggleFolderStates bind:toggleState={folderToggleState} />
 	</div>
 </div>
