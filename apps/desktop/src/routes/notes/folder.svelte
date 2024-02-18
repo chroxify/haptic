@@ -87,18 +87,14 @@
 				// Loop through the parent elements until finding a root collapsible parent
 				while (parentElement) {
 					if (parentElement !== dragItem?.closest('[data-collapsible-root]')) {
-						highlightElement = parentElement.parentElement as HTMLElement;
+						if (parentElement.hasAttribute('data-collection-root')) {
+							highlightElement = parentElement;
+						} else {
+							highlightElement = parentElement.parentElement as HTMLElement;
+						}
 						break;
 					}
 					parentElement = parentElement.parentElement;
-				}
-
-				// If no collapsible parent is found, select the collection root
-				if (!highlightElement) {
-					const collectionRoot = document.querySelector('[data-collection-root]');
-					if (collectionRoot) {
-						highlightElement = collectionRoot as HTMLElement;
-					}
 				}
 			} else {
 				highlightElement = collapsibleTriggerElement as HTMLElement;
