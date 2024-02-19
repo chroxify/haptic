@@ -158,10 +158,17 @@
 				}}
 			>
 				<Icon
-					name="collapse"
+					name="collapseCircle"
 					class={cn(
 						'w-[18px] h-[18px] transition-all transform',
-						folderToggleState === 'collapse' && 'rotate-180'
+						folderToggleState === 'collapse' && 'hidden'
+					)}
+				/>
+				<Icon
+					name="expandCircle"
+					class={cn(
+						'w-[18px] h-[18px] transition-all transform',
+						folderToggleState === 'expand' && 'hidden'
 					)}
 				/>
 			</Button>
