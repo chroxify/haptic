@@ -22,7 +22,7 @@
 </script>
 
 <div
-	class="sticky gap-2 min-h-[42px] top-0 px-3 z-20 flex items-center justify-between w-full bg-secondary-background"
+	class="sticky gap-2 min-h-10 top-0 px-3 z-20 flex items-center justify-between w-full bg-secondary-background"
 >
 	<div class="flex gap-1.5 select-none">
 		<Tooltip

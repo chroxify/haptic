@@ -19,9 +19,11 @@
 	import { cn } from '@haptic/ui/lib/utils';
 	import { SHORTCUTS } from '@/shortcuts';
 	import Shortcut from '@/components/shared/shortcut.svelte';
+	import Input from '@haptic/ui/components/input/input.svelte';
 
 	let entries: FileEntry[] = [];
 	let folderToggleState: 'collapse' | 'expand';
+	let searchActive: boolean;
 	let toggleFolderStates: () => void;
 	let stopWatching: UnlistenFn;
 
@@ -118,75 +120,100 @@
 	/>
 
 	<!-- Controls -->
-	<div
-		class="sticky top-0 flex flex-row items-center justify-start gap-2 w-full px-3.5 py-1.5 border-b bg-background"
-	>
-		<Tooltip text="New note" side="bottom" shortcut={SHORTCUTS['notes:create']}>
-			<Button
-				size="icon"
-				variant="ghost"
-				scale="md"
-				class="h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all"
-				on:click={async () => createNote($collection)}
-			>
-				<Shortcut options={SHORTCUTS['notes:create']} />
-				<Icon name="notePlus" class="w-[18px] h-[18px]" />
-			</Button>
-		</Tooltip>
-		<Tooltip text="New folder" side="bottom">
-			<Button
-				size="icon"
-				variant="ghost"
-				scale="md"
-				class="h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all"
-				on:click={async () => createFolder($collection)}
-			>
-				<Icon name="folderPlus" class="w-[18px] h-[18px]" />
-			</Button>
-		</Tooltip>
-		<Tooltip
-			text={folderToggleState === 'collapse' ? 'Collapse folders' : 'Expand folders'}
-			side="bottom"
+	<div class="relative top-0 flex flex-col min-h-10 w-full border-b bg-background overflow-hidden">
+		<div
+			class={cn(
+				'flex flex-row items-center w-full h-full px-3.5 gap-2 shrink-0 transform transition-all translate-y-0',
+				searchActive && '-translate-y-12'
+			)}
 		>
-			<Button
-				size="icon"
-				variant="ghost"
-				scale="md"
-				class="h-7 w-7 fill-muted-foreground hover:fill-foreground"
-				on:click={async () => {
-					toggleFolderStates();
-				}}
+			<Tooltip text="New note" side="bottom" shortcut={SHORTCUTS['notes:create']}>
+				<Button
+					size="icon"
+					variant="ghost"
+					scale="md"
+					class="h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all"
+					on:click={async () => createNote($collection)}
+				>
+					<Shortcut options={SHORTCUTS['notes:create']} />
+					<Icon name="notePlus" class="w-[18px] h-[18px]" />
+				</Button>
+			</Tooltip>
+			<Tooltip text="New folder" side="bottom">
+				<Button
+					size="icon"
+					variant="ghost"
+					scale="md"
+					class="h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all"
+					on:click={async () => createFolder($collection)}
+				>
+					<Icon name="folderPlus" class="w-[18px] h-[18px]" />
+				</Button>
+			</Tooltip>
+			<Tooltip
+				text={folderToggleState === 'collapse' ? 'Collapse folders' : 'Expand folders'}
+				side="bottom"
 			>
-				<Icon
-					name="collapseCircle"
-					class={cn(
-						'w-[18px] h-[18px] transition-all transform',
-						folderToggleState === 'collapse' && 'hidden'
-					)}
-				/>
-				<Icon
-					name="expandCircle"
-					class={cn(
-						'w-[18px] h-[18px] transition-all transform',
-						folderToggleState === 'expand' && 'hidden'
-					)}
-				/>
-			</Button>
-		</Tooltip>
-		<Button
-			size="icon"
-			variant="ghost"
-			class="h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all"
+				<Button
+					size="icon"
+					variant="ghost"
+					scale="md"
+					class="h-7 w-7 fill-muted-foreground hover:fill-foreground"
+					on:click={async () => {
+						toggleFolderStates();
+					}}
+				>
+					<Icon
+						name="collapseCircle"
+						class={cn(
+							'w-[18px] h-[18px] transition-all transform',
+							folderToggleState === 'collapse' && 'hidden'
+						)}
+					/>
+					<Icon
+						name="expandCircle"
+						class={cn(
+							'w-[18px] h-[18px] transition-all transform',
+							folderToggleState === 'expand' && 'hidden'
+						)}
+					/>
+				</Button>
+			</Tooltip>
+			<Tooltip text="Search" side="bottom">
+				<Button
+					size="icon"
+					variant="ghost"
+					scale="md"
+					class="h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all"
+					on:click={() => {
+						searchActive = !searchActive;
+					}}
+				>
+					<Icon name="searchBars" class="w-[18px] h-[18px]" />
+				</Button>
+			</Tooltip>
+		</div>
+		<div
+			class={cn(
+				'absolute pb-[0.5px] flex flex-row items-center justify-center w-full h-full px-3.5 gap-1.5 shrink-0 transform transition-all translate-y-12',
+				searchActive && 'translate-y-0'
+			)}
 		>
-			<Icon name="reload" class="w-[18px] h-[18px]" />
-		</Button>
-		<Button
-			size="icon"
-			variant="ghost"
-			class="h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all"
-		>
-			<Icon name="searchBars" class="w-[18px] h-[18px]" />
-		</Button>
+			<Input class="w-full h-7" placeholder="Search" spellcheck="false" />
+			<Tooltip text="Close" side="bottom">
+				<Button
+					size="icon"
+					variant="ghost"
+					scale="md"
+					class="h-7 w-7 shrink-0 fill-muted-foreground hover:fill-foreground transition-all"
+					on:click={() => {
+						searchActive = !searchActive;
+					}}
+				>
+					<Icon name="x" class="w-4 h-4" />
+				</Button>
+			</Tooltip>
+		</div>
 	</div>
 
 	<!-- Folders -->
