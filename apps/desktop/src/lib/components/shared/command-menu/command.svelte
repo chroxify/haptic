@@ -1,13 +1,12 @@
 <script lang="ts">
 	import * as Command from '@haptic/ui/components/command';
 	import { onMount } from 'svelte';
-	import Icon from '../shared/icon.svelte';
+	import Icon from '$lib/components/shared/icon.svelte';
 	import { activeFile } from '@/store';
 	import { moveNote, openNote } from '@/api/notes';
 	import { getAllItems } from './helpers';
 	import { mainCommands as commands, createNoteCommands } from './commands';
 	import { setMode, mode } from 'mode-watcher';
-	import Shortcut from '../shared/shortcut.svelte';
 
 	let open = false;
 	let search = '';
@@ -243,25 +242,6 @@
 </Command.Dialog>
 
 <style>
-	:global([data-dialog-content]) {
-		transform: none;
-		width: 518px;
-		max-width: 100%;
-		max-height: 100%;
-		top: 15%;
-		left: unset;
-		overflow: hidden;
-	}
-
-	:global([data-dialog-portal]) {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-		z-index: 1000;
-	}
-
 	:global([data-cmdk-list]) {
 		height: min(300px, var(--cmdk-list-height));
 		max-height: 400px;

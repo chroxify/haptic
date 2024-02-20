@@ -1,12 +1,12 @@
 <script lang="ts">
-	import Header from '@/components/header.svelte';
+	import Header from '@/components/layout/header.svelte';
 	import '../app.css';
 	import { ModeWatcher } from 'mode-watcher';
-	import Footer from '@/components/footer.svelte';
-	import Sidebar from '@/components/sidebar.svelte';
+	import Footer from '@/components/layout/footer.svelte';
+	import Sidebar from '@/components/layout/sidebar.svelte';
 	import { collection } from '@/store';
 	import { readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
-	import Command from '@/components/command-menu/command.svelte';
+	import Command from '@/components/shared/command-menu/command.svelte';
 
 	// Prevent right-clicking in production
 	// TODO: Test if this even works in production (not sure if tauri has access to env variables)

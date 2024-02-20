@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Editor from '@/components/tiptap/editor.svelte';
+	import Editor from '@/components/shared/editor/editor.svelte';
 	import EditorToolbar from './editor-toolbar.svelte';
 	import EditorSearch from './editor-search.svelte';
 </script>
