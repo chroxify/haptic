@@ -9,9 +9,9 @@
 	import Appearance from './appearance.svelte';
 	import Editor from './editor.svelte';
 	import HapticSync from './haptic-sync.svelte';
-	import type { SvelteComponent } from 'svelte';
+	import type { ComponentType } from 'svelte';
 
-	const settings: Record<string, { name: string; icon: IconKey; content: SvelteComponent }[]> = {
+	const settings: Record<string, { name: string; icon: IconKey; content: ComponentType }[]> = {
 		App: [
 			{
 				name: 'General',
