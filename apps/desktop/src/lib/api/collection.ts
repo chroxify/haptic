@@ -1,6 +1,6 @@
 import { activeFile, collection, noteHistory } from '@/store';
 import { hideDotFiles } from '@/utils';
-import { readDir } from '@tauri-apps/api/fs';
+import { createDir, readDir } from '@tauri-apps/api/fs';
 import { get } from 'svelte/store';
 import { open } from '@tauri-apps/api/dialog';
 import { writeTextFile, readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
@@ -39,6 +39,13 @@ export const loadCollection = async () => {
 	// Reset all collection states
 	noteHistory.set([]);
 	activeFile.set(null);
+
+	// Validate .haptic folder
+	const hapticFolder = await readDir(`${path}/.haptic`).catch(() => null);
+
+	if (!hapticFolder) {
+		await createDir(`${path}/.haptic`);
+	}
 
 	// Add collection to collections data
 	const collectionObj = {

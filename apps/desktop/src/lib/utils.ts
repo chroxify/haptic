@@ -7,7 +7,7 @@ import { get } from 'svelte/store';
 import { editor } from './store';
 import { EditorState } from '@tiptap/pm/state';
 import { invoke } from '@tauri-apps/api/tauri';
-import type { ShortcutParams } from './shortcuts';
+import type { ShortcutParams } from './types';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
