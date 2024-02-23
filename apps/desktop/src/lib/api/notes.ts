@@ -1,6 +1,6 @@
-import { writeTextFile, readDir, readTextFile, renameFile } from '@tauri-apps/api/fs';
-import { activeFile, editor, noteHistory } from '@/store';
-import { resetEditorContent } from '@/utils';
+import { writeTextFile, readDir, readTextFile, renameFile, removeFile } from '@tauri-apps/api/fs';
+import { activeFile, collection, collectionSettings, editor, noteHistory } from '@/store';
+import { setEditorContent } from '@/utils';
 import { homeDir } from '@tauri-apps/api/path';
 import { get } from 'svelte/store';
 
@@ -25,7 +25,7 @@ export const createNote = async (dirPath: string) => {
 // Open a note
 export async function openNote(path: string, skipHistory = false) {
 	const fileContent = await readTextFile(path);
-	resetEditorContent(fileContent, path.split('/').pop()!.split('.').shift()!);
+	setEditorContent(fileContent, path.split('/').pop()!.split('.').shift()!);
 	activeFile.set(path);
 	if (!skipHistory) {
 		noteHistory.update((history) => {
@@ -40,7 +40,17 @@ export async function openNote(path: string, skipHistory = false) {
 // Delete a note
 export const deleteNote = async (path: string) => {
 	// TODO: Wont work on Windows
-	await renameFile(path, `${await homeDir()}.trash/${path.split('/').pop()!}`);
+	switch (get(collectionSettings).notes.trash_dir) {
+		case 'system':
+			await renameFile(path, `${await homeDir()}.trash/${path.split('/').pop()!}`);
+			break;
+		case 'haptic':
+			await renameFile(path, `${get(collection)}/.haptic/trash/${path.split('/').pop()!}`);
+			break;
+		case 'delete':
+			await removeFile(path);
+			break;
+	}
 	activeFile.set('');
 };
 

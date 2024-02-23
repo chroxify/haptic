@@ -10,7 +10,7 @@
 	import { createFolder, deleteFolder, moveFolder } from '@/api/folders';
 	import { shortcutToString, showInFolder } from '@/utils';
 	import Shortcut from '@/components/shared/shortcut.svelte';
-	import { SHORTCUTS } from '@/shortcuts';
+	import { SHORTCUTS } from '@/constants';
 
 	export let entries: FileEntry[];
 	export let toggleState: 'collapse' | 'expand';

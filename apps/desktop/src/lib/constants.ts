@@ -26,15 +26,15 @@ export const BASECOLLECTIONSETTINGS: CollectionSettingsParams = {
 	editor: {
 		font: 'system-ui',
 		size: 14,
+		auto_save: true,
+		auto_save_debounce: 750,
 		auto_correct: false,
 		spell_check: false,
 		show_inline_title: true,
-		show_line_numbers: true,
-		show_editor_toolbar: true
+		show_line_numbers: false,
+		show_toolbar: true
 	},
 	notes: {
-		auto_save: true,
-		auto_save_debounce: 750,
 		trash_dir: 'system',
 		excluded_files: []
 	}

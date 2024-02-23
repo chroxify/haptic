@@ -17,16 +17,16 @@ export interface CollectionSettingsParams {
 	editor: {
 		font: string;
 		size: number;
+		auto_save: boolean;
+		auto_save_debounce: number;
 		auto_correct: boolean;
 		spell_check: boolean;
 		show_inline_title: boolean;
 		show_line_numbers: boolean;
-		show_editor_toolbar: boolean;
+		show_toolbar: boolean;
 	};
 	notes: {
-		auto_save: boolean;
-		auto_save_debounce: number;
-		trash_dir: 'system' | 'haptic' | null;
+		trash_dir: 'system' | 'haptic' | 'delete';
 		excluded_files: string[];
 	};
 }

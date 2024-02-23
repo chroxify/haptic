@@ -2,9 +2,9 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
-import { type FileEntry } from '@tauri-apps/api/fs';
+import { createDir, readDir, type FileEntry } from '@tauri-apps/api/fs';
 import { get } from 'svelte/store';
-import { editor } from './store';
+import { collectionSettings, editor } from './store';
 import { EditorState } from '@tiptap/pm/state';
 import { invoke } from '@tauri-apps/api/tauri';
 import type { ShortcutParams } from './types';
@@ -78,11 +78,13 @@ export function hideDotFiles(entries: FileEntry[]) {
  * Resets the editors document title, updating the editor state, and focusing on the
  * first element after the heading.
  */
-export function resetEditorContent(content: string, title: string) {
+export function setEditorContent(content: string, title: string) {
 	const $editor = get(editor);
 
 	// Set document title
-	content = `# ${title}\n\n${content}`;
+	if (get(collectionSettings).editor.show_inline_title) {
+		content = `# ${title}\n\n${content}`;
+	}
 
 	// Set content of the editor
 	$editor.commands.setContent(content);
@@ -96,8 +98,12 @@ export function resetEditorContent(content: string, title: string) {
 	$editor.view.updateState(newEditorState);
 
 	// Focus first element after heading
-	const headingEndPos = content.indexOf('\n\n');
-	$editor.chain().focus().setTextSelection(headingEndPos).run();
+	if (get(collectionSettings).editor.show_inline_title) {
+		const headingEndPos = content.indexOf('\n\n');
+		$editor.chain().focus().setTextSelection(headingEndPos).run();
+	} else {
+		$editor.chain().focus().run();
+	}
 }
 
 // Show in folder
@@ -147,4 +153,18 @@ export function shortcutToString(shortcut: ShortcutParams) {
 	}
 
 	return keys.join('');
+}
+
+export async function validateHapticFolder(path: string) {
+	if (path === null) return;
+
+	const hapticFolder = await readDir(path + '/.haptic').catch(() => null);
+
+	if (!hapticFolder) {
+		// Create .haptic folder
+		await createDir(path + '/.haptic');
+
+		// Create trash folder
+		await createDir(path + '/.haptic/trash');
+	}
 }

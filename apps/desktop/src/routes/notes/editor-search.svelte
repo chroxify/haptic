@@ -7,7 +7,7 @@
 	import { editor, editorSearchActive } from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
 	import Shortcut from '@/components/shared/shortcut.svelte';
-	import { SHORTCUTS } from '@/shortcuts';
+	import { SHORTCUTS } from '@/constants';
 	import Tooltip from '@/components/shared/tooltip.svelte';
 
 	let searchValue = '';

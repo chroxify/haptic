@@ -3,6 +3,7 @@
 	import Label from '@haptic/ui/components/label/label.svelte';
 	import * as Select from '@haptic/ui/components/select';
 	import Switch from '@haptic/ui/components/switch/switch.svelte';
+	import Tooltip from '../shared/tooltip.svelte';
 
 	let autoSync = false;
 	let autoBackup = false;
@@ -13,17 +14,19 @@
 <div class="space-y-5">
 	<div class="space-y-1">
 		<Label class="text-base">Auto sync</Label>
-		<p class="text-muted-foreground text-xs">Automatically sync your notes</p>
-		<div class="flex items center gap-2 pt-2">
-			<Switch bind:checked={autoSync} />
+		<p class="text-muted-foreground text-xs">Automatically sync your notes.</p>
+		<div class="flex items-center gap-2 pt-2">
+			<Tooltip text="Coming soon">
+				<Switch bind:checked={autoSync} disabled />
+			</Tooltip>
 		</div>
 	</div>
 
 	<div class="space-y-1">
 		<Label class="text-base">Sync interval</Label>
-		<p class="text-muted-foreground text-xs">How often to sync your notes</p>
+		<p class="text-muted-foreground text-xs">How often to sync your notes.</p>
 		<div class="flex items-center gap-2 pt-2">
-			<Select.Root bind:selected={selectedSyncInterval}>
+			<Select.Root bind:selected={selectedSyncInterval} disabled={!autoSync}>
 				<Select.Trigger class="w-32">
 					<Select.Value class="text-sm text-foreground/85"
 						>{selectedSyncInterval.label}</Select.Value
@@ -47,17 +50,19 @@
 
 	<div class="space-y-1">
 		<Label class="text-base">Backups</Label>
-		<p class="text-muted-foreground text-xs">Wheter or not to create scheduled backups</p>
-		<div class="flex items center gap-2 pt-2">
-			<Switch bind:checked={autoBackup} />
+		<p class="text-muted-foreground text-xs">Wheter or not to create scheduled backups.</p>
+		<div class="flex items-center gap-2 pt-2">
+			<Tooltip text="Coming soon">
+				<Switch bind:checked={autoBackup} disabled />
+			</Tooltip>
 		</div>
 	</div>
 
 	<div class="space-y-1">
 		<Label class="text-base">Backup interval</Label>
-		<p class="text-muted-foreground text-xs">How often to create backups of your notes</p>
+		<p class="text-muted-foreground text-xs">How often to create backups of your notes.</p>
 		<div class="flex items-center gap-2 pt-2">
-			<Select.Root bind:selected={selectedBackupInterval}>
+			<Select.Root bind:selected={selectedBackupInterval} disabled={!autoBackup}>
 				<Select.Trigger class="w-32">
 					<Select.Value class="text-sm text-foreground/85"
 						>{selectedBackupInterval.label}</Select.Value
@@ -75,6 +80,7 @@
 				size="sm"
 				class="text-primary-foreground/85 hover:text-primary-foreground text-sm font-normal"
 				scale="sm"
+				disabled={!autoBackup}
 			>
 				Backup now
 			</Button>

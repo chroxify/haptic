@@ -3,6 +3,10 @@
 	import * as Select from '@haptic/ui/components/select';
 	import { Switch } from '@haptic/ui/components/switch';
 	import { cn } from '@/utils';
+	import { setSettings } from '@/api/settings';
+	import { activeFile, collectionSettings } from '@/store';
+	import { invalidateAll } from '$app/navigation';
+	import { openNote } from '@/api/notes';
 
 	let selectedFont = { value: 'inter', label: 'Inter' };
 	let selectedFontSize = { value: 'normal', label: 'Normal' };
@@ -20,7 +24,7 @@
 <div class="space-y-5">
 	<div class="space-y-1">
 		<Label class="text-base">Font</Label>
-		<p class="text-muted-foreground text-xs">Change the editor font</p>
+		<p class="text-muted-foreground text-xs">Change the editor font.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Select.Root bind:selected={selectedFont}>
 				<Select.Trigger class="w-32">
@@ -40,8 +44,8 @@
 
 	<div class="space-y-1">
 		<Label class="text-base">Font size</Label>
-		<p class="text-muted-foreground text-xs">Change the editor font size</p>
-		<div class="flex items center gap-2 pt-2">
+		<p class="text-muted-foreground text-xs">Change the editor font size.</p>
+		<div class="flex items-center gap-2 pt-2">
 			<Select.Root bind:selected={selectedFontSize}>
 				<Select.Trigger class="w-32">
 					<Select.Value class="text-sm text-foreground/85">{selectedFontSize.label}</Select.Value>
@@ -59,10 +63,17 @@
 
 	<div class="space-y-1">
 		<Label class="text-base">Text correction</Label>
-		<p class="text-muted-foreground text-xs">Enable or disable various text correction features</p>
+		<p class="text-muted-foreground text-xs">Enable or disable various text correction features.</p>
 		<div class="flex flex-col items-start gap-2.5 pt-2">
 			<div class="flex items-center gap-2">
-				<Switch bind:checked={textCorrections.autoCorrect} />
+				<Switch
+					checked={$collectionSettings.editor.auto_correct}
+					onCheckedChange={(value) =>
+						setSettings('collection', {
+							...$collectionSettings,
+							editor: { ...$collectionSettings.editor, auto_correct: value }
+						})}
+				/>
 				<Label
 					class={cn(
 						'text-foreground/60 text-sm font-normal',
@@ -73,7 +84,14 @@
 				</Label>
 			</div>
 			<div class="flex items-center gap-2">
-				<Switch bind:checked={textCorrections.spellCheck} />
+				<Switch
+					checked={$collectionSettings.editor.spell_check}
+					onCheckedChange={(value) =>
+						setSettings('collection', {
+							...$collectionSettings,
+							editor: { ...$collectionSettings.editor, spell_check: value }
+						})}
+				/>
 				<Label
 					class={cn(
 						'text-foreground/60 text-sm font-normal',
@@ -88,10 +106,20 @@
 
 	<div class="space-y-1">
 		<Label class="text-base">Additional settings</Label>
-		<p class="text-muted-foreground text-xs">Additional settings for the editor</p>
+		<p class="text-muted-foreground text-xs">Additional settings for the editor.</p>
 		<div class="flex flex-col items-start gap-2.5 pt-2">
 			<div class="flex items-center gap-2">
-				<Switch bind:checked={additionalSettings.inlineTitle} />
+				<Switch
+					checked={$collectionSettings.editor.show_inline_title}
+					onCheckedChange={(value) => {
+						setSettings('collection', {
+							...$collectionSettings,
+							editor: { ...$collectionSettings.editor, show_inline_title: value }
+						});
+						invalidateAll();
+						openNote($activeFile || '', true);
+					}}
+				/>
 				<Label
 					class={cn(
 						'text-foreground/60 text-sm font-normal',
@@ -102,7 +130,15 @@
 				</Label>
 			</div>
 			<div class="flex items-center gap-2">
-				<Switch bind:checked={additionalSettings.lineNumbers} />
+				<Switch
+					disabled
+					checked={$collectionSettings.editor.show_line_numbers}
+					onCheckedChange={(value) =>
+						setSettings('collection', {
+							...$collectionSettings,
+							editor: { ...$collectionSettings.editor, show_line_numbers: value }
+						})}
+				/>
 				<Label
 					class={cn(
 						'text-foreground/60 text-sm font-normal',
@@ -113,7 +149,14 @@
 				</Label>
 			</div>
 			<div class="flex items-center gap-2">
-				<Switch bind:checked={additionalSettings.editorToolbar} />
+				<Switch
+					checked={$collectionSettings.editor.show_toolbar}
+					onCheckedChange={(value) =>
+						setSettings('collection', {
+							...$collectionSettings,
+							editor: { ...$collectionSettings.editor, show_toolbar: value }
+						})}
+				/>
 				<Label
 					class={cn(
 						'text-foreground/60 text-sm font-normal',

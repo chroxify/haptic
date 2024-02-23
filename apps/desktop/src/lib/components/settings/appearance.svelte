@@ -14,7 +14,7 @@
 <div class="space-y-5">
 	<div class="space-y-1">
 		<Label class="text-base">Color scheme</Label>
-		<p class="text-muted-foreground text-xs">Change the color scheme of the app</p>
+		<p class="text-muted-foreground text-xs">Change the color scheme of the app.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Tooltip text="System" side="bottom">
 				<Button
@@ -63,7 +63,7 @@
 
 	<div class="space-y-1">
 		<Label class="text-base">Theme</Label>
-		<p class="text-muted-foreground text-xs">Change the theme of the app</p>
+		<p class="text-muted-foreground text-xs">Change the theme of the app.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Select.Root bind:selected={selectedTheme}>
 				<Select.Trigger class="w-32">
@@ -86,7 +86,7 @@
 
 	<div class="space-y-1">
 		<Label class="text-base">Fonts</Label>
-		<p class="text-muted-foreground text-xs">Change the interface font</p>
+		<p class="text-muted-foreground text-xs">Change the interface font.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Select.Root bind:selected={selectedFont}>
 				<Select.Trigger class="w-32">

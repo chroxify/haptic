@@ -87,7 +87,7 @@
 							value={tab.name.toLocaleLowerCase()}
 							class="w-full h-full -mt-2.5 overflow-y-auto pb-10"
 						>
-							<div class="flex flex-col items-start justify-start h-full w-full gap-5">
+							<div class="flex flex-col items-start justify-start h-full w-full gap-5 px-1">
 								<h1 class="text-xl font-medium">{tab.name}</h1>
 								<svelte:component this={tab.content} />
 							</div>
