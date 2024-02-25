@@ -140,6 +140,7 @@
 				size="sm"
 				class="text-primary-foreground/85 hover:text-primary-foreground text-sm font-normal"
 				scale="sm"
+				disabled
 			>
 				Add
 			</Button>

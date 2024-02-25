@@ -26,7 +26,7 @@
 		<Label class="text-base">Font</Label>
 		<p class="text-muted-foreground text-xs">Change the editor font.</p>
 		<div class="flex items-center gap-2 pt-2">
-			<Select.Root bind:selected={selectedFont}>
+			<Select.Root bind:selected={selectedFont} disabled>
 				<Select.Trigger class="w-32">
 					<Select.Value class="text-sm text-foreground/85">{selectedFont.label}</Select.Value>
 				</Select.Trigger>
@@ -46,7 +46,7 @@
 		<Label class="text-base">Font size</Label>
 		<p class="text-muted-foreground text-xs">Change the editor font size.</p>
 		<div class="flex items-center gap-2 pt-2">
-			<Select.Root bind:selected={selectedFontSize}>
+			<Select.Root bind:selected={selectedFontSize} disabled>
 				<Select.Trigger class="w-32">
 					<Select.Value class="text-sm text-foreground/85">{selectedFontSize.label}</Select.Value>
 				</Select.Trigger>

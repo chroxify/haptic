@@ -78,6 +78,7 @@
 				size="sm"
 				class="text-primary-foreground/85 hover:text-primary-foreground text-sm font-normal"
 				scale="sm"
+				disabled
 			>
 				Browse
 			</Button>
@@ -88,7 +89,7 @@
 		<Label class="text-base">Fonts</Label>
 		<p class="text-muted-foreground text-xs">Change the interface font.</p>
 		<div class="flex items-center gap-2 pt-2">
-			<Select.Root bind:selected={selectedFont}>
+			<Select.Root bind:selected={selectedFont} disabled>
 				<Select.Trigger class="w-32">
 					<Select.Value class="text-sm text-foreground/85">{selectedFont.label}</Select.Value>
 				</Select.Trigger>
