@@ -57,7 +57,7 @@
 	</div>
 
 	<div class="space-y-1">
-		<Label class="text-base">Auto save debugger</Label>
+		<Label class="text-base">Auto save debounce</Label>
 		<p class="text-muted-foreground text-xs">The delay before auto save is triggered.</p>
 		<div class="flex items-center gap-1 pt-2">
 			<Select.Root
@@ -90,7 +90,7 @@
 				</Select.Content>
 			</Select.Root>
 
-			{#if $collectionSettings.editor.auto_save_debounce !== 750}
+			{#if $collectionSettings.editor.auto_save_debounce != 750}
 				<Tooltip text="Reset to default" side="bottom">
 					<Button
 						variant="ghost"

@@ -30,7 +30,7 @@
 					}
 				}),
 				Document.extend({
-					content: 'heading block*'
+					content: $collectionSettings.editor.show_inline_title ? 'heading block*' : 'block*'
 				}),
 				SearchAndReplace.configure({
 					searchResultClass: 'search-result',
