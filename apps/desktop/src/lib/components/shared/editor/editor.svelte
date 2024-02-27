@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
-	import { editor, activeFile } from '@/store';
+	import { editor, activeFile, collectionSettings } from '@/store';
 	import StarterKit from '@tiptap/starter-kit';
 	import Document from '@tiptap/extension-document';
 	import { Typography } from '@tiptap/extension-typography';
@@ -30,7 +30,7 @@
 					}
 				}),
 				Document.extend({
-					content: 'heading block*'
+					content: $collectionSettings.editor.show_inline_title ? 'heading block*' : 'block*'
 				}),
 				SearchAndReplace.configure({
 					searchResultClass: 'search-result',
@@ -75,10 +75,13 @@
 
 				// Set timeout to update the store
 				timeout = setTimeout(() => {
-					saveNote($activeFile!).catch((error) => {
-						console.error('Error saving note:', error);
-					});
-				}, 750);
+					if ($collectionSettings.editor.auto_save) {
+						console.log('Saving note...');
+						saveNote($activeFile!).catch((error) => {
+							console.error('Error saving note:', error);
+						});
+					}
+				}, $collectionSettings.editor.auto_save_debounce);
 			}
 		});
 	});
@@ -90,7 +93,12 @@
 	});
 </script>
 
-<div bind:this={element} spellcheck="false" autocorrect="false" class="w-full h-full px-8" />
+<div
+	bind:this={element}
+	spellcheck={$collectionSettings.editor.spell_check}
+	autocorrect={$collectionSettings.editor.auto_correct.toString()}
+	class="w-full h-full px-8"
+/>
 
 <style>
 	div :global(ul[data-type='taskList']) {

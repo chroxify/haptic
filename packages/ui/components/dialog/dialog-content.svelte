@@ -14,13 +14,13 @@
 	export { className as class };
 </script>
 
-<Dialog.Portal class="">
+<Dialog.Portal class="flex items-center justify-center w-full h-full z-50">
 	<Dialog.Overlay />
 	<DialogPrimitive.Content
 		{transition}
 		{transitionConfig}
 		class={cn(
-			'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg md:w-full',
+			'fixed z-50 grid w-full gap-4 border bg-background p-6 shadow-lg rounded-lg max-w-full max-h-full',
 			className
 		)}
 		{...$$restProps}

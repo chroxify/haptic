@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Button } from '@haptic/ui/components/button';
 	import { toggleMode } from 'mode-watcher';
-	import Icon from './shared/icon.svelte';
-	import Tooltip from './shared/tooltip.svelte';
+	import Icon from '../shared/icon.svelte';
+	import Tooltip from '../shared/tooltip.svelte';
 </script>
 
 <footer

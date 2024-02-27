@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { Button } from '@haptic/ui/components/button';
 	import { cn } from '@haptic/ui/lib/utils';
-	import Icon from './shared/icon.svelte';
-	import Tooltip from './shared/tooltip.svelte';
+	import Icon from '$lib/components/shared/icon.svelte';
+	import Tooltip from '$lib/components/shared/tooltip.svelte';
 	import { loadCollection } from '@/api/collection';
+	import { page } from '$app/stores';
+	import SettingsModal from '../settings/settings-modal.svelte';
 
 	let selected: 'notes' | 'daily' | 'tasks' | null = null;
 
@@ -14,6 +16,14 @@
 
 		selected = value;
 	};
+
+	// TODO: Just use $page instead in the active validation
+	page.subscribe((value) => {
+		if (value.url.pathname === '/notes') {
+			selected = 'notes';
+		}
+		// console.log(value.url.pathname);
+	});
 </script>
 
 <div
@@ -21,7 +31,7 @@
 >
 	<div class="flex flex-col items-center gap-2">
 		<Tooltip text="Notes" side="right">
-			<a href={selected === 'notes' ? '/notes' : '/'}>
+			<a href={'/notes'}>
 				<Button
 					size="icon"
 					variant="ghost"
@@ -30,7 +40,7 @@
 						selected === 'notes' && 'fill-foreground bg-accent'
 					)}
 					scale="md"
-					on:click={() => handleSelected('notes')}
+					on:click={() => (selected = 'notes')}
 				>
 					<Icon name="inboxFull" class="w-[18px] h-[18px]" />
 				</Button>
@@ -84,14 +94,7 @@
 			</Button>
 		</Tooltip>
 		<Tooltip text="Settings" side="right">
-			<Button
-				size="icon"
-				variant="ghost"
-				class="h-7 w-7 fill-muted-foreground hover:fill-foreground"
-				scale="md"
-			>
-				<Icon name="settings" class="w-[18px] h-[18px]" />
-			</Button>
+			<SettingsModal />
 		</Tooltip>
 	</div>
 </div>

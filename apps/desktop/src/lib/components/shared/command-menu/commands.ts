@@ -3,7 +3,7 @@ import { createNote, deleteNote, duplicateNote, saveNote } from '@/api/notes';
 import { collection, editor, editorMode, editorSearchActive, isNotesSidebarOpen } from '@/store';
 import { get } from 'svelte/store';
 import { loadCollection } from '@/api/collection';
-import type { IconKey } from '../shared/icon.svelte';
+import type { IconKey } from '$lib/components/shared/icon.svelte';
 import { showInFolder } from '@/utils';
 
 type Command = {

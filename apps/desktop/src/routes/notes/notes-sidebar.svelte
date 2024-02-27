@@ -17,7 +17,7 @@
 	import { createFolder } from '@/api/folders';
 	import Tooltip from '@/components/shared/tooltip.svelte';
 	import { cn } from '@haptic/ui/lib/utils';
-	import { SHORTCUTS } from '@/shortcuts';
+	import { SHORTCUTS } from '@/constants';
 	import Shortcut from '@/components/shared/shortcut.svelte';
 	import Input from '@haptic/ui/components/input/input.svelte';
 

@@ -12,7 +12,7 @@
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import Tooltip from '@/components/shared/tooltip.svelte';
 	import { openNote } from '@/api/notes';
-	import { SHORTCUTS } from '@/shortcuts';
+	import { SHORTCUTS } from '@/constants';
 	import Shortcut from '@/components/shared/shortcut.svelte';
 	let historyIndex: number = 0;
 

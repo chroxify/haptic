@@ -1,12 +1,15 @@
 <script lang="ts">
-	import Header from '@/components/header.svelte';
+	import Header from '@/components/layout/header.svelte';
 	import '../app.css';
 	import { ModeWatcher } from 'mode-watcher';
-	import Footer from '@/components/footer.svelte';
-	import Sidebar from '@/components/sidebar.svelte';
+	import Footer from '@/components/layout/footer.svelte';
+	import Sidebar from '@/components/layout/sidebar.svelte';
 	import { collection } from '@/store';
 	import { readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
-	import Command from '@/components/command-menu/command.svelte';
+	import Command from '@/components/shared/command-menu/command.svelte';
+	import { loadSettings } from '@/api/settings';
+	import { onMount } from 'svelte';
+	import { validateHapticFolder } from '@/utils';
 
 	// Prevent right-clicking in production
 	// TODO: Test if this even works in production (not sure if tauri has access to env variables)
@@ -32,8 +35,16 @@
 		collection.set(latestCollection.path);
 	}
 
-	// Move this to a loading screen later on
-	loadLatestCollection();
+	onMount(async () => {
+		// Load latest collection on mount
+		await loadLatestCollection();
+
+		// Validate haptic folder
+		await validateHapticFolder($collection);
+
+		// Load app & collection settings
+		loadSettings(true, true);
+	});
 </script>
 
 <ModeWatcher />
