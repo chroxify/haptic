@@ -10,6 +10,8 @@
 	import Editor from './editor.svelte';
 	import HapticSync from './haptic-sync.svelte';
 	import type { ComponentType } from 'svelte';
+	import Shortcut from '../shared/shortcut.svelte';
+	import { SHORTCUTS } from '@/constants';
 
 	const settings: Record<string, { name: string; icon: IconKey; content: ComponentType }[]> = {
 		App: [
@@ -47,6 +49,7 @@
 			class="h-7 w-7 fill-muted-foreground hover:fill-foreground"
 			scale="md"
 		>
+			<Shortcut options={SHORTCUTS['app:settings']} />
 			<Icon name="settings" class="w-[18px] h-[18px]" />
 		</Button>
 	</Dialog.Trigger>

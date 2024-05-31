@@ -6,6 +6,7 @@
 	import { loadCollection } from '@/api/collection';
 	import { page } from '$app/stores';
 	import SettingsModal from '../settings/settings-modal.svelte';
+	import { SHORTCUTS } from '@/constants';
 
 	let selected: 'notes' | 'daily' | 'tasks' | null = null;
 
@@ -93,7 +94,7 @@
 				<Icon name="folderOpen" class="w-[18px] h-[18px] hidden group-hover:block" />
 			</Button>
 		</Tooltip>
-		<Tooltip text="Settings" side="right">
+		<Tooltip text="Settings" side="right" shortcut={SHORTCUTS['app:settings']}>
 			<SettingsModal />
 		</Tooltip>
 	</div>

@@ -13,16 +13,17 @@ export const SHORTCUTS: Record<string, ShortcutParams> = {
 	'folder:create-note': { key: 'n', hover: true },
 	'folder:rename': { key: 'r', hover: true },
 	'folder:show-in-folder': { shift: true, key: 'f', hover: true },
-	'folder:delete': { command: true, key: 'Backspace', hover: true }
+	'folder:delete': { command: true, key: 'Backspace', hover: true },
+	'app:settings': { command: true, key: ',' }
 };
 
-export const BASEAPPSETTINGS = {
+export const BASE_APP_SETTINGS = {
 	theme: 'dark',
 	theme_mode: 'system',
 	interface_font: 'system-ui'
 };
 
-export const BASECOLLECTIONSETTINGS: CollectionSettingsParams = {
+export const BASE_COLLECTION_SETTINGS: CollectionSettingsParams = {
 	editor: {
 		font: 'system-ui',
 		size: 14,
