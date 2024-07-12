@@ -12,11 +12,13 @@ import { get } from 'svelte/store';
 import { loadCollection } from '@/api/collection';
 import type { IconKey } from '$lib/components/shared/icon.svelte';
 import { showInFolder } from '@/utils';
+import type { ShortcutParams } from '@/types';
+import { SHORTCUTS } from '@/constants';
 
 type Command = {
 	title: string;
 	icon: IconKey | null;
-	shortcut: string[];
+	shortcut?: ShortcutParams;
 	onSelect?: () => string | void;
 };
 
@@ -32,7 +34,7 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'New note',
 				icon: 'notePlus',
-				shortcut: ['cmd', 'n'],
+				shortcut: SHORTCUTS['notes:create'],
 				onSelect: () => {
 					createNote(get(collection));
 				}
@@ -40,7 +42,7 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'New folder',
 				icon: 'folderPlus',
-				shortcut: ['cmd', 'shift', 'n'],
+				// shortcut: ['cmd', 'shift', 'n'],
 				onSelect: () => {
 					createFolder(get(collection));
 				}
@@ -48,7 +50,7 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Open note',
 				icon: 'note',
-				shortcut: ['cmd', 'j'],
+				shortcut: SHORTCUTS['command:open-note'],
 				onSelect: () => {
 					return 'open_note';
 				}
@@ -56,7 +58,7 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Search collection',
 				icon: 'searchDocument',
-				shortcut: ['cmd', 'shift', 'f'],
+				shortcut: SHORTCUTS['notes:search'],
 				onSelect: () => {
 					collectionSearchActive.set(true);
 				}
@@ -64,7 +66,7 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Toggle editor mode',
 				icon: 'cursorI',
-				shortcut: ['cmd', 'e'],
+				shortcut: SHORTCUTS['editor:toggle-mode'],
 				onSelect: () => {
 					get(editor).setEditable(!get(editor).isEditable);
 					editorMode.update((mode) => (mode === 'edit' ? 'view' : 'edit'));
@@ -73,7 +75,7 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Find in note',
 				icon: 'searchDocument',
-				shortcut: ['cmd', 'f'],
+				shortcut: SHORTCUTS['editor:search'],
 				onSelect: () => {
 					editorSearchActive.set(true);
 				}
@@ -85,18 +87,18 @@ export const mainCommands: CommandGroup[] = [
 		commands: [
 			{
 				title: 'Go to previous note',
-				icon: 'arrowLeft',
-				shortcut: ['cmd', 'up']
+				icon: 'arrowLeft'
+				// shortcut: ['cmd', 'up']
 			},
 			{
 				title: 'Go to next note',
-				icon: 'arrowRight',
-				shortcut: ['cmd', 'down']
+				icon: 'arrowRight'
+				// shortcut: ['cmd', 'down']
 			},
 			{
 				title: 'Open other collection',
 				icon: 'folder',
-				shortcut: ['cmd', 'o'],
+				// shortcut: ['cmd', 'o'],
 				onSelect: () => {
 					loadCollection();
 				}
@@ -104,22 +106,22 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Go to settings',
 				icon: 'settings',
-				shortcut: ['cmd', ',']
+				shortcut: SHORTCUTS['app:settings']
 			},
 			{
 				title: 'Go to help',
-				icon: 'lifebouy',
-				shortcut: ['cmd', 'h']
+				icon: 'lifebouy'
+				// shortcut: ['cmd', 'h']
 			},
 			{
 				title: 'Send feedback',
-				icon: 'lifebouy',
-				shortcut: ['cmd', 'shift', 'h']
+				icon: 'lifebouy'
+				// shortcut: ['cmd', 'shift', 'h']
 			},
 			{
 				title: "Go to What's new",
-				icon: 'bolt',
-				shortcut: ['cmd', 'shift', 'n']
+				icon: 'bolt'
+				// shortcut: ['cmd', 'shift', 'n']
 			}
 		]
 	},
@@ -129,7 +131,7 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Change theme',
 				icon: 'sun',
-				shortcut: ['cmd', 'shift', 't'],
+				// shortcut: ['cmd', 'shift', 't'],
 				onSelect: () => {
 					return 'change_theme';
 				}
@@ -142,15 +144,15 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Toggle sidebar',
 				icon: 'sidebarMenuLeft',
-				shortcut: ['cmd', 'shift', 's'],
+				shortcut: SHORTCUTS['notes:toggle-sidebar'],
 				onSelect: () => {
 					isNotesSidebarOpen.update((open) => !open);
 				}
 			},
 			{
 				title: 'Toggle note details',
-				icon: 'sidebarMenuRight',
-				shortcut: ['cmd', 'shift', 'e']
+				icon: 'sidebarMenuRight'
+				// shortcut: ['cmd', 'shift', 'e']
 			}
 		]
 	}
@@ -163,7 +165,7 @@ export const createNoteCommands = (notePath: string): CommandGroup => {
 			{
 				title: 'Save note',
 				icon: 'floppy',
-				shortcut: ['cmd', 's'],
+				shortcut: SHORTCUTS['note:save'],
 				onSelect: () => {
 					saveNote(notePath);
 				}
@@ -171,7 +173,7 @@ export const createNoteCommands = (notePath: string): CommandGroup => {
 			{
 				title: 'Duplicate note',
 				icon: 'copy',
-				shortcut: ['cmd', 'shift', 'd'],
+				shortcut: SHORTCUTS['note:duplicate'],
 				onSelect() {
 					duplicateNote(notePath);
 				}
@@ -179,12 +181,12 @@ export const createNoteCommands = (notePath: string): CommandGroup => {
 			{
 				title: 'Rename note',
 				icon: 'editPencil',
-				shortcut: ['cmd', 'r']
+				shortcut: SHORTCUTS['note:rename']
 			},
 			{
 				title: 'Delete note',
 				icon: 'bin',
-				shortcut: ['cmd', 'd'],
+				shortcut: SHORTCUTS['note:delete'],
 				onSelect: () => {
 					deleteNote(notePath);
 				}
@@ -192,7 +194,7 @@ export const createNoteCommands = (notePath: string): CommandGroup => {
 			{
 				title: 'Move note to...',
 				icon: 'motionCirclesLines',
-				shortcut: ['cmd', 'shift', 'm'],
+				shortcut: SHORTCUTS['command:move-note'],
 				onSelect: () => {
 					return 'move_note';
 				}
@@ -200,7 +202,7 @@ export const createNoteCommands = (notePath: string): CommandGroup => {
 			{
 				title: 'Copy note path',
 				icon: 'copy',
-				shortcut: ['cmd', 'c'],
+				// shortcut: ['cmd', 'c'],
 				onSelect: () => {
 					navigator.clipboard.writeText(notePath);
 				}
@@ -208,7 +210,7 @@ export const createNoteCommands = (notePath: string): CommandGroup => {
 			{
 				title: 'Reveal in Finder',
 				icon: 'eye',
-				shortcut: ['cmd', 'o'],
+				shortcut: SHORTCUTS['note:show-in-folder'],
 				onSelect: () => {
 					showInFolder(notePath);
 				}

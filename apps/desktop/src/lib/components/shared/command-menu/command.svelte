@@ -7,6 +7,7 @@
 	import { getAllItems } from './helpers';
 	import { mainCommands as commands, createNoteCommands } from './commands';
 	import { setMode, mode } from 'mode-watcher';
+	import { shortcutToString } from '@/utils';
 
 	let open = false;
 	let search = '';
@@ -134,24 +135,11 @@
 									<span class="text-foreground/80 group:hover:text-foreground/100"></span>
 									{command.title}
 								</div>
-								<span class="ml-auto text-xs tracking-widest text-muted-foreground h-full"
-									>{command.shortcut
-										.map((key) => {
-											switch (key) {
-												case 'cmd':
-													return '⌘';
-												case 'shift':
-													return '⇧';
-												case 'up':
-													return '↑';
-												case 'down':
-													return '↓';
-												default:
-													return key.toUpperCase();
-											}
-										})
-										.join('')}
-								</span>
+								{#if command.shortcut}
+									<span class="ml-auto text-xs tracking-widest text-muted-foreground h-full"
+										>{shortcutToString(command.shortcut)}
+									</span>
+								{/if}
 							</div>
 						</Command.Item>
 					{/each}
