@@ -5,6 +5,7 @@
 	import {
 		collection,
 		editor,
+		collectionSearchActive,
 		isNotesSidebarOpen,
 		notesSidebarWidth,
 		resizingNotesSidebar
@@ -23,7 +24,6 @@
 
 	let entries: FileEntry[] = [];
 	let folderToggleState: 'collapse' | 'expand';
-	let searchActive: boolean;
 	let toggleFolderStates: () => void;
 	let stopWatching: UnlistenFn;
 
@@ -45,6 +45,20 @@
 		if (value) {
 			if (stopWatching) stopWatching();
 			stopWatching = await watchCollection();
+		}
+	});
+
+	collectionSearchActive.subscribe((value) => {
+		// Should focus inputs when search is active
+		if (value) {
+			const input = document.querySelector('#notesSearch') as HTMLInputElement;
+			if (input) {
+				// Wait 250ms for the input to be visible
+				setTimeout(() => {
+					// Focus the input
+					input.focus();
+				}, 250);
+			}
 		}
 	});
 
@@ -121,10 +135,11 @@
 
 	<!-- Controls -->
 	<div class="relative top-0 flex flex-col min-h-10 w-full border-b bg-background overflow-hidden">
+		<!-- Main Actions -->
 		<div
 			class={cn(
-				'flex flex-row items-center w-full h-full px-3.5 gap-2 shrink-0 transform transition-all translate-y-0',
-				searchActive && '-translate-y-12'
+				'flex flex-row items-center justify-center w-full h-full px-3.5 gap-2 shrink-0 transform transition-all translate-y-0',
+				$collectionSearchActive && '-translate-y-12'
 			)}
 		>
 			<Tooltip text="New note" side="bottom" shortcut={SHORTCUTS['notes:create']}>
@@ -186,20 +201,28 @@
 					scale="md"
 					class="h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all"
 					on:click={() => {
-						searchActive = !searchActive;
+						collectionSearchActive.set(!$collectionSearchActive);
 					}}
 				>
+					<Shortcut options={SHORTCUTS['notes:search']} />
 					<Icon name="searchBars" class="w-[18px] h-[18px]" />
 				</Button>
 			</Tooltip>
 		</div>
+		<!-- Search -->
 		<div
 			class={cn(
-				'absolute pb-[0.5px] flex flex-row items-center justify-center w-full h-full px-3.5 gap-1.5 shrink-0 transform transition-all translate-y-12',
-				searchActive && 'translate-y-0'
+				'absolute pb-[0.5px] flex flex-row items-center justify-center w-full h-full px-[5px] gap-1 shrink-0 transform transition-all translate-y-12',
+				$collectionSearchActive && 'translate-y-0'
 			)}
 		>
-			<Input class="w-full h-7" placeholder="Search" spellcheck="false" />
+			<Input
+				id="notesSearch"
+				class="w-full h-[30px] text-[13px]"
+				placeholder="Search"
+				spellcheck="false"
+				disabled={!$collectionSearchActive}
+			/>
 			<Tooltip text="Close" side="bottom">
 				<Button
 					size="icon"
@@ -207,7 +230,7 @@
 					scale="md"
 					class="h-7 w-7 shrink-0 fill-muted-foreground hover:fill-foreground transition-all"
 					on:click={() => {
-						searchActive = !searchActive;
+						collectionSearchActive.set(!$collectionSearchActive);
 					}}
 				>
 					<Icon name="x" class="w-4 h-4" />

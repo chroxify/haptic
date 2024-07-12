@@ -197,7 +197,7 @@
 								size="sm"
 								variant="ghost"
 								scale="sm"
-								class="h-7 w-full fill-muted-foreground hover:fill-foreground transition-all flex items-center justify-between"
+								class="h-7 w-full fill-muted-foreground hover:fill-foreground text-secondary-foreground/80 hover:text-foreground transition-all flex items-center justify-between"
 								style={`padding-left: ${calculateDepth(entry.path)}`}
 								draggable
 							>
@@ -229,7 +229,7 @@
 									<span class="text-xs truncate">{entry.name}</span>
 								</div>
 								<!-- TODO: Make this an optional feature -->
-								<span class="text-xs text-foreground/40 font-light">{entry.children.length}</span>
+								<span class="text-xs text-foreground/40">{entry.children.length}</span>
 							</Button>
 						</Collapsible.Trigger>
 					</div>
@@ -344,8 +344,8 @@
 						variant="ghost"
 						scale="sm"
 						class={cn(
-							'h-7 w-full transition-all flex items-center gap-2 justify-start',
-							$activeFile === entry.path && 'bg-accent'
+							'h-7 w-full transition-all text-secondary-foreground/80 hover:text-foreground flex items-center gap-2 justify-start',
+							$activeFile === entry.path && 'bg-accent text-foreground'
 						)}
 						style={`padding-left: ${calculateDepth(entry.path)}`}
 						on:click={() => openNote(entry.path)}

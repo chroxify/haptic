@@ -3,6 +3,7 @@ import type { CollectionSettingsParams, ShortcutParams } from './types';
 export const SHORTCUTS: Record<string, ShortcutParams> = {
 	'editor:toggle-mode': { command: true, key: 'e' },
 	'editor:search': { command: true, key: 'f' },
+	'notes:search': { command: true, shift: true, key: 'f' },
 	'notes:toggle-sidebar': { command: true, shift: true, key: 's' },
 	'notes:create': { command: true, key: 'n' },
 	'note:duplicate': { key: 'd', hover: true },

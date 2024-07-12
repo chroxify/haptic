@@ -80,7 +80,7 @@
 	editorSearchActive.subscribe((value) => {
 		// Should focus inputs when search is active
 		if (value) {
-			const input = document.querySelector('input');
+			const input = document.querySelector('#editorSearch') as HTMLInputElement;
 			if (input) {
 				input.focus();
 			}
@@ -146,7 +146,13 @@
 			</Button>
 		</Collapsible.Trigger>
 		<div class="flex flex-row items-center justify-between h-full w-full gap-1 -mt-[1px]">
-			<Input class="w-full h-7" placeholder="Find" spellcheck="false" bind:value={searchValue} />
+			<Input
+				id="editorSearch"
+				class="w-full h-7"
+				placeholder="Find"
+				spellcheck="false"
+				bind:value={searchValue}
+			/>
 			<div class="flex items-center h-full gap-0.5">
 				<Tooltip text="Case sensitive" side="bottom">
 					<Button

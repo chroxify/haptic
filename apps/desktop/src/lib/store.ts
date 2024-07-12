@@ -14,6 +14,7 @@ const collection = writable<string>();
 
 const tooltipsOpen = writable<number>(0);
 
+const collectionSearchActive = writable<boolean>(false);
 const isNotesSidebarOpen = writable<boolean>(true);
 const notesSidebarWidth = writable<number>(200);
 const resizingNotesSidebar = writable<boolean>(false);
@@ -26,6 +27,7 @@ export {
 	activeFile,
 	collection,
 	tooltipsOpen,
+	collectionSearchActive,
 	isNotesSidebarOpen,
 	notesSidebarWidth,
 	resizingNotesSidebar,

@@ -52,7 +52,7 @@
 
 <Header />
 <Sidebar />
-<main class="flex min-h-screen w-full items-center justify-center">
+<main class="flex min-h-screen w-full items-center justify-center antialiased">
 	<slot />
 </main>
 <Footer />
