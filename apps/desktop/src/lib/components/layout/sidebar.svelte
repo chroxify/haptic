@@ -8,22 +8,13 @@
 	import SettingsModal from '../settings/settings-modal.svelte';
 	import { SHORTCUTS } from '@/constants';
 
-	let selected: 'notes' | 'daily' | 'tasks' | null = null;
-
-	const handleSelected = (value: 'notes' | 'daily' | 'tasks' | null) => {
-		if (selected === value) {
-			return (selected = null);
-		}
-
-		selected = value;
-	};
+	let selected: 'notes' | 'daily' | 'tasks' = 'notes';
 
 	// TODO: Just use $page instead in the active validation
 	page.subscribe((value) => {
 		if (value.url.pathname === '/notes') {
 			selected = 'notes';
 		}
-		// console.log(value.url.pathname);
 	});
 </script>
 
@@ -37,7 +28,7 @@
 					size="icon"
 					variant="ghost"
 					class={cn(
-						'h-7 w-7 fill-muted-foreground hover:fill-foreground',
+						'h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all',
 						selected === 'notes' && 'fill-foreground bg-accent'
 					)}
 					scale="md"
@@ -53,11 +44,11 @@
 					size="icon"
 					variant="ghost"
 					class={cn(
-						'h-7 w-7 fill-muted-foreground hover:fill-foreground',
-						selected === 'daily' && 'fill-foreground'
+						'h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all',
+						selected === 'daily' && 'fill-foreground bg-accent'
 					)}
 					scale="md"
-					on:click={() => handleSelected('daily')}
+					on:click={() => (selected = 'daily')}
 				>
 					<Icon name="calendarEdit" class="w-[18px] h-[18px]" />
 				</Button>
@@ -73,7 +64,7 @@
 						selected === 'tasks' && 'fill-foreground'
 					)}
 					scale="md"
-					on:click={() => handleSelected('tasks')}
+					on:click={() => (selected = 'tasks')}
 				>
 					<Icon name="checkSquare" class="w-[18px] h-[18px]" />
 				</Button>

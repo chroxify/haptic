@@ -5,7 +5,7 @@ import {
 	editor,
 	editorMode,
 	editorSearchActive,
-	isNotesSidebarOpen,
+	isPageSidebarOpen,
 	collectionSearchActive
 } from '@/store';
 import { get } from 'svelte/store';
@@ -151,7 +151,7 @@ export const mainCommands: CommandGroup[] = [
 				icon: 'sidebarMenuLeft',
 				shortcut: SHORTCUTS['notes:toggle-sidebar'],
 				onSelect: () => {
-					isNotesSidebarOpen.update((open) => !open);
+					isPageSidebarOpen.update((open) => !open);
 				}
 			},
 			{

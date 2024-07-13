@@ -156,5 +156,8 @@ export async function validateHapticFolder(path: string) {
 
 		// Create trash folder
 		await createDir(path + '/.haptic/trash');
+
+		// Create daily folder
+		await createDir(path + '/.haptic/daily');
 	}
 }

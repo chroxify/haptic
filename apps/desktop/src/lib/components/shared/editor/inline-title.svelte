@@ -2,6 +2,8 @@
 	import { renameNote } from '@/api/notes';
 	import { editor, activeFile, collectionSettings } from '@/store';
 
+	export let preCheckRegex: RegExp | undefined = undefined;
+
 	let value = '';
 
 	// Handle keydown for enter key
@@ -14,6 +16,11 @@
 	// Rename handler on input blur
 	async function handleBlur() {
 		if (!$activeFile) return;
+
+		// Make sure file name is in date format year-month-day, else return
+		if (preCheckRegex && !preCheckRegex.test(value)) {
+			value = $activeFile.split('/').pop()!.split('.').slice(0, -1).join('.');
+		}
 
 		if (
 			value !== $activeFile.split('/').pop()!.split('.').slice(0, -1).join('.') &&

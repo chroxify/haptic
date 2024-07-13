@@ -54,7 +54,6 @@
 					transformPastedText: true
 				})
 			],
-			content: '<p>Hello World! 🌍️ </p>',
 			editorProps: {
 				attributes: {
 					class: 'prose prose-theme mx-auto focus:outline-none min-h-full pb-6 select-text'

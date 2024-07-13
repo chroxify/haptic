@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { Button } from '@haptic/ui/components/button';
 	import Icon from '@/components/shared/icon.svelte';
-	import Folder from './folder.svelte';
+	import Entries from './entries.svelte';
 	import {
 		collection,
 		editor,
 		collectionSearchActive,
-		isNotesSidebarOpen,
-		notesSidebarWidth,
-		resizingNotesSidebar
+		isPageSidebarOpen,
+		pageSidebarWidth,
+		resizingPageSidebar
 	} from '@/store';
-	import { createNote } from '@/api/notes';
+	import { createNote, openNote } from '@/api/notes';
 	import { watchImmediate } from 'tauri-plugin-fs-watch-api';
 	import type { FileEntry } from '@tauri-apps/api/fs';
 	import { fetchCollectionEntries } from '@/api/collection';
@@ -42,6 +42,15 @@
 
 	collection.subscribe(async (value) => {
 		entries = await fetchCollectionEntries(value);
+
+		// Find first item that is a note (entry.children === undefined)
+		const firstNote = entries.find((entry) => !entry.children);
+
+		// Open the first note
+		if (firstNote) {
+			openNote(firstNote.path);
+		}
+
 		if (value) {
 			if (stopWatching) stopWatching();
 			stopWatching = await watchCollection();
@@ -63,23 +72,23 @@
 	});
 
 	const handleMouseMove = (e: MouseEvent) => {
-		resizingNotesSidebar.set(true);
+		resizingPageSidebar.set(true);
 
 		const x = e.x;
 
 		// Set collapsing bounds
 		if (x < 100) {
-			resizingNotesSidebar.set(false);
-			isNotesSidebarOpen.set(false);
+			resizingPageSidebar.set(false);
+			isPageSidebarOpen.set(false);
 			return;
-		} else if (x > 100 && !$isNotesSidebarOpen) {
-			resizingNotesSidebar.set(false);
-			isNotesSidebarOpen.set(true);
+		} else if (x > 100 && !$isPageSidebarOpen) {
+			resizingPageSidebar.set(false);
+			isPageSidebarOpen.set(true);
 			return;
 		}
 
 		// Set width bounds
-		if ($notesSidebarWidth + e.movementX < 200 || $notesSidebarWidth + e.movementX > 500) {
+		if ($pageSidebarWidth + e.movementX < 200 || $pageSidebarWidth + e.movementX > 500) {
 			return;
 		}
 
@@ -88,13 +97,13 @@
 			return;
 		}
 
-		notesSidebarWidth.update((value) => value + e.movementX);
+		pageSidebarWidth.update((value) => value + e.movementX);
 	};
 
 	// Resize sidebar handler
 	const resizeHandler = () => {
 		// Set resizing state
-		resizingNotesSidebar.set(true);
+		resizingPageSidebar.set(true);
 
 		// Blur the editor
 		$editor.commands.blur();
@@ -110,7 +119,7 @@
 			// Remove cursor-col-resize class from body
 			document.body.classList.remove('cursor-col-resize');
 
-			resizingNotesSidebar.set(false);
+			resizingPageSidebar.set(false);
 		};
 
 		// Add event listeners
@@ -122,9 +131,9 @@
 <div
 	class={cn(
 		'fixed left-12 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
-		!$isNotesSidebarOpen && '-translate-x-52'
+		!$isPageSidebarOpen && '-translate-x-52'
 	)}
-	style={`width: ${$notesSidebarWidth}px`}
+	style={`width: ${$pageSidebarWidth}px`}
 >
 	<!-- Drag border -->
 	<div
@@ -242,11 +251,11 @@
 	<!-- Folders -->
 	<!-- Set y paddings here instead of in the parent as gap so scrollbar is not affected -->
 	<div
-		class="flex flex-col items-start gap-2 w-full px-2 h-full overflow-auto pt-2 pb-4"
+		class="flex flex-col items-start gap-1 w-full px-2 h-full overflow-auto pt-2 pb-4"
 		data-collection-root
 		data-path={$collection}
 	>
-		<Folder {entries} bind:toggleFolderStates bind:toggleState={folderToggleState} />
+		<Entries {entries} bind:toggleFolderStates bind:toggleState={folderToggleState} />
 	</div>
 </div>
 

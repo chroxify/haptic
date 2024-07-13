@@ -15,9 +15,9 @@ const collection = writable<string>();
 const tooltipsOpen = writable<number>(0);
 
 const collectionSearchActive = writable<boolean>(false);
-const isNotesSidebarOpen = writable<boolean>(true);
-const notesSidebarWidth = writable<number>(200);
-const resizingNotesSidebar = writable<boolean>(false);
+const isPageSidebarOpen = writable<boolean>(true);
+const pageSidebarWidth = writable<number>(200);
+const resizingPageSidebar = writable<boolean>(false);
 
 const appSettings = writable<AppSettingsParams>(BASE_APP_SETTINGS);
 const collectionSettings = writable<CollectionSettingsParams>(BASE_COLLECTION_SETTINGS);
@@ -28,9 +28,9 @@ export {
 	collection,
 	tooltipsOpen,
 	collectionSearchActive,
-	isNotesSidebarOpen,
-	notesSidebarWidth,
-	resizingNotesSidebar,
+	isPageSidebarOpen,
+	pageSidebarWidth,
+	resizingPageSidebar,
 	noteHistory,
 	editorMode,
 	editorSearchActive,

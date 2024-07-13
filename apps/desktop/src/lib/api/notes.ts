@@ -5,7 +5,7 @@ import { homeDir } from '@tauri-apps/api/path';
 import { get } from 'svelte/store';
 
 // Create a new note
-export const createNote = async (dirPath: string) => {
+export const createNote = async (dirPath: string, name?: string) => {
 	// Read the directory
 	const files = await readDir(dirPath);
 
@@ -13,7 +13,9 @@ export const createNote = async (dirPath: string) => {
 	const untitledNotes = files.filter(
 		(file) => file.name?.toLowerCase().startsWith('untitled') && file.children === undefined
 	);
-	const name = `Untitled${untitledNotes.length ? ` ${untitledNotes.length}` : ''}.md`;
+	if (!name) {
+		name = `Untitled${untitledNotes.length ? ` ${untitledNotes.length}` : ''}.md`;
+	}
 
 	// Save the new note
 	await writeTextFile(`${dirPath}/${name}`, '');

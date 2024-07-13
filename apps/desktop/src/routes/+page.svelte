@@ -3,6 +3,7 @@
 	import { toggleMode } from 'mode-watcher';
 </script>
 
+<!-- ! This is basically a dead page as page.server.ts always redirects to /notes -->
 <Button variant="outline">Buttons</Button>
 <Button on:click={toggleMode} variant="outline" size="icon">
 	sun

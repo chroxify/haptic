@@ -6,7 +6,7 @@
 		collection,
 		editor,
 		editorMode,
-		isNotesSidebarOpen,
+		isPageSidebarOpen,
 		noteHistory
 	} from '@/store';
 	import Button from '@haptic/ui/components/button/button.svelte';
@@ -14,6 +14,10 @@
 	import { openNote } from '@/api/notes';
 	import { SHORTCUTS } from '@/constants';
 	import Shortcut from '@/components/shared/shortcut.svelte';
+
+	export let hideHistory: boolean = false;
+	export let hideParentDirectories: boolean = false;
+
 	let historyIndex: number = 0;
 
 	noteHistory.subscribe((value) => {
@@ -26,7 +30,7 @@
 >
 	<div class="flex gap-1.5 select-none">
 		<Tooltip
-			text={$isNotesSidebarOpen ? 'Collapse' : 'Expand'}
+			text={$isPageSidebarOpen ? 'Collapse' : 'Expand'}
 			side="bottom"
 			shortcut={SHORTCUTS['notes:toggle-sidebar']}
 		>
@@ -36,7 +40,7 @@
 				scale="md"
 				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				on:click={() => {
-					isNotesSidebarOpen.update((state) => !state);
+					isPageSidebarOpen.update((state) => !state);
 				}}
 			>
 				<Shortcut options={SHORTCUTS['notes:toggle-sidebar']} />
@@ -44,71 +48,87 @@
 					name="sidebarArrow"
 					class={cn(
 						'w-4 h-4 transform transition-transform',
-						$isNotesSidebarOpen ? 'rotate-180' : ''
+						$isPageSidebarOpen ? 'rotate-180' : ''
 					)}
 				/>
 			</Button>
 		</Tooltip>
-		<Tooltip text="Previous note" side="bottom">
-			<Button
-				size="icon"
-				variant="ghost"
-				scale="md"
-				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
-				disabled={!$noteHistory?.length || $noteHistory?.length === 1 || historyIndex === 0}
-				on:click={() => {
-					// Decrement the history index
-					historyIndex--;
+		{#if !hideHistory}
+			<Tooltip text="Previous note" side="bottom">
+				<Button
+					size="icon"
+					variant="ghost"
+					scale="md"
+					class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
+					disabled={!$noteHistory?.length || $noteHistory?.length === 1 || historyIndex === 0}
+					on:click={() => {
+						// Decrement the history index
+						historyIndex--;
 
-					// Set the active file to the previous note
-					openNote($noteHistory[historyIndex], true);
-				}}
-			>
-				<Icon name="arrowLeft" class="w-4 h-4" />
-			</Button>
-		</Tooltip>
-		<Tooltip text="Next note" side="bottom">
-			<Button
-				size="icon"
-				variant="ghost"
-				scale="md"
-				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
-				disabled={!$noteHistory?.length ||
-					$noteHistory?.length === 1 ||
-					historyIndex === $noteHistory?.length - 1}
-				on:click={() => {
-					// Increment the history index
-					historyIndex++;
+						// Set the active file to the previous note
+						openNote($noteHistory[historyIndex], true);
+					}}
+				>
+					<Icon name="arrowLeft" class="w-4 h-4" />
+				</Button>
+			</Tooltip>
+			<Tooltip text="Next note" side="bottom">
+				<Button
+					size="icon"
+					variant="ghost"
+					scale="md"
+					class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
+					disabled={!$noteHistory?.length ||
+						$noteHistory?.length === 1 ||
+						historyIndex === $noteHistory?.length - 1}
+					on:click={() => {
+						// Increment the history index
+						historyIndex++;
 
-					// Set the active file to the next note
-					openNote($noteHistory[historyIndex], true);
-				}}
-			>
-				<Icon name="arrowRight" class="w-4 h-4" />
-			</Button>
-		</Tooltip>
+						// Set the active file to the next note
+						openNote($noteHistory[historyIndex], true);
+					}}
+				>
+					<Icon name="arrowRight" class="w-4 h-4" />
+				</Button>
+			</Tooltip>
+		{:else}
+			<div class="w-6" />
+			<div class="w-6" />
+		{/if}
 	</div>
 	<div class="flex gap-1.5">
 		<p class="text-xs flex items-center text-muted-foreground fill-muted-foreground">
-			{#each $activeFile?.replace($collection, '').split('/') ?? [] as folder, i}
-				{#if i !== 0}
-					<Button
-						size="sm"
-						variant="ghost"
-						scale="sm"
-						class={cn(
-							'h-6 text-[13px] w-fit px-1.5 fill-muted-foreground hover:fill-foreground transition-all font-normal',
-							i === ($activeFile?.replace($collection, '').split('/') ?? [])?.length - 1 &&
-								'text-foreground font-medium'
-						)}
-					>
-						{folder}
-					</Button>
-					{#if i !== ($activeFile?.replace($collection, '').split('/') ?? [])?.length - 1}
-						<Icon name="chevron" class="w-3.5 h-3.5 inline-block" />
+			{#if !hideParentDirectories}
+				{#each $activeFile?.replace($collection, '').split('/') ?? [] as folder, i}
+					{#if i !== 0}
+						<Button
+							size="sm"
+							variant="ghost"
+							scale="sm"
+							class={cn(
+								'h-6 text-[13px] w-fit px-1.5 fill-muted-foreground hover:fill-foreground transition-all font-normal',
+								i === ($activeFile?.replace($collection, '').split('/') ?? [])?.length - 1 &&
+									'text-foreground font-medium'
+							)}
+						>
+							{folder}
+						</Button>
+						{#if i !== ($activeFile?.replace($collection, '').split('/') ?? [])?.length - 1}
+							<Icon name="chevron" class="w-3.5 h-3.5 inline-block" />
+						{/if}
 					{/if}
-				{/if}
-			{/each}
+				{/each}
+			{:else}
+				<Button
+					size="sm"
+					variant="ghost"
+					scale="sm"
+					class="h-6 text-[13px] w-fit px-1.5 text-foreground transition-all font-medium"
+				>
+					{$activeFile?.replace($collection, '').split('/')?.slice(-1)[0]}
+				</Button>
+			{/if}
 		</p>
 	</div>
 	<div class="flex gap-1.5">
