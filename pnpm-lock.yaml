@@ -82,7 +82,7 @@ importers:
         version: 0.1.20(tailwindcss@3.4.1)
       tauri-plugin-fs-watch-api:
         specifier: github:tauri-apps/tauri-plugin-fs-watch#v1
-        version: github.com/tauri-apps/tauri-plugin-fs-watch/f74123edf269381171c5ef40a9599c3e87bb096a
+        version: github.com/tauri-apps/tauri-plugin-fs-watch/27c1ee0740eb63c4b3f417866e0c2b0a196262ea
       tiptap-markdown:
         specifier: ^0.8.9
         version: 0.8.9(@tiptap/core@2.2.1)
@@ -190,8 +190,8 @@ importers:
         specifier: ^0.0.13
         version: 0.0.13(svelte@4.2.8)
       lucide-svelte:
-        specifier: ^0.321.0
-        version: 0.321.0(svelte@4.2.8)
+        specifier: ^0.408.0
+        version: 0.408.0(svelte@4.2.8)
       radix-icons-svelte:
         specifier: ^1.2.1
         version: 1.2.1
@@ -819,6 +819,11 @@ packages:
 
   /@tauri-apps/api@1.5.3:
     resolution: {integrity: sha512-zxnDjHHKjOsrIzZm6nO5Xapb/BxqUq1tc7cGkFXsFkGTsSWgCPH1D8mm0XS9weJY2OaR73I3k3S+b7eSzJDfqA==}
+    engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+    dev: false
+
+  /@tauri-apps/api@1.6.0:
+    resolution: {integrity: sha512-rqI++FWClU5I2UBp4HXFvl+sBWkdigBkxnpJDQUWttNyG7IZP4FwQGhTNL5EOw0vI8i6eSAJ5frLqO7n7jbJdg==}
     engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
     dev: false
 
@@ -2391,6 +2396,14 @@ packages:
       svelte: 4.2.8
     dev: false
 
+  /lucide-svelte@0.408.0(svelte@4.2.8):
+    resolution: {integrity: sha512-5rJvcnHvE+K/2ebff/tKvG1FmIut01hDUaibMk6pG2Je+82TCPflVvhMvgCjP0fkM0ztj5t/ma1s5WYyketOSA==}
+    peerDependencies:
+      svelte: ^3 || ^4 || ^5.0.0-next.42
+    dependencies:
+      svelte: 4.2.8
+    dev: false
+
   /magic-string@0.27.0:
     resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
     engines: {node: '>=12'}
@@ -3699,10 +3712,10 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  github.com/tauri-apps/tauri-plugin-fs-watch/f74123edf269381171c5ef40a9599c3e87bb096a:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-watch/tar.gz/f74123edf269381171c5ef40a9599c3e87bb096a}
+  github.com/tauri-apps/tauri-plugin-fs-watch/27c1ee0740eb63c4b3f417866e0c2b0a196262ea:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-watch/tar.gz/27c1ee0740eb63c4b3f417866e0c2b0a196262ea}
     name: tauri-plugin-fs-watch-api
     version: 0.0.0
     dependencies:
-      '@tauri-apps/api': 1.5.3
+      '@tauri-apps/api': 1.6.0
     dev: false

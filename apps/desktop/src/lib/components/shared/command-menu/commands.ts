@@ -114,6 +114,11 @@ export const mainCommands: CommandGroup[] = [
 				// shortcut: ['cmd', 'h']
 			},
 			{
+				title: 'View shortcuts',
+				icon: 'bolt',
+				shortcut: SHORTCUTS['app:shortcuts']
+			},
+			{
 				title: 'Send feedback',
 				icon: 'lifebouy'
 				// shortcut: ['cmd', 'shift', 'h']

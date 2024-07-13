@@ -194,7 +194,7 @@
 					/>
 				</Button>
 			</Tooltip>
-			<Tooltip text="Search" side="bottom">
+			<Tooltip text="Search" side="bottom" shortcut={SHORTCUTS['notes:search']}>
 				<Button
 					size="icon"
 					variant="ghost"

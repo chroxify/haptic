@@ -1,23 +1,23 @@
 {
-  "name": "@haptic/ui",
-  "version": "0.0.0",
-  "type": "module",
-  "module": "index.ts",
-  "main": "index.ts",
-  "scripts": {
-    "lint": "eslint ."
-  },
-  "devDependencies": {
-    "@haptic/eslint-config": "workspace:*",
-    "svelte": "^4.2.8"
-  },
-  "dependencies": {
-    "bits-ui": "^0.16.0",
-    "clsx": "^2.1.0",
-    "cmdk-sv": "^0.0.13",
-    "lucide-svelte": "^0.321.0",
-    "radix-icons-svelte": "^1.2.1",
-    "tailwind-merge": "^2.2.1",
-    "tailwind-variants": "^0.1.20"
-  }
+	"name": "@haptic/ui",
+	"version": "0.0.0",
+	"type": "module",
+	"module": "index.ts",
+	"main": "index.ts",
+	"scripts": {
+		"lint": "eslint ."
+	},
+	"devDependencies": {
+		"@haptic/eslint-config": "workspace:*",
+		"svelte": "^4.2.8"
+	},
+	"dependencies": {
+		"bits-ui": "^0.16.0",
+		"clsx": "^2.1.0",
+		"cmdk-sv": "^0.0.13",
+		"lucide-svelte": "^0.408.0",
+		"radix-icons-svelte": "^1.2.1",
+		"tailwind-merge": "^2.2.1",
+		"tailwind-variants": "^0.1.20"
+	}
 }
