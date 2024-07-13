@@ -29,9 +29,7 @@
 						}
 					}
 				}),
-				Document.extend({
-					content: $collectionSettings.editor.show_inline_title ? 'heading block*' : 'block*'
-				}),
+				Document,
 				SearchAndReplace.configure({
 					searchResultClass: 'search-result',
 					disableRegex: false
@@ -59,7 +57,7 @@
 			content: '<p>Hello World! 🌍️ </p>',
 			editorProps: {
 				attributes: {
-					class: 'prose prose-theme mx-auto focus:outline-none min-h-full py-6 select-text'
+					class: 'prose prose-theme mx-auto focus:outline-none min-h-full pb-6 select-text'
 				}
 			},
 			onTransaction: () => {

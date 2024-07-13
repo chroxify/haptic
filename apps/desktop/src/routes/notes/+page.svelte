@@ -3,6 +3,7 @@
 	import EditorToolbar from './editor-toolbar.svelte';
 	import EditorSearch from './editor-search.svelte';
 	import { collectionSettings } from '@/store';
+	import EditorInlineTitle from './editor-inline-title.svelte';
 </script>
 
 <div
@@ -12,5 +13,6 @@
 		<EditorToolbar />
 	{/if}
 	<EditorSearch />
+	<EditorInlineTitle />
 	<Editor />
 </div>

@@ -56,6 +56,15 @@ export const deleteNote = async (path: string) => {
 
 // Rename a note
 export const renameNote = async (path: string, name: string) => {
+	// Make sure file extension is included
+	if (!name.endsWith('.md')) {
+		name += '.md';
+	}
+
+	// Remove breaking characters
+	name = name.replace(/[/\\?%*:|"<>]/g, '');
+
+	// Rename the file
 	await renameFile(path, `${path.split('/').slice(0, -1).join('/')}/${name}`);
 	activeFile.set(`${path.split('/').slice(0, -1).join('/')}/${name}`);
 };

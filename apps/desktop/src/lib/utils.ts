@@ -4,7 +4,7 @@ import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
 import { createDir, readDir, type FileEntry } from '@tauri-apps/api/fs';
 import { get } from 'svelte/store';
-import { collectionSettings, editor } from './store';
+import { editor } from './store';
 import { EditorState } from '@tiptap/pm/state';
 import { invoke } from '@tauri-apps/api/tauri';
 import type { ShortcutParams } from './types';
@@ -81,11 +81,6 @@ export function hideDotFiles(entries: FileEntry[]) {
 export function setEditorContent(content: string, title: string) {
 	const $editor = get(editor);
 
-	// Set document title
-	if (get(collectionSettings).editor.show_inline_title) {
-		content = `# ${title}\n\n${content}`;
-	}
-
 	// Set content of the editor
 	$editor.commands.setContent(content);
 
@@ -97,13 +92,8 @@ export function setEditorContent(content: string, title: string) {
 	});
 	$editor.view.updateState(newEditorState);
 
-	// Focus first element after heading
-	if (get(collectionSettings).editor.show_inline_title) {
-		const headingEndPos = content.indexOf('\n\n');
-		$editor.chain().focus().setTextSelection(headingEndPos).run();
-	} else {
-		$editor.chain().focus().run();
-	}
+	// Focus first line
+	$editor.chain().focus().run();
 }
 
 // Show in folder
