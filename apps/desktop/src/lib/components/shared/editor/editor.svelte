@@ -91,11 +91,12 @@
 	});
 </script>
 
+<!-- >90px is required to hide scrollbar in normal size -->
 <div
 	bind:this={element}
 	spellcheck={$collectionSettings.editor.spell_check}
 	autocorrect={$collectionSettings.editor.auto_correct.toString()}
-	class="w-full h-full px-8"
+	class="w-full h-[calc(100%-91px)] px-8"
 />
 
 <style>

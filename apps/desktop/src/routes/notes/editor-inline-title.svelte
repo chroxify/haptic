@@ -12,12 +12,23 @@
 	}
 
 	// Rename handler on input blur
-	function handleBlur() {
+	async function handleBlur() {
 		if (!$activeFile) return;
 
-		if (value !== $activeFile.split('/').pop()!.split('.').slice(0, -1).join('.')) {
+		if (
+			value !== $activeFile.split('/').pop()!.split('.').slice(0, -1).join('.') &&
+			value.trim() !== ''
+		) {
 			// Rename note
-			renameNote($activeFile, value);
+			try {
+				await renameNote($activeFile, value);
+			} catch {
+				value = $activeFile.split('/').pop()!.split('.').slice(0, -1).join('.');
+			}
+		}
+
+		if (value.trim() === '') {
+			value = $activeFile.split('/').pop()!.split('.').slice(0, -1).join('.');
 		}
 
 		// Remove last extension
@@ -42,7 +53,6 @@
 			autocomplete="off"
 			autocorrect="off"
 			class="w-[635px] prose font-bold text-4xl text-foreground mx-auto bg-transparent focus:outline-none"
-			placeholder="Search notes..."
 			on:keydown={handleKeydown}
 			on:blur={handleBlur}
 			bind:value

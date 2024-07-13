@@ -64,6 +64,18 @@ export const renameNote = async (path: string, name: string) => {
 	// Remove breaking characters
 	name = name.replace(/[/\\?%*:|"<>]/g, '');
 
+	// Read the directory
+	const files = await readDir(path.split('/').slice(0, -1).join('/'));
+
+	// Make sure there are no name conflicts
+	if (
+		files.some(
+			(file) => file.name?.toLowerCase() === name.toLowerCase() && file.children === undefined
+		)
+	) {
+		throw new Error('Name conflict');
+	}
+
 	// Rename the file
 	await renameFile(path, `${path.split('/').slice(0, -1).join('/')}/${name}`);
 	activeFile.set(`${path.split('/').slice(0, -1).join('/')}/${name}`);
