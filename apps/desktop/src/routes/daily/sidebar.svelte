@@ -13,6 +13,7 @@
 	import type { UnlistenFn } from '@tauri-apps/api/event';
 	import { cn } from '@haptic/ui/lib/utils';
 	import Entries from './entries.svelte';
+	import { Calendar } from '@haptic/ui/components/calendar';
 
 	let entries: FileEntry[] = [];
 	let stopWatching: UnlistenFn;
@@ -67,7 +68,7 @@
 		}
 
 		// Set width bounds
-		if ($pageSidebarWidth + e.movementX < 200 || $pageSidebarWidth + e.movementX > 500) {
+		if ($pageSidebarWidth + e.movementX < 210 || $pageSidebarWidth + e.movementX > 500) {
 			return;
 		}
 
@@ -105,6 +106,24 @@
 		document.addEventListener('mousemove', handleMouseMove);
 		document.addEventListener('mouseup', handleMouseUp);
 	};
+
+	// handle open calendar day
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const handleOpenCalendarDay = (e: any) => {
+		// Pad the month and day with a leading zero if they're single digits
+		const paddedMonth = e.month.toString().padStart(2, '0');
+		const paddedDay = e.day.toString().padStart(2, '0');
+
+		// Create the note name with padded month and day
+		const noteName = `${e.year}-${paddedMonth}-${paddedDay}.md`;
+
+		if (!entries.some((entry) => entry.path.includes(noteName))) {
+			createNote($collection + '/.haptic/daily', noteName);
+		}
+
+		// Open note
+		openNote($collection + '/.haptic/daily/' + noteName, true);
+	};
 </script>
 
 <div
@@ -123,12 +142,14 @@
 
 	<!-- Note Entries -->
 	<div
-		class="flex flex-col items-start gap-2 w-full px-2 h-full overflow-auto pt-2 pb-4"
+		class="flex flex-col items-start gap-2 w-full h-full overflow-auto pt-2.5 px-2 pb-2"
 		data-collection-root
 		data-path={$collection + '/.haptic/daily'}
 	>
 		<Entries {entries} />
 	</div>
+
+	<Calendar class=" border-t w-full" onValueChange={(e) => handleOpenCalendarDay(e)} />
 </div>
 
 <style>

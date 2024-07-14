@@ -24,6 +24,7 @@
 		const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
 		const grouped: Record<string, FileEntry[]> = {
+			upcoming: [],
 			today: [],
 			yesterday: [],
 			thisWeek: [],
@@ -43,7 +44,9 @@
 
 			const entryDate = new Date(year, month - 1, day); // month is 0-indexed in JS Date
 
-			if (entryDate >= today) {
+			if (entryDate > today) {
+				grouped.upcoming.push(entry);
+			} else if (entryDate.getTime() === today.getTime()) {
 				grouped.today.push(entry);
 			} else if (entryDate >= yesterday) {
 				grouped.yesterday.push(entry);
@@ -54,6 +57,25 @@
 			} else {
 				grouped.older.push(entry);
 			}
+		});
+
+		// Sort function to sort entries by date (newest first)
+		const sortByDate = (a: FileEntry, b: FileEntry) => {
+			const getDate = (entry: FileEntry) => {
+				const [year, month, day] = entry.path
+					.split('/')
+					.pop()!
+					.split('.')[0]
+					.split('-')
+					.map(Number);
+				return new Date(year, month - 1, day).getTime();
+			};
+			return getDate(b) - getDate(a);
+		};
+
+		// Sort each group
+		Object.keys(grouped).forEach((key) => {
+			grouped[key as keyof typeof grouped].sort(sortByDate);
 		});
 
 		return grouped;
@@ -68,7 +90,7 @@
 	{#if groupEntries.length > 0}
 		<div class="w-full text-xs space-y-1">
 			<!-- Title -->
-			<Label class="text-muted-foreground text-xs">
+			<Label class="text-muted-foreground text-xs pl-1">
 				{groupName === 'thisWeek'
 					? 'This Week'
 					: groupName === 'thisMonth'

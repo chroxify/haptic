@@ -88,7 +88,7 @@
 		}
 
 		// Set width bounds
-		if ($pageSidebarWidth + e.movementX < 200 || $pageSidebarWidth + e.movementX > 500) {
+		if ($pageSidebarWidth + e.movementX < 210 || $pageSidebarWidth + e.movementX > 500) {
 			return;
 		}
 

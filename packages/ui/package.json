@@ -12,6 +12,7 @@
 		"svelte": "^4.2.8"
 	},
 	"dependencies": {
+		"@internationalized/date": "^3.5.4",
 		"bits-ui": "^0.16.0",
 		"clsx": "^2.1.0",
 		"cmdk-sv": "^0.0.13",

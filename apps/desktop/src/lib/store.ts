@@ -16,7 +16,7 @@ const tooltipsOpen = writable<number>(0);
 
 const collectionSearchActive = writable<boolean>(false);
 const isPageSidebarOpen = writable<boolean>(true);
-const pageSidebarWidth = writable<number>(200);
+const pageSidebarWidth = writable<number>(210);
 const resizingPageSidebar = writable<boolean>(false);
 
 const appSettings = writable<AppSettingsParams>(BASE_APP_SETTINGS);
