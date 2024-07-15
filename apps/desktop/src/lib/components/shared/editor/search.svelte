@@ -90,7 +90,7 @@
 
 <div
 	class={cn(
-		'fixed right-4 top-[80px] w-96 min-h-10 bg-secondary-background border z-10 rounded-md flex items-center px-1 py-1.5 transition-all duration-200',
+		'fixed right-4 top-[80px] w-96 min-h-10 bg-secondary-background border z-50 rounded-md flex items-center px-1 py-1.5 transition-all duration-200',
 		$editorSearchActive ? 'translate-y-0' : '-translate-y-96'
 	)}
 >

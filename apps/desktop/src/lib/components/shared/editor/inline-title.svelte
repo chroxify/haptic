@@ -53,7 +53,7 @@
 	});
 </script>
 
-<div class="flex items-center w-full h-fit px-8 pb-1">
+<div class="flex items-center w-full h-fit px-8 pb-2.5">
 	{#if $collectionSettings.editor.show_inline_title}
 		<input
 			type="text"

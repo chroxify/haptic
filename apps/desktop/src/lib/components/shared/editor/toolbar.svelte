@@ -6,6 +6,7 @@
 		collection,
 		editor,
 		editorMode,
+		isNoteDetailSidebarOpen,
 		isPageSidebarOpen,
 		noteHistory
 	} from '@/store';
@@ -159,14 +160,24 @@
 				<Icon name="glasses" class={cn('w-4 h-4', $editorMode === 'view' && 'hidden')} />
 			</Button>
 		</Tooltip>
-		<Tooltip text="Expand" side="bottom">
+		<Tooltip text="Expand" side="bottom" shortcut={SHORTCUTS['note:toggle-details']}>
 			<Button
 				size="icon"
 				variant="ghost"
 				scale="md"
 				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
+				on:click={() => {
+					isNoteDetailSidebarOpen.update((state) => !state);
+				}}
 			>
-				<Icon name="sidebarArrow" class="w-4 h-4 transform rotate-180" />
+				<Shortcut options={SHORTCUTS['note:toggle-details']} />
+				<Icon
+					name="sidebarArrow"
+					class={cn(
+						'w-4 h-4 transform transition-transform',
+						$isNoteDetailSidebarOpen ? '' : 'rotate-180'
+					)}
+				/>
 			</Button>
 		</Tooltip>
 	</div>

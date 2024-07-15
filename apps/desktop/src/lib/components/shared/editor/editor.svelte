@@ -10,6 +10,7 @@
 	import { TaskList } from '@tiptap/extension-task-list';
 	import { TaskItem } from '@tiptap/extension-task-item';
 	import { Link } from '@tiptap/extension-link';
+	import CharacterCount from '@tiptap/extension-character-count';
 	import SearchAndReplace from './extensions';
 
 	let element: HTMLDivElement;
@@ -29,6 +30,7 @@
 						}
 					}
 				}),
+				CharacterCount,
 				Document,
 				SearchAndReplace.configure({
 					searchResultClass: 'search-result',
@@ -71,12 +73,16 @@
 				}
 
 				// Set timeout to update the store
-				timeout = setTimeout(() => {
+				timeout = setTimeout(async () => {
 					if ($collectionSettings.editor.auto_save) {
 						console.log('Saving note...');
-						saveNote($activeFile!).catch((error) => {
-							console.error('Error saving note:', error);
-						});
+						saveNote($activeFile!)
+							.then(() => {
+								editor.notifySaveEvent();
+							})
+							.catch((error) => {
+								console.error('Error saving note:', error);
+							});
 					}
 				}, $collectionSettings.editor.auto_save_debounce);
 			}
@@ -90,12 +96,12 @@
 	});
 </script>
 
-<!-- >90px is required to hide scrollbar in normal size -->
+<!-- >96px is required to hide scrollbar in normal size -->
 <div
 	bind:this={element}
 	spellcheck={$collectionSettings.editor.spell_check}
 	autocorrect={$collectionSettings.editor.auto_correct.toString()}
-	class="w-full h-[calc(100%-91px)] px-8"
+	class="w-full h-[calc(100%-97px)] px-8"
 />
 
 <style>

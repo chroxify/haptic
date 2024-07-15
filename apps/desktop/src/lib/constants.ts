@@ -13,6 +13,7 @@ export const SHORTCUTS: Record<string, ShortcutParams> = {
 	'note:rename': { key: 'r', hover: true },
 	'note:delete': { command: true, key: 'Backspace', hover: true },
 	'note:show-in-folder': { shift: true, key: 'f', hover: true },
+	'note:toggle-details': { command: true, key: 'i' },
 	'folder:create': { key: 'f', hover: true },
 	'folder:create-note': { key: 'n', hover: true },
 	'folder:rename': { key: 'r', hover: true },

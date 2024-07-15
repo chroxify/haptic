@@ -35,12 +35,18 @@ importers:
       '@haptic/ui':
         specifier: workspace:^
         version: link:../../packages/ui
+      '@internationalized/date':
+        specifier: ^3.5.4
+        version: 3.5.4
       '@tauri-apps/api':
         specifier: ^1.5.3
         version: 1.5.3
       '@tiptap/core':
         specifier: ^2.2.1
         version: 2.2.1(@tiptap/pm@2.2.1)
+      '@tiptap/extension-character-count':
+        specifier: ^2.5.0
+        version: 2.5.0(@tiptap/core@2.2.1)(@tiptap/pm@2.2.1)
       '@tiptap/extension-document':
         specifier: ^2.2.2
         version: 2.2.2(@tiptap/core@2.2.1)
@@ -80,6 +86,9 @@ importers:
       tailwind-variants:
         specifier: ^0.1.20
         version: 0.1.20(tailwindcss@3.4.1)
+      tauri-plugin-fs-extra-api:
+        specifier: github:tauri-apps/tauri-plugin-fs-extra#v1
+        version: github.com/tauri-apps/tauri-plugin-fs-extra/26b38078869dbfa0f8b6855f47b2e15b3101bef0
       tauri-plugin-fs-watch-api:
         specifier: github:tauri-apps/tauri-plugin-fs-watch#v1
         version: github.com/tauri-apps/tauri-plugin-fs-watch/27c1ee0740eb63c4b3f417866e0c2b0a196262ea
@@ -967,6 +976,16 @@ packages:
       '@tiptap/core': ^2.0.0
     dependencies:
       '@tiptap/core': 2.2.1(@tiptap/pm@2.2.1)
+    dev: false
+
+  /@tiptap/extension-character-count@2.5.0(@tiptap/core@2.2.1)(@tiptap/pm@2.2.1):
+    resolution: {integrity: sha512-kx16DJN9UZIJYLaEZ/Qg7Fh+O5+wEkmn1EJjjYXaWsqB7eR32dw7GbhoBtlleS6r++XoGOnaFzXkax1ja1M65w==}
+    peerDependencies:
+      '@tiptap/core': ^2.5.0
+      '@tiptap/pm': ^2.5.0
+    dependencies:
+      '@tiptap/core': 2.2.1(@tiptap/pm@2.2.1)
+      '@tiptap/pm': 2.2.1
     dev: false
 
   /@tiptap/extension-code-block@2.2.2(@tiptap/core@2.2.1)(@tiptap/pm@2.2.1):
@@ -3714,6 +3733,14 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  github.com/tauri-apps/tauri-plugin-fs-extra/26b38078869dbfa0f8b6855f47b2e15b3101bef0:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/26b38078869dbfa0f8b6855f47b2e15b3101bef0}
+    name: tauri-plugin-fs-extra-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.6.0
+    dev: false
 
   github.com/tauri-apps/tauri-plugin-fs-watch/27c1ee0740eb63c4b3f417866e0c2b0a196262ea:
     resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-watch/tar.gz/27c1ee0740eb63c4b3f417866e0c2b0a196262ea}

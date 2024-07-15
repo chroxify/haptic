@@ -1,3 +1,5 @@
+import type { Metadata } from 'tauri-plugin-fs-extra-api';
+
 export interface ShortcutParams {
 	alt?: boolean;
 	shift?: boolean;
@@ -28,5 +30,14 @@ export interface CollectionSettingsParams {
 	notes: {
 		trash_dir: 'system' | 'haptic' | 'delete';
 		excluded_files: string[];
+	};
+}
+
+export interface NoteMetadata {
+	fileMetadata: Metadata;
+	editorMetadata: {
+		words: number;
+		characters: number;
+		avgReadingTime: string;
 	};
 }

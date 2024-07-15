@@ -1,5 +1,6 @@
 <script lang="ts">
 	import {
+		activeFile,
 		collection,
 		editor,
 		isPageSidebarOpen,
@@ -14,7 +15,9 @@
 	import { cn } from '@haptic/ui/lib/utils';
 	import Entries from './entries.svelte';
 	import { Calendar } from '@haptic/ui/components/calendar';
+	import { CalendarDate, getLocalTimeZone, today, type DateValue } from '@internationalized/date';
 
+	let calValue = today(getLocalTimeZone());
 	let entries: FileEntry[] = [];
 	let stopWatching: UnlistenFn;
 
@@ -108,8 +111,9 @@
 	};
 
 	// handle open calendar day
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const handleOpenCalendarDay = (e: any) => {
+	const handleOpenCalendarDay = async (e: DateValue | undefined) => {
+		if (!e) return;
+
 		// Pad the month and day with a leading zero if they're single digits
 		const paddedMonth = e.month.toString().padStart(2, '0');
 		const paddedDay = e.day.toString().padStart(2, '0');
@@ -117,13 +121,52 @@
 		// Create the note name with padded month and day
 		const noteName = `${e.year}-${paddedMonth}-${paddedDay}.md`;
 
+		// Check if note exists, if not create it - else open it
 		if (!entries.some((entry) => entry.path.includes(noteName))) {
 			createNote($collection + '/.haptic/daily', noteName);
+		} else {
+			openNote($collection + '/.haptic/daily/' + noteName, true);
 		}
 
-		// Open note
-		openNote($collection + '/.haptic/daily/' + noteName, true);
+		// Get note element by data-path
+		let noteElement = document.querySelector(
+			`[data-path="${$collection}/.haptic/daily/${noteName}"]`
+		);
+
+		// If note element is not found, wait for it to be rendered
+		if (!noteElement) {
+			await new Promise((resolve) => setTimeout(resolve, 150));
+		}
+
+		// Get note element again - this is because if the note is newly created, it might not be rendered yet
+		noteElement = document.querySelector(`[data-path="${$collection}/.haptic/daily/${noteName}"]`);
+
+		// Scroll to note element
+		if (noteElement) {
+			const rect = noteElement.getBoundingClientRect();
+			const isAboveView = rect.top < 0;
+			const isBelowView = rect.bottom > window.innerHeight;
+			if (isAboveView || isBelowView) {
+				// Smooth scroll doesn't seem to work well from bottom to top
+				const behavior = isAboveView ? 'auto' : 'smooth';
+				noteElement.scrollIntoView({ behavior, block: 'center' });
+			}
+		}
 	};
+
+	// Listen to activeFile change and update calendar value
+	activeFile.subscribe((value) => {
+		// Extract date string from active file path
+		const dateString = value?.split('/').pop()?.split('.')[0];
+		if (!dateString) return;
+
+		// Parse date string
+		const [year, month, day] = dateString.split('-').map(Number);
+		if (!year || !month || !day) return;
+
+		// Update calendar value
+		calValue = new CalendarDate(year, month, day);
+	});
 </script>
 
 <div
@@ -149,7 +192,11 @@
 		<Entries {entries} />
 	</div>
 
-	<Calendar class=" border-t w-full" onValueChange={(e) => handleOpenCalendarDay(e)} />
+	<Calendar
+		bind:value={calValue}
+		class="border-t w-full"
+		onValueChange={(e) => handleOpenCalendarDay(e)}
+	/>
 </div>
 
 <style>

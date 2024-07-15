@@ -1,8 +1,10 @@
 import { writeTextFile, readDir, readTextFile, renameFile, removeFile } from '@tauri-apps/api/fs';
 import { activeFile, collection, collectionSettings, editor, noteHistory } from '@/store';
-import { setEditorContent } from '@/utils';
+import { calculateReadingTime, setEditorContent } from '@/utils';
 import { homeDir } from '@tauri-apps/api/path';
 import { get } from 'svelte/store';
+import { metadata } from 'tauri-plugin-fs-extra-api';
+import type { NoteMetadata } from '@/types';
 
 // Create a new note
 export const createNote = async (dirPath: string, name?: string) => {
@@ -133,4 +135,25 @@ export const duplicateNote = async (path: string) => {
 
 	// Open the new note
 	openNote(`${path.split('/').slice(0, -1).join('/')}/${newName}`);
+};
+
+export const getNoteMetadata = async (path: string): Promise<NoteMetadata> => {
+	// General file metadata
+	const fileMetadata = await metadata(path);
+
+	// Get editor metadata
+	const editorWordCount = get(editor).storage.characterCount.words();
+	const editorCharacterCount = get(editor).storage.characterCount.characters();
+
+	// Calculate average reading time (in seconds if < 1min and in minutes if >= 1min)
+	const avgReadingTime = calculateReadingTime(editorWordCount);
+
+	return {
+		fileMetadata,
+		editorMetadata: {
+			words: editorWordCount,
+			characters: editorCharacterCount,
+			avgReadingTime: avgReadingTime
+		}
+	};
 };

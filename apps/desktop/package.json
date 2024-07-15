@@ -41,8 +41,10 @@
 	"type": "module",
 	"dependencies": {
 		"@haptic/ui": "workspace:^",
+		"@internationalized/date": "^3.5.4",
 		"@tauri-apps/api": "^1.5.3",
 		"@tiptap/core": "^2.2.1",
+		"@tiptap/extension-character-count": "^2.5.0",
 		"@tiptap/extension-document": "^2.2.2",
 		"@tiptap/extension-link": "^2.2.2",
 		"@tiptap/extension-task-item": "^2.2.2",
@@ -56,6 +58,7 @@
 		"mode-watcher": "^0.1.2",
 		"tailwind-merge": "^2.2.1",
 		"tailwind-variants": "^0.1.20",
+		"tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra#v1",
 		"tauri-plugin-fs-watch-api": "github:tauri-apps/tauri-plugin-fs-watch#v1",
 		"tiptap-markdown": "^0.8.9"
 	}

@@ -1,9 +1,9 @@
 import { writable } from 'svelte/store';
-import { Editor } from '@tiptap/core';
 import type { CollectionSettingsParams, AppSettingsParams } from './types';
 import { BASE_APP_SETTINGS, BASE_COLLECTION_SETTINGS } from './constants';
+import { createEditorStore } from './components/shared/editor/editor-store';
 
-const editor = writable<Editor>();
+const editor = createEditorStore();
 
 const activeFile = writable<string | null>(null);
 const noteHistory = writable<string[]>([]);
@@ -18,6 +18,9 @@ const collectionSearchActive = writable<boolean>(false);
 const isPageSidebarOpen = writable<boolean>(true);
 const pageSidebarWidth = writable<number>(210);
 const resizingPageSidebar = writable<boolean>(false);
+const isNoteDetailSidebarOpen = writable<boolean>(false);
+const noteDetailSidebarWidth = writable<number>(210);
+const resizingNoteDetailSidebar = writable<boolean>(false);
 
 const appSettings = writable<AppSettingsParams>(BASE_APP_SETTINGS);
 const collectionSettings = writable<CollectionSettingsParams>(BASE_COLLECTION_SETTINGS);
@@ -35,5 +38,8 @@ export {
 	editorMode,
 	editorSearchActive,
 	appSettings,
-	collectionSettings
+	collectionSettings,
+	isNoteDetailSidebarOpen,
+	noteDetailSidebarWidth,
+	resizingNoteDetailSidebar
 };

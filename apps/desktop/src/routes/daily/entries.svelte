@@ -101,7 +101,7 @@
 			<!-- Notes -->
 			{#each groupEntries as entry}
 				<ContextMenu.Root>
-					<ContextMenu.Trigger class="w-full">
+					<ContextMenu.Trigger class="w-full" data-path={entry.path}>
 						<div class="w-full h-full" role="button" tabindex="0">
 							<Button
 								size="sm"
