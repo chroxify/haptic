@@ -136,7 +136,7 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Change theme',
 				icon: 'sun',
-				// shortcut: ['cmd', 'shift', 't'],
+				shortcut: SHORTCUTS['settings:toggle-theme'],
 				onSelect: () => {
 					return 'change_theme';
 				}

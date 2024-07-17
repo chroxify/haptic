@@ -103,7 +103,7 @@
 			<Collapsible.Content class="mt-0.5 w-full gap-1.5 flex flex-col">
 				{#each groupedResults[path] as result, index}
 					<button
-						class="flex items-start min-w-full text-start p-2 bg-secondary-background border rounded-md text-xs hover:bg-accent hover:text-accent-foreground"
+						class="flex items-start min-w-full overflow-hidden text-start p-2 bg-secondary-background border rounded-md text-xs hover:bg-accent hover:text-accent-foreground"
 						on:click={async () => {
 							// set search term
 							editorSearchValue.set('');

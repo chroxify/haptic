@@ -46,7 +46,7 @@
 	class="fixed bottom-0 w-full flex justify-between items-center h-9 border-t pb-0.5 px-1.5 bg-background z-20"
 >
 	<div class="cursor-default space-x-0.5">
-		<Tooltip text="Toggle theme">
+		<Tooltip text="Toggle theme" shortcut={SHORTCUTS['settings:toggle-theme']}>
 			<Button
 				on:click={toggleMode}
 				size="icon"

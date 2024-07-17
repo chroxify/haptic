@@ -21,7 +21,8 @@ export const SHORTCUTS: Record<string, ShortcutParams> = {
 	'folder:delete': { command: true, key: 'Backspace', hover: true },
 	'app:settings': { command: true, key: ',' },
 	'app:shortcuts': { command: true, key: '/' },
-	'app:open-collection': { command: true, key: 'o' }
+	'app:open-collection': { command: true, key: 'o' },
+	'settings:toggle-theme': { command: true, key: 't', shift: true }
 };
 
 export const BASE_APP_SETTINGS = {
