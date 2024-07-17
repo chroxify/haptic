@@ -4,13 +4,18 @@
 	import * as Collapsible from '@haptic/ui/components/collapsible';
 	import { Button } from '@haptic/ui/components/button';
 	import { Replace, ReplaceAll, WholeWord, ALargeSmall } from 'lucide-svelte';
-	import { editor, editorSearchActive } from '@/store';
+	import {
+		editor,
+		editorSearchActive,
+		editorSearchValue,
+		isNoteDetailSidebarOpen,
+		noteDetailSidebarWidth
+	} from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
 	import Shortcut from '@/components/shared/shortcut.svelte';
 	import { SHORTCUTS } from '@/constants';
 	import Tooltip from '@/components/shared/tooltip.svelte';
 
-	let searchValue = '';
 	let replaceValue = '';
 	let caseSensitive = false;
 	let wholeWord = false;
@@ -18,16 +23,6 @@
 
 	$: {
 		if ($editor) {
-			// Filter out regex special characters
-			// TODO: Find a fix for this, for some reason regex characters throw an error and makes app unresponsive
-			searchValue = searchValue.replace(/[.*+?^${}()|[\]\\]/g, '');
-
-			if (wholeWord) {
-				$editor.commands.setSearchTerm(`\\b${searchValue}\\b`);
-			} else {
-				$editor.commands.setSearchTerm(searchValue);
-				goToSelection();
-			}
 			$editor.commands.setReplaceTerm(replaceValue);
 			$editor.commands.setCaseSensitive(caseSensitive);
 		}
@@ -68,7 +63,7 @@
 	};
 
 	const close = () => {
-		searchValue = '';
+		editorSearchValue.set('');
 		replaceValue = '';
 		caseSensitive = false;
 		wholeWord = false;
@@ -86,13 +81,30 @@
 			}
 		}
 	});
+
+	editorSearchValue.subscribe((value) => {
+		if ($editor) {
+			// Filter out regex special characters
+			// TODO: Find a fix for this, for some reason regex characters throw an error and makes app unresponsive
+			const filteredValue = value.replace(/[.*+?^${}()|[\]\\]/g, '');
+
+			if (wholeWord) {
+				$editor.commands.setSearchTerm(`\\b${filteredValue}\\b`);
+			} else {
+				$editor.commands.setSearchTerm(filteredValue);
+			}
+
+			goToSelection();
+		}
+	});
 </script>
 
 <div
 	class={cn(
-		'fixed right-4 top-[80px] w-96 min-h-10 bg-secondary-background border z-50 rounded-md flex items-center px-1 py-1.5 transition-all duration-200',
+		'fixed top-[80px] w-96 min-h-10 bg-secondary-background border z-30 rounded-md flex items-center px-1 py-1.5 transition-all duration-200',
 		$editorSearchActive ? 'translate-y-0' : '-translate-y-96'
 	)}
+	style={`right: ${$isNoteDetailSidebarOpen ? $noteDetailSidebarWidth + 16 : 16}px`}
 >
 	<Shortcut
 		options={SHORTCUTS['editor:search']}
@@ -100,7 +112,7 @@
 			if ($editorSearchActive) {
 				close();
 			} else {
-				searchValue = getCurrentTextSelection() || '';
+				editorSearchValue.set(getCurrentTextSelection() || '');
 				editorSearchActive.set(true);
 			}
 		}}
@@ -151,7 +163,7 @@
 				class="w-full h-7"
 				placeholder="Find"
 				spellcheck="false"
-				bind:value={searchValue}
+				bind:value={$editorSearchValue}
 			/>
 			<div class="flex items-center h-full gap-0.5">
 				<Tooltip text="Case sensitive" side="bottom">

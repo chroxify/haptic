@@ -60,6 +60,10 @@ declare module '@tiptap/core' {
 			 * @description Replace all instances of search result with given replace term.
 			 */
 			replaceAll: () => ReturnType;
+			/**
+			 * @description Set the current search result to a specific index.
+			 */
+			setSearchResult: (index: number) => ReturnType;
 		};
 	}
 }
@@ -336,6 +340,21 @@ export const SearchAndReplace = Extension.create<SearchAndReplaceOptions, Search
 					const { replaceTerm, results } = editor.storage.searchAndReplace;
 
 					replaceAll(replaceTerm, results, { tr, dispatch });
+
+					return false;
+				},
+			setSearchResult:
+				(index: number) =>
+				({ editor }) => {
+					const { results } = editor.storage.searchAndReplace;
+
+					if (index >= 0 && index < results.length) {
+						editor.storage.searchAndReplace.resultIndex = index;
+					} else {
+						console.warn(
+							`Search result index out of range. Valid range: 0 to ${results.length - 1}`
+						);
+					}
 
 					return false;
 				}

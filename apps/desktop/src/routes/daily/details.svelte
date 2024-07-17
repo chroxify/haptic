@@ -196,50 +196,50 @@
 		<div class="flex flex-col gap-1.5 items-start w-full px-4 py-2.5 h-full overflow-auto">
 			<!-- Created -->
 			<div class="flex flex-row items-center justify-between w-full h-6 cursor-default">
-				<Label class="text-sm font-normal text-muted-foreground">Created</Label>
+				<Label class="text-[13px] font-normal text-muted-foreground">Created</Label>
 				<Tooltip text={new Date(activeNoteMetadata.fileMetadata.createdAt).toLocaleString()}>
-					<span class="text-sm text-secondary-foreground">{createdTimeAgo}</span>
+					<span class="text-[13px] text-secondary-foreground">{createdTimeAgo}</span>
 				</Tooltip>
 			</div>
 
 			<!-- Modified -->
 			<div class="flex flex-row items-center justify-between w-full h-6 cursor-default">
-				<Label class="text-sm font-normal text-muted-foreground">Modified</Label>
+				<Label class="text-[13px] font-normal text-muted-foreground">Modified</Label>
 				<Tooltip text={new Date(activeNoteMetadata.fileMetadata.modifiedAt).toLocaleString()}>
-					<span class="text-sm text-secondary-foreground">{modifiedTimeAgo}</span>
+					<span class="text-[13px] text-secondary-foreground">{modifiedTimeAgo}</span>
 				</Tooltip>
 			</div>
 
 			<!-- File size -->
 			<div class="flex flex-row items-center justify-between w-full h-6 cursor-default">
-				<Label class="text-sm font-normal text-muted-foreground">File Size</Label>
+				<Label class="text-[13px] font-normal text-muted-foreground">File Size</Label>
 
-				<span class="text-sm text-secondary-foreground"
+				<span class="text-[13px] text-secondary-foreground"
 					>{formatFileSize(activeNoteMetadata.fileMetadata.size)}</span
 				>
 			</div>
 
 			<!-- Character count -->
 			<div class="flex flex-row items-center justify-between w-full h-6 cursor-default">
-				<Label class="text-sm font-normal text-muted-foreground">Characters</Label>
-				<span class="text-sm text-secondary-foreground"
+				<Label class="text-[13px] font-normal text-muted-foreground">Characters</Label>
+				<span class="text-[13px] text-secondary-foreground"
 					>{activeNoteMetadata.editorMetadata.characters}</span
 				>
 			</div>
 
 			<!-- Word count -->
 			<div class="flex flex-row items-center justify-between w-full h-6 cursor-default">
-				<Label class="text-sm font-normal text-muted-foreground">Words</Label>
-				<span class="text-sm text-secondary-foreground"
+				<Label class="text-[13px] font-normal text-muted-foreground">Words</Label>
+				<span class="text-[13px] text-secondary-foreground"
 					>{activeNoteMetadata.editorMetadata.words}</span
 				>
 			</div>
 
 			<!-- Read time -->
 			<div class="flex flex-row items-center justify-between w-full h-6 cursor-default">
-				<Label class="text-sm font-normal text-muted-foreground">Read Time</Label>
+				<Label class="text-[13px] font-normal text-muted-foreground">Read Time</Label>
 				<Tooltip text="Estimated read time based on 200 words per minute">
-					<span class="text-sm text-secondary-foreground"
+					<span class="text-[13px] text-secondary-foreground"
 						>{activeNoteMetadata.editorMetadata.avgReadingTime}</span
 					>
 				</Tooltip>
@@ -252,7 +252,7 @@
 				{#each tocItems as item}
 					<button
 						type="button"
-						class="flex flex-row items-center justify-between w-full min-h-[24px] h-6 text-sm truncate font-normal text-muted-foreground hover:text-primary transition-all"
+						class="flex flex-row items-center justify-between w-full min-h-[24px] h-6 text-[13px] truncate font-normal text-muted-foreground hover:text-primary transition-all"
 						style="padding-left: {item.indent}rem"
 						on:click={() => {
 							if (!nodeHeadings) return;
@@ -285,7 +285,7 @@
 		</div>
 	{:else}
 		<div class="flex flex-col items-center justify-center w-full h-full">
-			<p class="text-sm text-muted-foreground">
+			<p class="text-[13px] text-muted-foreground">
 				{tab === 'metadata' ? 'No metadata available' : 'No headings found'}
 			</p>
 		</div>

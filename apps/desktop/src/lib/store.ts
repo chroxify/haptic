@@ -8,6 +8,7 @@ const editor = createEditorStore();
 const activeFile = writable<string | null>(null);
 const noteHistory = writable<string[]>([]);
 const editorMode = writable<'edit' | 'view'>('edit');
+const editorSearchValue = writable<string>('');
 const editorSearchActive = writable<boolean>(false);
 
 const collection = writable<string>();
@@ -36,6 +37,7 @@ export {
 	resizingPageSidebar,
 	noteHistory,
 	editorMode,
+	editorSearchValue,
 	editorSearchActive,
 	appSettings,
 	collectionSettings,

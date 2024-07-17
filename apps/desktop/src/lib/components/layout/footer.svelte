@@ -104,7 +104,7 @@
 							placeholder="Search shortcuts"
 							autocorrect="off"
 							autocomplete="off"
-							class="w-full text-foreground"
+							class="w-full text-foreground font-light"
 							bind:value={searchValue}
 						/>
 					</Sheet.Description>

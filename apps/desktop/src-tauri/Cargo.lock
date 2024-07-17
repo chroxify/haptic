@@ -69,6 +69,7 @@ dependencies = [
  "cocoa 0.25.0",
  "hex_color",
  "objc",
+ "regex",
  "serde",
  "serde_json",
  "tauri",

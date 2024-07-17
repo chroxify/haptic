@@ -18,7 +18,10 @@ fn main() {
 
         Ok(())
     })
-    .invoke_handler(tauri::generate_handler![commands::folder::show_in_folder])
+    .invoke_handler(tauri::generate_handler![
+        commands::folder::show_in_folder,
+        commands::search::search_files
+    ])
     .plugin(tauri_plugin_fs_watch::init())
     .plugin(tauri_plugin_fs_extra::init())
     .plugin(tauri_plugin_window_state::Builder::default().build())

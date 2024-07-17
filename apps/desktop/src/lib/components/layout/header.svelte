@@ -3,7 +3,7 @@
 </script>
 
 <header
-	class="absolute top-0 w-full flex justify-center items-center h-9 border-b pl-20 bg-background z-20"
+	class="absolute top-0 w-full flex justify-center items-center h-9 border-b pl-20 bg-background z-40"
 	data-tauri-drag-region
 >
 	<p
