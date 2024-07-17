@@ -119,7 +119,7 @@
 				<Command.Group heading={group.name}>
 					{#each group.commands as command}
 						<Command.Item
-							class="[&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground [&>*]:stroke-foreground/50 [&>*]:aria-selected:stroke-foreground"
+							class="[&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 							value={command.title}
 							onSelect={() => {
 								const page = command.onSelect?.();
@@ -157,7 +157,7 @@
 					{#each folders as folder}
 						{#if folder.path + `/${$activeFile?.split('/').pop()}` !== $activeFile}
 							<Command.Item
-								class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground [&>*]:stroke-foreground/50 [&>*]:aria-selected:stroke-foreground"
+								class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 								value={folder.path}
 								onSelect={() => {
 									moveNote($activeFile || '', folder.path);
@@ -182,7 +182,7 @@
 				{:then notes}
 					{#each notes as note}
 						<Command.Item
-							class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground [&>*]:stroke-foreground/50 [&>*]:aria-selected:stroke-foreground"
+							class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 							value={note.path}
 							onSelect={() => {
 								openNote(note.path);
@@ -203,7 +203,7 @@
 			<Command.Group heading="Change theme...">
 				{#if $mode !== 'light'}
 					<Command.Item
-						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground [&>*]:stroke-foreground/50 [&>*]:aria-selected:stroke-foreground"
+						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 						value="light"
 						onSelect={() => {
 							setMode('light');
@@ -216,7 +216,7 @@
 				{/if}
 				{#if $mode !== 'dark'}
 					<Command.Item
-						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground [&>*]:stroke-foreground/50 [&>*]:aria-selected:stroke-foreground"
+						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 						value="dark"
 						onSelect={() => {
 							setMode('dark');
@@ -231,7 +231,7 @@
 		{:else if page === 'open_collection'}
 			<Command.Group heading="Open collection">
 				<Command.Item
-					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground [&>*]:stroke-foreground/50 [&>*]:aria-selected:stroke-foreground"
+					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 					onSelect={() => {
 						loadCollection();
 						handlePageState(undefined);
@@ -249,7 +249,7 @@
 						.filter((c) => c.path !== $collection)
 						.sort((a, b) => +new Date(b.lastOpened) - +new Date(a.lastOpened)) as collection}
 						<Command.Item
-							class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground [&>*]:stroke-foreground/50 [&>*]:aria-selected:stroke-foreground"
+							class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 							value={collection.path}
 							onSelect={() => {
 								loadCollection(collection.path);
