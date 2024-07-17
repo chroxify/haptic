@@ -8,18 +8,18 @@
 		noteDetailSidebarWidth,
 		resizingNoteDetailSidebar
 	} from '@/store';
-	import { getNoteMetadata } from '@/api/notes';
+	import { getNoteMetadataParams } from '@/api/notes';
 	import Tooltip from '@/components/shared/tooltip.svelte';
 	import { cn } from '@haptic/ui/lib/utils';
 	import Label from '@haptic/ui/components/label/label.svelte';
 	import { formatFileSize, formatTimeAgo } from '@/utils';
-	import { type NoteMetadata } from '@/types';
+	import { type NoteMetadataParams } from '@/types';
 	import type { NodePos } from '@tiptap/core';
 	import { onDestroy, onMount } from 'svelte';
 
 	let tab: 'metadata' | 'toc' = 'metadata';
 	let nodeHeadings: NodePos[] | null = null;
-	let activeNoteMetadata: NoteMetadata | null = null;
+	let activeNoteMetadataParams: NoteMetadataParams | null = null;
 
 	// Reactive variables
 	let createdTimeAgo: string;
@@ -87,13 +87,13 @@
 
 	// Handle reactivity for time ago values
 	function updateTimes() {
-		if (activeNoteMetadata && tab === 'metadata') {
-			createdTimeAgo = formatTimeAgo(activeNoteMetadata.fileMetadata.createdAt);
-			modifiedTimeAgo = formatTimeAgo(activeNoteMetadata.fileMetadata.modifiedAt);
+		if (activeNoteMetadataParams && tab === 'metadata') {
+			createdTimeAgo = formatTimeAgo(activeNoteMetadataParams.fileMetadata.createdAt);
+			modifiedTimeAgo = formatTimeAgo(activeNoteMetadataParams.fileMetadata.modifiedAt);
 		}
 	}
 
-	$: if (activeNoteMetadata && tab === 'metadata') {
+	$: if (activeNoteMetadataParams && tab === 'metadata') {
 		updateTimes();
 	}
 
@@ -112,14 +112,14 @@
 	const stopWatching = activeFile.subscribe(async (filePath) => {
 		if (filePath) {
 			nodeHeadings = $editor.$nodes('heading');
-			activeNoteMetadata = await getNoteMetadata(filePath);
+			activeNoteMetadataParams = await getNoteMetadataParams(filePath);
 		}
 	});
 
 	// Subscribe to save events
 	const unsubscribeSave = editor.subscribeToSaveEvents(async () => {
 		if (tab === 'metadata') {
-			activeNoteMetadata = await getNoteMetadata($activeFile!);
+			activeNoteMetadataParams = await getNoteMetadataParams($activeFile!);
 		} else if (tab === 'toc') {
 			nodeHeadings = $editor.$nodes('heading');
 			if (nodeHeadings) {
@@ -192,12 +192,12 @@
 	</div>
 
 	<!-- Metadata -->
-	{#if activeNoteMetadata && tab === 'metadata'}
+	{#if activeNoteMetadataParams && tab === 'metadata'}
 		<div class="flex flex-col gap-1.5 items-start w-full px-4 py-2.5 h-full overflow-auto">
 			<!-- Created -->
 			<div class="flex flex-row items-center justify-between w-full h-6 cursor-default">
 				<Label class="text-[13px] font-normal text-muted-foreground">Created</Label>
-				<Tooltip text={new Date(activeNoteMetadata.fileMetadata.createdAt).toLocaleString()}>
+				<Tooltip text={new Date(activeNoteMetadataParams.fileMetadata.createdAt).toLocaleString()}>
 					<span class="text-[13px] text-secondary-foreground">{createdTimeAgo}</span>
 				</Tooltip>
 			</div>
@@ -205,7 +205,7 @@
 			<!-- Modified -->
 			<div class="flex flex-row items-center justify-between w-full h-6 cursor-default">
 				<Label class="text-[13px] font-normal text-muted-foreground">Modified</Label>
-				<Tooltip text={new Date(activeNoteMetadata.fileMetadata.modifiedAt).toLocaleString()}>
+				<Tooltip text={new Date(activeNoteMetadataParams.fileMetadata.modifiedAt).toLocaleString()}>
 					<span class="text-[13px] text-secondary-foreground">{modifiedTimeAgo}</span>
 				</Tooltip>
 			</div>
@@ -215,7 +215,7 @@
 				<Label class="text-[13px] font-normal text-muted-foreground">File Size</Label>
 
 				<span class="text-[13px] text-secondary-foreground"
-					>{formatFileSize(activeNoteMetadata.fileMetadata.size)}</span
+					>{formatFileSize(activeNoteMetadataParams.fileMetadata.size)}</span
 				>
 			</div>
 
@@ -223,7 +223,7 @@
 			<div class="flex flex-row items-center justify-between w-full h-6 cursor-default">
 				<Label class="text-[13px] font-normal text-muted-foreground">Characters</Label>
 				<span class="text-[13px] text-secondary-foreground"
-					>{activeNoteMetadata.editorMetadata.characters}</span
+					>{activeNoteMetadataParams.editorMetadata.characters}</span
 				>
 			</div>
 
@@ -231,7 +231,7 @@
 			<div class="flex flex-row items-center justify-between w-full h-6 cursor-default">
 				<Label class="text-[13px] font-normal text-muted-foreground">Words</Label>
 				<span class="text-[13px] text-secondary-foreground"
-					>{activeNoteMetadata.editorMetadata.words}</span
+					>{activeNoteMetadataParams.editorMetadata.words}</span
 				>
 			</div>
 
@@ -240,7 +240,7 @@
 				<Label class="text-[13px] font-normal text-muted-foreground">Read Time</Label>
 				<Tooltip text="Estimated read time based on 200 words per minute">
 					<span class="text-[13px] text-secondary-foreground"
-						>{activeNoteMetadata.editorMetadata.avgReadingTime}</span
+						>{activeNoteMetadataParams.editorMetadata.avgReadingTime}</span
 					>
 				</Tooltip>
 			</div>

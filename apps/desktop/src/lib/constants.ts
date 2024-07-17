@@ -20,7 +20,8 @@ export const SHORTCUTS: Record<string, ShortcutParams> = {
 	'folder:show-in-folder': { shift: true, key: 'f', hover: true },
 	'folder:delete': { command: true, key: 'Backspace', hover: true },
 	'app:settings': { command: true, key: ',' },
-	'app:shortcuts': { command: true, key: '/' }
+	'app:shortcuts': { command: true, key: '/' },
+	'app:open-collection': { command: true, key: 'o' }
 };
 
 export const BASE_APP_SETTINGS = {

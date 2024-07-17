@@ -4,12 +4,13 @@
 	import { openNote } from '@/api/notes';
 	import Label from '@haptic/ui/components/label/label.svelte';
 	import * as Collapsible from '@haptic/ui/components/collapsible';
-	import { ChevronDown } from 'lucide-svelte';
+	import { ChevronDown, Loader } from 'lucide-svelte';
 	import markdownit from 'markdown-it';
 
 	export let query: string;
 	export let searchSettings: { caseSensitive: boolean; wholeWord: boolean };
 	export let results: { path: string; context_preview: string }[] = [];
+	export let loading = false;
 	let openState: Record<string, boolean> = {};
 	let groupedResults: Record<string, { context_preview: string }[]> = {};
 	$: groupedResults = groupResults(results);
@@ -84,7 +85,7 @@
 	>
 </div>
 
-{#if Object.keys(groupedResults).length > 0}
+{#if Object.keys(groupedResults).length > 0 && !loading}
 	{#each Object.keys(groupedResults) as path}
 		<Collapsible.Root open={openState[path]} class="w-full">
 			<Collapsible.Trigger
@@ -93,11 +94,11 @@
 			>
 				<ChevronDown
 					class={cn(
-						'w-3.5 h-3.5 transform transition-all text-muted-foreground group-hover:text-foreground',
+						'w-3.5 h-3.5 transform transition-all shrink-0 text-muted-foreground group-hover:text-foreground',
 						!openState[path] ? '-rotate-90' : 'rotate-0'
 					)}
 				/>
-				{path.split('/').pop()}
+				<p class="truncate">{path.split('/').pop()}</p>
 			</Collapsible.Trigger>
 			<Collapsible.Content class="mt-0.5 w-full gap-1.5 flex flex-col">
 				{#each groupedResults[path] as result, index}
@@ -146,8 +147,15 @@
 	{/each}
 {/if}
 
-{#if results.length === 0}
-	<div class="w-full h-full flex items-center justify-center">
+{#if results.length === 0 && !loading}
+	<div class="w-full h-full flex flex-col gap-1 items-center justify-center">
 		<Label class="text-muted-foreground text-xs">No results found</Label>
+	</div>
+{/if}
+
+{#if loading}
+	<div class="w-full h-full flex flex-col gap-0.5 items-center justify-center">
+		<Loader class="w-4 h-4 animate-spin text-muted-foreground" />
+		<Label class="text-muted-foreground text-xs">Searching collection...</Label>
 	</div>
 {/if}

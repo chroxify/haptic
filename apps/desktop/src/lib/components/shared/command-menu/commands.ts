@@ -98,9 +98,9 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Open other collection',
 				icon: 'folder',
-				// shortcut: ['cmd', 'o'],
+				shortcut: SHORTCUTS['app:open-collection'],
 				onSelect: () => {
-					loadCollection();
+					return 'open_collection';
 				}
 			},
 			{

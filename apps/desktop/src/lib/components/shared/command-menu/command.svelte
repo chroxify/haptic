@@ -2,12 +2,13 @@
 	import * as Command from '@haptic/ui/components/command';
 	import { onMount } from 'svelte';
 	import Icon from '$lib/components/shared/icon.svelte';
-	import { activeFile } from '@/store';
+	import { activeFile, collection } from '@/store';
 	import { moveNote, openNote } from '@/api/notes';
 	import { getAllItems } from './helpers';
 	import { mainCommands as commands, createNoteCommands } from './commands';
 	import { setMode, mode } from 'mode-watcher';
-	import { shortcutToString } from '@/utils';
+	import { formatTimeAgo, shortcutToString } from '@/utils';
+	import { getCollections, loadCollection } from '@/api/collection';
 
 	let open = false;
 	let search = '';
@@ -18,7 +19,9 @@
 	const shortcutKeyMap: Record<string, string | undefined> = {
 		'cmd+k': 'default',
 		'cmd+j': 'open_note',
-		'cmd+shift+m': 'move_note'
+		'cmd+shift+m': 'move_note',
+		'cmd+shift+t': 'change_theme',
+		'cmd+o': 'open_collection'
 	};
 
 	// If a page is provided, it opens that page, otherwise it closes the menu
@@ -224,6 +227,52 @@
 						Dark
 					</Command.Item>
 				{/if}
+			</Command.Group>
+		{:else if page === 'open_collection'}
+			<Command.Group heading="Open collection">
+				<Command.Item
+					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground [&>*]:stroke-foreground/50 [&>*]:aria-selected:stroke-foreground"
+					onSelect={() => {
+						loadCollection();
+						handlePageState(undefined);
+					}}
+				>
+					<Icon name="folderPlus" />
+					Open new collection
+				</Command.Item>
+			</Command.Group>
+			<Command.Group heading="Browse recent collections">
+				{#await getCollections()}
+					<Command.Loading class="text-foreground/90">Recent collections</Command.Loading>
+				{:then collections}
+					{#each collections
+						.filter((c) => c.path !== $collection)
+						.sort((a, b) => +new Date(b.lastOpened) - +new Date(a.lastOpened)) as collection}
+						<Command.Item
+							class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground [&>*]:stroke-foreground/50 [&>*]:aria-selected:stroke-foreground"
+							value={collection.path}
+							onSelect={() => {
+								loadCollection(collection.path);
+								handlePageState(undefined);
+							}}
+						>
+							<div class="flex w-full items-center justify-between">
+								<div class="flex items-center gap-1.5">
+									<Icon name="folder" />
+									<span class="text-foreground/80 group:hover:text-foreground/100"></span>
+									{collection.name}
+								</div>
+								<span class="ml-auto text-xs text-muted-foreground h-full"
+									>{formatTimeAgo(new Date(collection.lastOpened))}
+								</span>
+							</div>
+						</Command.Item>
+					{/each}
+				{:catch error}
+					<Command.Item class="text-foreground/90"
+						>Error loading collections: {error.message}</Command.Item
+					>
+				{/await}
 			</Command.Group>
 		{/if}
 	</Command.List>

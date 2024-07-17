@@ -33,7 +33,13 @@ export interface CollectionSettingsParams {
 	};
 }
 
-export interface NoteMetadata {
+export interface CollectionParams {
+	path: string;
+	name: string;
+	lastOpened: string;
+}
+
+export interface NoteMetadataParams {
 	fileMetadata: Metadata;
 	editorMetadata: {
 		words: number;

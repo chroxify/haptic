@@ -4,6 +4,7 @@ import { readDir } from '@tauri-apps/api/fs';
 import { get } from 'svelte/store';
 import { open } from '@tauri-apps/api/dialog';
 import { writeTextFile, readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
+import type { CollectionParams } from '@/types';
 
 // Fetch the collection entries
 export const fetchCollectionEntries = async (
@@ -29,8 +30,13 @@ export const fetchCollectionEntries = async (
 	return files;
 };
 
-export const loadCollection = async () => {
-	const path = (await open({ directory: true })) as string;
+export const loadCollection = async (path?: string | undefined) => {
+	// If no path is provided, open a dialog
+	if (!path) {
+		path = (await open({ directory: true })) as string;
+	}
+
+	// Return if no path is provided
 	if (!path) return;
 
 	// Set collection path
@@ -71,4 +77,15 @@ export const loadCollection = async () => {
 			dir: BaseDirectory.AppData
 		});
 	}
+};
+
+// Get all collections
+export const getCollections = async (): Promise<CollectionParams[]> => {
+	const collections = await readTextFile('collections.json', {
+		dir: BaseDirectory.AppData
+	}).catch(() => null);
+
+	if (!collections) return [];
+
+	return JSON.parse(collections);
 };

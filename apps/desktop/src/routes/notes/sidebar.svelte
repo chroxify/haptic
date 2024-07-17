@@ -26,6 +26,7 @@
 
 	let searchValue: string;
 	let searchDebounce: number;
+	let searchLoading: boolean = false;
 	let caseSensitive: boolean = false;
 	let wholeWord: boolean = false;
 	let results: { path: string; context_preview: string }[] = [];
@@ -140,6 +141,8 @@
 			return;
 		}
 
+		searchLoading = true;
+
 		try {
 			results = (await invoke('search_files', {
 				dirPath: $collection,
@@ -148,6 +151,8 @@
 				matchWord: wholeWord,
 				recursive: true
 			})) as { path: string; context_preview: string }[];
+
+			searchLoading = false;
 		} catch (error) {
 			console.error('Error searching files:', error);
 		}
@@ -354,7 +359,12 @@
 		data-path={$collection}
 	>
 		{#if $collectionSearchActive}
-			<SearchResults {results} query={searchValue} searchSettings={{ caseSensitive, wholeWord }} />
+			<SearchResults
+				{results}
+				query={searchValue}
+				searchSettings={{ caseSensitive, wholeWord }}
+				loading={searchLoading}
+			/>
 		{:else}
 			<Entries {entries} bind:toggleFolderStates bind:toggleState={folderToggleState} />
 		{/if}

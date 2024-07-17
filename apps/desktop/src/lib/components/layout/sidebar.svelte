@@ -3,7 +3,6 @@
 	import { cn } from '@haptic/ui/lib/utils';
 	import Icon from '$lib/components/shared/icon.svelte';
 	import Tooltip from '$lib/components/shared/tooltip.svelte';
-	import { loadCollection } from '@/api/collection';
 	import { page } from '$app/stores';
 	import SettingsModal from '../settings/settings-modal.svelte';
 	import { SHORTCUTS } from '@/constants';
@@ -73,13 +72,16 @@
 	</div>
 
 	<div class="flex flex-col items-center gap-2">
-		<Tooltip text="Open collection" side="right">
+		<Tooltip text="Open collection" side="right" shortcut={SHORTCUTS['app:open-collection']}>
 			<Button
 				size="icon"
 				variant="ghost"
 				class="h-7 w-7 fill-muted-foreground hover:fill-foreground group relative"
 				scale="md"
-				on:click={loadCollection}
+				on:click={() => {
+					// Simulate cmd+o key press
+					document.dispatchEvent(new KeyboardEvent('keydown', { key: 'o', metaKey: true }));
+				}}
 			>
 				<Icon name="folder" class="w-[18px] h-[18px] group-hover:hidden" />
 				<Icon name="folderOpen" class="w-[18px] h-[18px] hidden group-hover:block" />

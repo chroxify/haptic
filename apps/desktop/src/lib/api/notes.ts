@@ -4,7 +4,7 @@ import { calculateReadingTime, setEditorContent } from '@/utils';
 import { homeDir } from '@tauri-apps/api/path';
 import { get } from 'svelte/store';
 import { metadata } from 'tauri-plugin-fs-extra-api';
-import type { NoteMetadata } from '@/types';
+import type { NoteMetadataParams } from '@/types';
 
 // Create a new note
 export const createNote = async (dirPath: string, name?: string) => {
@@ -137,7 +137,7 @@ export const duplicateNote = async (path: string) => {
 	openNote(`${path.split('/').slice(0, -1).join('/')}/${newName}`);
 };
 
-export const getNoteMetadata = async (path: string): Promise<NoteMetadata> => {
+export const getNoteMetadataParams = async (path: string): Promise<NoteMetadataParams> => {
 	// General file metadata
 	const fileMetadata = await metadata(path);
 
