@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { CollectionSettingsParams, AppSettingsParams } from './types';
+import type { CollectionSettingsParams, AppSettingsParams, SettingsStateParams } from './types';
 import { BASE_APP_SETTINGS, BASE_COLLECTION_SETTINGS } from './constants';
 import { createEditorStore } from './components/shared/editor/editor-store';
 
@@ -22,6 +22,10 @@ const resizingPageSidebar = writable<boolean>(false);
 const isNoteDetailSidebarOpen = writable<boolean>(false);
 const noteDetailSidebarWidth = writable<number>(210);
 const resizingNoteDetailSidebar = writable<boolean>(false);
+export const settingsStore = writable<SettingsStateParams>({
+	isOpen: false,
+	activePage: 'general'
+});
 
 const appSettings = writable<AppSettingsParams>(BASE_APP_SETTINGS);
 const collectionSettings = writable<CollectionSettingsParams>(BASE_COLLECTION_SETTINGS);

@@ -47,3 +47,8 @@ export interface NoteMetadataParams {
 		avgReadingTime: string;
 	};
 }
+
+export interface SettingsStateParams {
+	isOpen: boolean;
+	activePage: string;
+}

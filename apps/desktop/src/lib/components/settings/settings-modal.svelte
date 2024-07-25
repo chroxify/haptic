@@ -12,6 +12,9 @@
 	import type { ComponentType } from 'svelte';
 	import Shortcut from '../shared/shortcut.svelte';
 	import { SHORTCUTS } from '@/constants';
+	import { settingsStore } from '@/store';
+
+	$: ({ isOpen, activePage } = $settingsStore);
 
 	const settings: Record<string, { name: string; icon: IconKey; content: ComponentType }[]> = {
 		App: [
@@ -41,7 +44,12 @@
 	};
 </script>
 
-<Dialog.Root>
+<Dialog.Root
+	open={isOpen}
+	onOpenChange={(value) => {
+		settingsStore.set({ isOpen: value, activePage: 'general' });
+	}}
+>
 	<Dialog.Trigger>
 		<Button
 			size="icon"
@@ -56,7 +64,16 @@
 	<Dialog.Content
 		class="flex items-center justify-center !w-[90%] !h-[90%] !top-[5%] !right-[5%] !bottom-[5%] !left-[5%] pt-16"
 	>
-		<Tabs.Root value="general" class="flex items-center justify-center h-full w-full gap-10">
+		<Tabs.Root
+			value={activePage}
+			onValueChange={(value) => {
+				settingsStore.update((store) => {
+					store.activePage = value ?? 'general';
+					return store;
+				});
+			}}
+			class="flex items-center justify-center h-full w-full gap-10"
+		>
 			<!-- Categories as label, rest as tabtrigger & corresponding content -->
 			<div class="flex flex-col items-center gap-4 h-full justify-start min-w-[160px]">
 				{#each Object.keys(settings) as setting}

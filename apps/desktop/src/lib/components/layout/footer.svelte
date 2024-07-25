@@ -13,6 +13,7 @@
 	import { activeFile } from '@/store';
 	import { SHORTCUTS } from '@/constants';
 	import Shortcut from '../shared/shortcut.svelte';
+	import { settingsStore } from '@/store';
 
 	let open = false;
 	let searchValue = '';
@@ -65,6 +66,9 @@
 				variant="ghost"
 				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				scale="md"
+				on:click={() => {
+					settingsStore.set({ isOpen: true, activePage: 'haptic sync' });
+				}}
 			>
 				<Icon name="cloudX" class="w-4 h-4" />
 			</Button>

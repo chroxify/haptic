@@ -6,10 +6,10 @@ import {
 	editorMode,
 	editorSearchActive,
 	isPageSidebarOpen,
-	collectionSearchActive
+	collectionSearchActive,
+	settingsStore
 } from '@/store';
 import { get } from 'svelte/store';
-import { loadCollection } from '@/api/collection';
 import type { IconKey } from '$lib/components/shared/icon.svelte';
 import { showInFolder } from '@/utils';
 import type { ShortcutParams } from '@/types';
@@ -106,7 +106,10 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'Go to settings',
 				icon: 'settings',
-				shortcut: SHORTCUTS['app:settings']
+				shortcut: SHORTCUTS['app:settings'],
+				onSelect: () => {
+					settingsStore.update((state) => ({ ...state, isOpen: true }));
+				}
 			},
 			{
 				title: 'Go to help',
