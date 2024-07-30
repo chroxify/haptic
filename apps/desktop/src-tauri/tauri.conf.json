@@ -4,7 +4,7 @@
 		"beforeBuildCommand": "pnpm build",
 		"beforeDevCommand": "pnpm dev",
 		"devPath": "http://localhost:5173",
-		"distDir": "../public"
+		"distDir": "../build"
 	},
 	"package": {
 		"productName": "haptic",
@@ -33,7 +33,7 @@
 				"icons/icon.icns",
 				"icons/icon.ico"
 			],
-			"identifier": "com.tauri.dev",
+			"identifier": "com.haptic.md",
 			"longDescription": "",
 			"macOS": {
 				"entitlements": null,
