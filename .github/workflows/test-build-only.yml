@@ -11,8 +11,10 @@ jobs:
         include:
           - platform: 'macos-latest' # for Arm based macs (M1 and above).
             args: '--target aarch64-apple-darwin'
+            rust_targets: 'aarch64-apple-darwin'
           - platform: 'macos-latest' # for Intel based macs.
             args: '--target x86_64-apple-darwin'
+            rust_targets: 'x86_64-apple-darwin'
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -31,10 +33,12 @@ jobs:
         with:
           toolchain: 1.60.0
 
+      - name: add Rust targets
+        run: rustup target add ${{ matrix.rust_targets }}
+
       - name: install frontend dependencies
         run: cd apps/desktop && pnpm install
 
-      # If tagName and releaseId are omitted tauri-action will only build the app and won't try to upload any assets.
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
