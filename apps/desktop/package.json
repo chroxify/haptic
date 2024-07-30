@@ -22,6 +22,7 @@
 		"@tauri-apps/cli": "^1.5.9",
 		"@types/eslint": "8.56.0",
 		"@types/markdown-it": "^14.1.1",
+		"@types/node": "^22.0.0",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "^10.4.17",

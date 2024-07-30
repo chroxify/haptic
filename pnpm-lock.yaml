@@ -126,6 +126,9 @@ importers:
       '@types/markdown-it':
         specifier: ^14.1.1
         version: 14.1.1
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.0.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
         version: 6.17.0(@typescript-eslint/parser@6.17.0)(eslint@8.56.0)(typescript@5.3.3)
@@ -173,7 +176,7 @@ importers:
         version: 5.3.3
       vite:
         specifier: ^5.0.3
-        version: 5.0.10
+        version: 5.0.10(@types/node@22.0.0)
 
   packages/config-eslint:
     dependencies:
@@ -852,7 +855,7 @@ packages:
       sirv: 2.0.4
       svelte: 4.2.8
       tiny-glob: 0.2.9
-      vite: 5.0.10
+      vite: 5.0.10(@types/node@22.0.0)
     dev: true
 
   /@sveltejs/vite-plugin-svelte-inspector@2.0.0(@sveltejs/vite-plugin-svelte@3.0.1)(svelte@4.2.8)(vite@5.0.10):
@@ -866,7 +869,7 @@ packages:
       '@sveltejs/vite-plugin-svelte': 3.0.1(svelte@4.2.8)(vite@5.0.10)
       debug: 4.3.4
       svelte: 4.2.8
-      vite: 5.0.10
+      vite: 5.0.10(@types/node@22.0.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -885,7 +888,7 @@ packages:
       magic-string: 0.30.5
       svelte: 4.2.8
       svelte-hmr: 0.15.3(svelte@4.2.8)
-      vite: 5.0.10
+      vite: 5.0.10(@types/node@22.0.0)
       vitefu: 0.2.5(vite@5.0.10)
     transitivePeerDependencies:
       - supports-color
@@ -1329,6 +1332,12 @@ packages:
 
   /@types/mdurl@2.0.0:
     resolution: {integrity: sha512-RGdgjQUZba5p6QEFAVx2OGb8rQDL/cPRG7GiedRzMcJ1tYnUANBncjbSB1NRGwbvjcPeikRABz2nshyPk1bhWg==}
+    dev: true
+
+  /@types/node@22.0.0:
+    resolution: {integrity: sha512-VT7KSYudcPOzP5Q0wfbowyNLaVR8QWUdw+088uFWwfvpY6uCWaXpqV6ieLAu9WBcnTa7H4Z5RLK8I5t2FuOcqw==}
+    dependencies:
+      undici-types: 6.11.1
     dev: true
 
   /@types/object.omit@3.0.3:
@@ -4199,6 +4208,10 @@ packages:
     resolution: {integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==}
     dev: false
 
+  /undici-types@6.11.1:
+    resolution: {integrity: sha512-mIDEX2ek50x0OlRgxryxsenE5XaQD4on5U2inY7RApK3SOJpofyw7uW2AyfMKkhAxXIceo2DeWGVGwyvng1GNQ==}
+    dev: true
+
   /update-browserslist-db@1.0.13(browserslist@4.22.3):
     resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}
     hasBin: true
@@ -4218,7 +4231,7 @@ packages:
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  /vite@5.0.10:
+  /vite@5.0.10(@types/node@22.0.0):
     resolution: {integrity: sha512-2P8J7WWgmc355HUMlFrwofacvr98DAjoE52BfdbwQtyLH06XKwaL/FMnmKM2crF0iX4MpmMKoDlNCB1ok7zHCw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -4246,6 +4259,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 22.0.0
       esbuild: 0.19.7
       postcss: 8.4.33
       rollup: 4.5.2
@@ -4261,7 +4275,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.0.10
+      vite: 5.0.10(@types/node@22.0.0)
     dev: true
 
   /w3c-keyname@2.2.8:
