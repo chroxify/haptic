@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"dev:tauri": "tauri dev",
+		"tauri": "tauri",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
