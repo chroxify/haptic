@@ -30,8 +30,6 @@ jobs:
 
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: 1.67.0
 
       - name: add Rust targets
         run: rustup target add ${{ matrix.rust_targets }}
