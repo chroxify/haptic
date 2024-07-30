@@ -95,7 +95,12 @@
 				$editor.commands.setSearchTerm(filteredValue);
 			}
 
-			goToSelection();
+			try {
+				goToSelection();
+			} catch (error) {
+				// This is usually triggered while search active is true and page is navigated
+				console.error('Error selecting search result:', error);
+			}
 		}
 	});
 </script>

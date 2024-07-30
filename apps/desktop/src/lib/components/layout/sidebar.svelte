@@ -59,8 +59,8 @@
 					size="icon"
 					variant="ghost"
 					class={cn(
-						'h-7 w-7 fill-muted-foreground hover:fill-foreground',
-						selected === 'tasks' && 'fill-foreground'
+						'h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all',
+						selected === 'tasks' && 'fill-foreground bg-accent'
 					)}
 					scale="md"
 					on:click={() => (selected = 'tasks')}
