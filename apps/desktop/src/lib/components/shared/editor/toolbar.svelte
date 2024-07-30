@@ -55,7 +55,7 @@
 			</Button>
 		</Tooltip>
 		{#if !hideHistory}
-			<Tooltip text="Previous note" side="bottom">
+			<Tooltip text="Previous note" side="bottom" shortcut={SHORTCUTS['notes:history-back']}>
 				<Button
 					size="icon"
 					variant="ghost"
@@ -70,10 +70,25 @@
 						openNote($noteHistory[historyIndex], true);
 					}}
 				>
+					<Shortcut
+						options={SHORTCUTS['notes:history-back']}
+						callback={() => {
+							// Make sure the history index is not out of bounds / button is not disabled
+							if (!$noteHistory?.length || $noteHistory?.length === 1 || historyIndex === 0) {
+								return;
+							}
+
+							// Decrement the history index
+							historyIndex--;
+
+							// Set the active file to the previous note
+							openNote($noteHistory[historyIndex], true);
+						}}
+					/>
 					<Icon name="arrowLeft" class="w-4 h-4" />
 				</Button>
 			</Tooltip>
-			<Tooltip text="Next note" side="bottom">
+			<Tooltip text="Next note" side="bottom" shortcut={SHORTCUTS['notes:history-forward']}>
 				<Button
 					size="icon"
 					variant="ghost"
@@ -90,6 +105,25 @@
 						openNote($noteHistory[historyIndex], true);
 					}}
 				>
+					<Shortcut
+						options={SHORTCUTS['notes:history-forward']}
+						callback={() => {
+							// Make sure the history index is not out of bounds / button is not disabled
+							if (
+								!$noteHistory?.length ||
+								$noteHistory?.length === 1 ||
+								historyIndex === $noteHistory?.length - 1
+							) {
+								return;
+							}
+
+							// Increment the history index
+							historyIndex++;
+
+							// Set the active file to the next note
+							openNote($noteHistory[historyIndex], true);
+						}}
+					/>
 					<Icon name="arrowRight" class="w-4 h-4" />
 				</Button>
 			</Tooltip>
@@ -160,7 +194,7 @@
 				<Icon name="glasses" class={cn('w-4 h-4', $editorMode === 'view' && 'hidden')} />
 			</Button>
 		</Tooltip>
-		<Tooltip text="Expand" side="bottom" shortcut={SHORTCUTS['note:toggle-details']}>
+		<Tooltip text="Expand" side="bottom" shortcut={SHORTCUTS['notes:toggle-details']}>
 			<Button
 				size="icon"
 				variant="ghost"
@@ -170,7 +204,7 @@
 					isNoteDetailSidebarOpen.update((state) => !state);
 				}}
 			>
-				<Shortcut options={SHORTCUTS['note:toggle-details']} />
+				<Shortcut options={SHORTCUTS['notes:toggle-details']} />
 				<Icon
 					name="sidebarArrow"
 					class={cn(

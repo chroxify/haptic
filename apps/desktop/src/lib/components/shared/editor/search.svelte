@@ -5,6 +5,7 @@
 	import { Button } from '@haptic/ui/components/button';
 	import { Replace, ReplaceAll, WholeWord, ALargeSmall } from 'lucide-svelte';
 	import {
+		collectionSettings,
 		editor,
 		editorSearchActive,
 		editorSearchValue,
@@ -102,7 +103,8 @@
 <div
 	class={cn(
 		'fixed top-[80px] w-96 min-h-10 bg-secondary-background border z-30 rounded-md flex items-center px-1 py-1.5 transition-all duration-200',
-		$editorSearchActive ? 'translate-y-0' : '-translate-y-96'
+		$editorSearchActive ? 'translate-y-0' : '-translate-y-96',
+		$collectionSettings.editor.show_toolbar ? 'top-[80px]' : 'top-[48px]'
 	)}
 	style={`right: ${$isNoteDetailSidebarOpen ? $noteDetailSidebarWidth + 16 : 16}px`}
 >

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { renameNote } from '@/api/notes';
 	import { editor, activeFile, collectionSettings } from '@/store';
+	import { cn } from '@/utils';
 
 	export let preCheckRegex: RegExp | undefined = undefined;
 
@@ -53,7 +54,12 @@
 	});
 </script>
 
-<div class="flex items-center w-full h-fit px-8 pb-2.5">
+<div
+	class={cn(
+		'flex items-center w-full h-fit px-8 pb-2.5',
+		!$collectionSettings.editor.show_toolbar && 'mt-5'
+	)}
+>
 	{#if $collectionSettings.editor.show_inline_title}
 		<input
 			type="text"

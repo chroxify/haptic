@@ -9,6 +9,8 @@
 	import { setMode, mode } from 'mode-watcher';
 	import { formatTimeAgo, shortcutToString } from '@/utils';
 	import { getCollections, loadCollection } from '@/api/collection';
+	import { Twitter } from 'lucide-svelte';
+	import { open as browserOpen } from '@tauri-apps/api/shell';
 
 	let open = false;
 	let search = '';
@@ -21,7 +23,9 @@
 		'cmd+j': 'open_note',
 		'cmd+shift+m': 'move_note',
 		'cmd+shift+t': 'change_theme',
-		'cmd+o': 'open_collection'
+		'cmd+o': 'open_collection',
+		'cmd+shift+h': 'help_and_feedback',
+		'cmd+shift+l': 'share'
 	};
 
 	// If a page is provided, it opens that page, otherwise it closes the menu
@@ -273,6 +277,69 @@
 						>Error loading collections: {error.message}</Command.Item
 					>
 				{/await}
+			</Command.Group>
+		{:else if page === 'help_and_feedback'}
+			<Command.Group heading="Help & Support">
+				<Command.Item
+					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+					value="sponsor"
+					onSelect={() => {
+						browserOpen('https://go.haptic.md/sponsor');
+						handlePageState(undefined);
+					}}
+				>
+					<Icon name="heart" />
+					Sponsor Haptic
+				</Command.Item>
+				<Command.Item
+					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+					value="help"
+					onSelect={() => {
+						browserOpen('https://go.haptic.md/help');
+						handlePageState(undefined);
+					}}
+				>
+					<Icon name="lifebouy" />
+					Get help
+				</Command.Item>
+
+				<Command.Item
+					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+					value="feedback"
+					onSelect={() => {
+						browserOpen('https://go.haptic.md/feedback');
+						handlePageState(undefined);
+					}}
+				>
+					<Icon name="commentSquareText" />
+					Leave feedback
+				</Command.Item>
+			</Command.Group>
+		{:else if page === 'share'}
+			<Command.Group heading="Share">
+				<Command.Item
+					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+					value="copy_link"
+					onSelect={() => {
+						navigator.clipboard.writeText('https://haptic.md');
+						handlePageState(undefined);
+					}}
+				>
+					<Icon name="browserUrl" />
+					Copy link
+				</Command.Item>
+				<Command.Item
+					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:stroke-foreground [&>*]:stroke-foreground/50 [&>*]:stroke-[2px]"
+					value="share_on_twitter"
+					onSelect={() => {
+						// Text: Check out this awesome open-source, local-first note-taking app I found! \n\nhttps://haptic.md by @chroxify
+						browserOpen('https://go.haptic.md/tweet');
+						handlePageState(undefined);
+					}}
+				>
+					<Twitter />
+					Share on Twitter
+				</Command.Item>
 			</Command.Group>
 		{/if}
 	</Command.List>

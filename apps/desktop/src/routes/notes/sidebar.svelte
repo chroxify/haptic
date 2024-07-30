@@ -25,7 +25,7 @@
 	import { ALargeSmall, WholeWord } from 'lucide-svelte';
 
 	let searchValue: string;
-	let searchDebounce: number;
+	let searchDebounce: NodeJS.Timeout;
 	let searchLoading: boolean = false;
 	let caseSensitive: boolean = false;
 	let wholeWord: boolean = false;
@@ -203,7 +203,7 @@
 					<Icon name="notePlus" class="w-[18px] h-[18px]" />
 				</Button>
 			</Tooltip>
-			<Tooltip text="New folder" side="bottom">
+			<Tooltip text="New folder" side="bottom" shortcut={SHORTCUTS['notes:create-folder']}>
 				<Button
 					size="icon"
 					variant="ghost"
@@ -211,6 +211,7 @@
 					class="h-7 w-7 fill-muted-foreground hover:fill-foreground transition-all"
 					on:click={async () => createFolder($collection)}
 				>
+					<Shortcut options={SHORTCUTS['notes:create-folder']} />
 					<Icon name="folderPlus" class="w-[18px] h-[18px]" />
 				</Button>
 			</Tooltip>

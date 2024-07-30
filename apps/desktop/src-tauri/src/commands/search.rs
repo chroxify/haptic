@@ -41,7 +41,7 @@ pub async fn search_files(
 fn check_query_in_file(path: &str, query: &str, case_sensitive: bool, match_word: bool) -> Vec<String> {
     if let Ok(file_content) = fs::read_to_string(path) {
         let mut contexts = Vec::new();
-        let mut last_index = 0;
+        let mut _last_index = 0;
 
         let search_query = if match_word {
             format!(r"\b{}\b", regex::escape(query))
@@ -57,7 +57,7 @@ fn check_query_in_file(path: &str, query: &str, case_sensitive: bool, match_word
 
         for mat in re.find_iter(&file_content) {
             contexts.push(extract_context(&file_content, mat.start(), mat.end() - mat.start()));
-            last_index = mat.end();
+            _last_index = mat.end();
         }
 
         contexts

@@ -7,7 +7,8 @@ import {
 	editorSearchActive,
 	isPageSidebarOpen,
 	collectionSearchActive,
-	settingsStore
+	settingsStore,
+	isNoteDetailSidebarOpen
 } from '@/store';
 import { get } from 'svelte/store';
 import type { IconKey } from '$lib/components/shared/icon.svelte';
@@ -42,7 +43,7 @@ export const mainCommands: CommandGroup[] = [
 			{
 				title: 'New folder',
 				icon: 'folderPlus',
-				// shortcut: ['cmd', 'shift', 'n'],
+				shortcut: SHORTCUTS['notes:create-folder'],
 				onSelect: () => {
 					createFolder(get(collection));
 				}
@@ -87,13 +88,23 @@ export const mainCommands: CommandGroup[] = [
 		commands: [
 			{
 				title: 'Go to previous note',
-				icon: 'arrowLeft'
-				// shortcut: ['cmd', 'up']
+				icon: 'arrowLeft',
+				shortcut: SHORTCUTS['notes:history-back'],
+				onSelect: () => {
+					window.dispatchEvent(
+						new KeyboardEvent('keydown', { key: 'ArrowLeft', altKey: true, metaKey: true })
+					);
+				}
 			},
 			{
 				title: 'Go to next note',
-				icon: 'arrowRight'
-				// shortcut: ['cmd', 'down']
+				icon: 'arrowRight',
+				shortcut: SHORTCUTS['notes:history-forward'],
+				onSelect: () => {
+					window.dispatchEvent(
+						new KeyboardEvent('keydown', { key: 'ArrowRight', altKey: true, metaKey: true })
+					);
+				}
 			},
 			{
 				title: 'Open other collection',
@@ -113,8 +124,11 @@ export const mainCommands: CommandGroup[] = [
 			},
 			{
 				title: 'Go to help',
-				icon: 'lifebouy'
-				// shortcut: ['cmd', 'h']
+				icon: 'lifebouy',
+				shortcut: SHORTCUTS['app:help'],
+				onSelect: () => {
+					return 'help_and_feedback';
+				}
 			},
 			{
 				title: 'View shortcuts',
@@ -123,13 +137,19 @@ export const mainCommands: CommandGroup[] = [
 			},
 			{
 				title: 'Send feedback',
-				icon: 'lifebouy'
-				// shortcut: ['cmd', 'shift', 'h']
+				icon: 'lifebouy',
+				shortcut: SHORTCUTS['app:help'],
+				onSelect: () => {
+					return 'help_and_feedback';
+				}
 			},
 			{
-				title: "Go to What's new",
-				icon: 'bolt'
-				// shortcut: ['cmd', 'shift', 'n']
+				title: 'Share with friends',
+				icon: 'share',
+				shortcut: SHORTCUTS['app:share'],
+				onSelect: () => {
+					return 'share';
+				}
 			}
 		]
 	},
@@ -159,8 +179,11 @@ export const mainCommands: CommandGroup[] = [
 			},
 			{
 				title: 'Toggle note details',
-				icon: 'sidebarMenuRight'
-				// shortcut: ['cmd', 'shift', 'e']
+				icon: 'sidebarMenuRight',
+				shortcut: SHORTCUTS['notes:toggle-details'],
+				onSelect: () => {
+					isNoteDetailSidebarOpen.update((open) => !open);
+				}
 			}
 		]
 	}
@@ -210,7 +233,7 @@ export const createNoteCommands = (notePath: string): CommandGroup => {
 			{
 				title: 'Copy note path',
 				icon: 'copy',
-				// shortcut: ['cmd', 'c'],
+				shortcut: SHORTCUTS['note:copy-path'],
 				onSelect: () => {
 					navigator.clipboard.writeText(notePath);
 				}

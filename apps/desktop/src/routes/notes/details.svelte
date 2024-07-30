@@ -24,7 +24,7 @@
 	// Reactive variables
 	let createdTimeAgo: string;
 	let modifiedTimeAgo: string;
-	let timeUpdateInterval: number;
+	let timeUpdateInterval: NodeJS.Timeout;
 
 	// Sidebar handlers
 	const handleMouseMove = (e: MouseEvent) => {

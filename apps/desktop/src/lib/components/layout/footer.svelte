@@ -76,12 +76,17 @@
 	</div>
 
 	<div class="cursor-default space-x-0.5">
-		<Tooltip text="Help & feedback">
+		<Tooltip text="Help & feedback" shortcut={SHORTCUTS['app:help']}>
 			<Button
 				size="icon"
 				variant="ghost"
 				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				scale="md"
+				on:click={() => {
+					document.dispatchEvent(
+						new KeyboardEvent('keydown', { key: 'h', metaKey: true, shiftKey: true })
+					);
+				}}
 			>
 				<Icon name="lifebouy" class="w-4 h-4" />
 			</Button>
@@ -168,12 +173,17 @@
 			</Sheet.Content>
 		</Sheet.Root>
 
-		<Tooltip text="Share">
+		<Tooltip text="Share" shortcut={SHORTCUTS['app:share']}>
 			<Button
 				size="icon"
 				variant="ghost"
 				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				scale="md"
+				on:click={() => {
+					document.dispatchEvent(
+						new KeyboardEvent('keydown', { key: 'l', metaKey: true, shiftKey: true })
+					);
+				}}
 			>
 				<Icon name="share" class="w-4 h-4" />
 			</Button>

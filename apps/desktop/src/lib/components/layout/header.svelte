@@ -7,8 +7,7 @@
 	data-tauri-drag-region
 >
 	<p
-		class="text-sm text-foreground/85 hover:text-foreground/100 transition-all cursor-default outline-none"
-		contenteditable
+		class="pointer-events-none text-sm text-foreground/85 hover:text-foreground/100 transition-all cursor-default outline-none"
 	>
 		{$collection?.split('/').pop()}
 	</p>

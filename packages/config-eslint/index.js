@@ -4,11 +4,13 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:svelte/recommended',
-    'prettier',
-    'turbo'
+    'prettier'
   ],
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
+  globals: {
+    NodeJS: true
+  },
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,
