@@ -9,10 +9,10 @@
 
 	let selected: 'notes' | 'daily' | 'tasks' = 'notes';
 
-	// TODO: Just use $page instead in the active validation
 	page.subscribe((value) => {
-		if (value.url.pathname === '/notes') {
-			selected = 'notes';
+		const path = value.url.pathname;
+		if (path === '/notes' || path === '/daily' || path === '/tasks') {
+			selected = path.slice(1) as 'notes' | 'daily' | 'tasks';
 		}
 	});
 </script>

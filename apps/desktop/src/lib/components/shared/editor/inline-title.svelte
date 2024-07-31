@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { renameNote } from '@/api/notes';
-	import { editor, activeFile, collectionSettings } from '@/store';
+	import { editor, activeFile, collectionSettings, editorMode } from '@/store';
 	import { cn } from '@/utils';
 
 	export let preCheckRegex: RegExp | undefined = undefined;
@@ -62,9 +62,11 @@
 >
 	{#if $collectionSettings.editor.show_inline_title}
 		<input
+			id="inline-title-input"
 			type="text"
 			autocomplete="off"
 			autocorrect="off"
+			disabled={$editorMode !== 'edit'}
 			class="w-[635px] prose font-bold text-4xl text-foreground mx-auto bg-transparent focus:outline-none"
 			on:keydown={handleKeydown}
 			on:blur={handleBlur}

@@ -212,7 +212,22 @@ export const createNoteCommands = (notePath: string): CommandGroup => {
 			{
 				title: 'Rename note',
 				icon: 'editPencil',
-				shortcut: SHORTCUTS['note:rename']
+				shortcut: SHORTCUTS['note:rename'],
+				onSelect: () => {
+					// Blur the editor
+					get(editor).commands.blur();
+
+					// Get the inline title input (#inline-title-input)
+					const inlineTitleInput = document.getElementById(
+						'inline-title-input'
+					) as HTMLInputElement;
+
+					// Focus the input and select all text
+					window.setTimeout(() => {
+						inlineTitleInput?.focus();
+						inlineTitleInput?.select();
+					}, 50);
+				}
 			},
 			{
 				title: 'Delete note',

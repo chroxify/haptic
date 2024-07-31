@@ -11,6 +11,7 @@
 	import { getCollections, loadCollection } from '@/api/collection';
 	import { Twitter } from 'lucide-svelte';
 	import { open as browserOpen } from '@tauri-apps/api/shell';
+	import { goto } from '$app/navigation';
 
 	let open = false;
 	let search = '';
@@ -236,7 +237,8 @@
 			<Command.Group heading="Open collection">
 				<Command.Item
 					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
-					onSelect={() => {
+					onSelect={async () => {
+						await goto('/notes');
 						loadCollection();
 						handlePageState(undefined);
 					}}
@@ -255,7 +257,8 @@
 						<Command.Item
 							class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 							value={collection.path}
-							onSelect={() => {
+							onSelect={async () => {
+								await goto('/notes');
 								loadCollection(collection.path);
 								handlePageState(undefined);
 							}}
