@@ -4,8 +4,8 @@
 	import Label from '@haptic/ui/components/label/label.svelte';
 	import Tooltip from '../shared/tooltip.svelte';
 	import * as Select from '@haptic/ui/components/select';
-	import { resetMode, setMode, userPrefersMode } from 'mode-watcher';
 	import { cn } from '@haptic/ui/lib/utils';
+	import { appTheme } from '@/store';
 
 	let selectedTheme = { value: 'haptic', label: 'Haptic' };
 	let selectedFont = { value: 'inter', label: 'Inter' };
@@ -22,10 +22,10 @@
 					variant="ghost"
 					class={cn(
 						'h-7 w-7 fill-muted-foreground hover:fill-foreground',
-						$userPrefersMode === 'system' && 'bg-accent fill-foreground'
+						$appTheme === 'auto' && 'bg-accent fill-foreground'
 					)}
 					scale="md"
-					on:click={() => resetMode()}
+					on:click={() => appTheme.set('auto')}
 				>
 					<Icon name="monitor" class="w-[18px] h-[18px]" />
 				</Button>
@@ -36,10 +36,10 @@
 					variant="ghost"
 					class={cn(
 						'h-7 w-7 fill-muted-foreground hover:fill-foreground',
-						$userPrefersMode === 'light' && 'bg-accent fill-foreground'
+						$appTheme === 'light' && 'bg-accent fill-foreground'
 					)}
 					scale="md"
-					on:click={() => setMode('light')}
+					on:click={() => appTheme.set('light')}
 				>
 					<Icon name="sun" class="w-[18px] h-[18px]" />
 				</Button>
@@ -50,10 +50,10 @@
 					variant="ghost"
 					class={cn(
 						'h-7 w-7 fill-muted-foreground hover:fill-foreground',
-						$userPrefersMode === 'dark' && 'bg-accent fill-foreground'
+						$appTheme === 'dark' && 'bg-accent fill-foreground'
 					)}
 					scale="md"
-					on:click={() => setMode('dark')}
+					on:click={() => appTheme.set('dark')}
 				>
 					<Icon name="moon" class="w-[18px] h-[18px]" />
 				</Button>

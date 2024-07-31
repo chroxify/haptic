@@ -27,6 +27,7 @@ export const settingsStore = writable<SettingsStateParams>({
 	activePage: 'general'
 });
 
+const appTheme = writable<'auto' | 'light' | 'dark'>('auto');
 const appSettings = writable<AppSettingsParams>(BASE_APP_SETTINGS);
 const collectionSettings = writable<CollectionSettingsParams>(BASE_COLLECTION_SETTINGS);
 
@@ -43,6 +44,7 @@ export {
 	editorMode,
 	editorSearchValue,
 	editorSearchActive,
+	appTheme,
 	appSettings,
 	collectionSettings,
 	isNoteDetailSidebarOpen,

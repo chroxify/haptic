@@ -2,11 +2,10 @@
 	import * as Command from '@haptic/ui/components/command';
 	import { onMount } from 'svelte';
 	import Icon from '$lib/components/shared/icon.svelte';
-	import { activeFile, collection } from '@/store';
+	import { activeFile, appTheme, collection } from '@/store';
 	import { moveNote, openNote } from '@/api/notes';
 	import { getAllItems } from './helpers';
 	import { mainCommands as commands, createNoteCommands } from './commands';
-	import { setMode, mode } from 'mode-watcher';
 	import { formatTimeAgo, shortcutToString } from '@/utils';
 	import { getCollections, loadCollection } from '@/api/collection';
 	import { Twitter } from 'lucide-svelte';
@@ -206,12 +205,12 @@
 			</Command.Group>
 		{:else if page === 'change_theme'}
 			<Command.Group heading="Change theme...">
-				{#if $mode !== 'light'}
+				{#if $appTheme !== 'light'}
 					<Command.Item
 						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 						value="light"
 						onSelect={() => {
-							setMode('light');
+							appTheme.set('light');
 							handlePageState(undefined);
 						}}
 					>
@@ -219,17 +218,30 @@
 						Light
 					</Command.Item>
 				{/if}
-				{#if $mode !== 'dark'}
+				{#if $appTheme !== 'dark'}
 					<Command.Item
 						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 						value="dark"
 						onSelect={() => {
-							setMode('dark');
+							appTheme.set('dark');
 							handlePageState(undefined);
 						}}
 					>
 						<Icon name="moon" />
 						Dark
+					</Command.Item>
+				{/if}
+				{#if $appTheme !== 'auto'}
+					<Command.Item
+						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+						value="system"
+						onSelect={() => {
+							appTheme.set('auto');
+							handlePageState(undefined);
+						}}
+					>
+						<Icon name="monitor" />
+						System
 					</Command.Item>
 				{/if}
 			</Command.Group>

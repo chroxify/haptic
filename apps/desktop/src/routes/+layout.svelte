@@ -1,15 +1,15 @@
 <script lang="ts">
 	import Header from '@/components/layout/header.svelte';
 	import '../app.css';
-	import { ModeWatcher } from 'mode-watcher';
 	import Footer from '@/components/layout/footer.svelte';
 	import Sidebar from '@/components/layout/sidebar.svelte';
-	import { collection } from '@/store';
+	import { appTheme, collection } from '@/store';
 	import { readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
 	import Command from '@/components/shared/command-menu/command.svelte';
 	import { loadSettings } from '@/api/settings';
 	import { onMount } from 'svelte';
-	import { validateHapticFolder } from '@/utils';
+	import { updateWindowTheme, validateHapticFolder } from '@/utils';
+	import { invoke } from '@tauri-apps/api/tauri';
 
 	// Prevent right-clicking in production
 	// TODO: Test if this even works in production (not sure if tauri has access to env variables)
@@ -45,9 +45,19 @@
 		// Load app & collection settings
 		loadSettings(true, true);
 	});
+
+	// Keep local theme synced
+	appTheme.subscribe(async (value) => {
+		// Update app theme
+		await invoke('plugin:theme|set_theme', {
+			theme: value
+		});
+
+		// Update window theme
+		updateWindowTheme();
+	});
 </script>
 
-<ModeWatcher />
 <Command />
 
 <Header />

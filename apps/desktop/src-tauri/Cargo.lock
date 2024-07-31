@@ -76,6 +76,7 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-fs-extra",
  "tauri-plugin-fs-watch",
+ "tauri-plugin-theme",
  "tauri-plugin-window-state",
 ]
 
@@ -3841,6 +3842,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "tauri-plugin-theme"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "378601e3a540fa6ee6b6c9cddb44404f387194d2d007351663d22fbb4d1d6453"
+dependencies = [
+ "cocoa 0.25.0",
+ "futures-lite 1.13.0",
+ "gtk",
+ "once_cell",
+ "serde",
+ "tauri",
+ "tintanum",
+ "tokio",
+]
+
+[[package]]
 name = "tauri-plugin-window-state"
 version = "0.1.1"
 source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#a3fe84296a9a51fed960ab99ee7cebebb7df5390"
@@ -4049,6 +4066,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "tintanum"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7abbcf9173afc80733c20b7e27a30bc9284d6535bdbde2a70904032de63e16e8"
+dependencies = [
+ "futures-lite 1.13.0",
+ "zbus",
+]
+
+[[package]]
 name = "tinyvec"
 version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4076,7 +4103,19 @@ dependencies = [
  "num_cpus",
  "pin-project-lite",
  "socket2 0.5.5",
+ "tokio-macros",
  "windows-sys 0.48.0",
+]
+
+[[package]]
+name = "tokio-macros"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5b8a1e28f2deaa14e508979454cb3a223b10b938b45af148bc0986de36f1923b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.48",
 ]
 
 [[package]]

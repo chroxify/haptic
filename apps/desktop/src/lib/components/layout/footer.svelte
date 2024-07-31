@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Button } from '@haptic/ui/components/button';
-	import { toggleMode } from 'mode-watcher';
 	import Icon from '../shared/icon.svelte';
 	import Tooltip from '../shared/tooltip.svelte';
 	import * as Sheet from '@haptic/ui/components/sheet';
@@ -9,8 +8,8 @@
 	import { ChevronDown } from 'lucide-svelte';
 	import { cn } from '@haptic/ui/lib/utils';
 	import { mainCommands as commands, createNoteCommands } from '../shared/command-menu/commands';
-	import { shortcutToString } from '@/utils';
-	import { activeFile } from '@/store';
+	import { shortcutToString, toggleTheme } from '@/utils';
+	import { activeFile, appTheme } from '@/store';
 	import { SHORTCUTS } from '@/constants';
 	import Shortcut from '../shared/shortcut.svelte';
 	import { settingsStore } from '@/store';
@@ -49,14 +48,19 @@
 	<div class="cursor-default space-x-0.5">
 		<Tooltip text="Toggle theme" shortcut={SHORTCUTS['settings:toggle-theme']}>
 			<Button
-				on:click={toggleMode}
+				on:click={toggleTheme}
 				size="icon"
 				variant="ghost"
 				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				scale="md"
 			>
-				<Icon name="moon" class="w-4 h-4 hidden dark:block" />
-				<Icon name="sun" class="w-4 h-4 block dark:hidden" />
+				{#if $appTheme === 'dark'}
+					<Icon name="moon" class="w-4 h-4" />
+				{:else if $appTheme === 'light'}
+					<Icon name="sun" class="w-4 h-4" />
+				{:else}
+					<Icon name="monitor" class="w-4 h-4" />
+				{/if}
 			</Button>
 		</Tooltip>
 
