@@ -1,6 +1,6 @@
 <script lang="ts">
+	import '@haptic/ui/app.css';
 	import Header from '@/components/layout/header.svelte';
-	import '../app.css';
 	import Footer from '@/components/layout/footer.svelte';
 	import Sidebar from '@/components/layout/sidebar.svelte';
 	import { appTheme, collection } from '@/store';

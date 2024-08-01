@@ -1,4 +1,5 @@
 {
+  "name": "haptic",
   "private": true,
   "scripts": {
     "build": "turbo run build",

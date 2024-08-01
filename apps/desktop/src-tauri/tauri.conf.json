@@ -7,7 +7,7 @@
 		"distDir": "../build"
 	},
 	"package": {
-		"productName": "haptic",
+		"productName": "Haptic",
 		"version": "0.1.0"
 	},
 	"tauri": {
