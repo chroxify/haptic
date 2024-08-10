@@ -1,18 +1,18 @@
 <script lang="ts">
-	import * as Dialog from '@haptic/ui/components/dialog';
-	import { Label } from '@haptic/ui/components/label';
-	import { Button } from '@haptic/ui/components/button';
 	import Icon, { type IconKey } from '$lib/components/shared/icon.svelte';
-	import * as Tabs from '@haptic/ui/components/tabs';
-	import General from './general.svelte';
-	import { Separator } from '@haptic/ui/components/separator';
-	import Appearance from './appearance.svelte';
-	import Editor from './editor.svelte';
-	import HapticSync from './haptic-sync.svelte';
-	import type { ComponentType } from 'svelte';
-	import Shortcut from '../shared/shortcut.svelte';
 	import { SHORTCUTS } from '@/constants';
 	import { settingsStore } from '@/store';
+	import { Button } from '@haptic/ui/components/button';
+	import * as Dialog from '@haptic/ui/components/dialog';
+	import { Label } from '@haptic/ui/components/label';
+	import { Separator } from '@haptic/ui/components/separator';
+	import * as Tabs from '@haptic/ui/components/tabs';
+	import type { ComponentType } from 'svelte';
+	import Shortcut from '../shared/shortcut.svelte';
+	import Appearance from './appearance.svelte';
+	import Editor from './editor.svelte';
+	import General from './general.svelte';
+	import HapticSync from './haptic-sync.svelte';
 
 	$: ({ isOpen, activePage } = $settingsStore);
 
@@ -87,7 +87,7 @@
 							{#each settings[setting] as tab}
 								<Tabs.Trigger
 									value={tab.name.toLocaleLowerCase()}
-									class="w-full h-[30px] rounded-lg px-3 hover:bg-accent hover:text-accent-foreground transition-transform active:scale-[98%] data-[state=active]:bg-accent text-foreground data-[state=active]:fill-foreground fill-muted-foreground/80 text-foreground/70 hover:fill-foreground items-center justify-start gap-2 text-sm font-normal"
+									class="w-full h-7 rounded-lg px-3 hover:bg-accent hover:text-accent-foreground transition-transform active:scale-[98%] data-[state=active]:bg-accent text-foreground data-[state=active]:fill-foreground fill-muted-foreground/80 text-foreground/70 hover:fill-foreground items-center justify-start gap-2 text-sm font-normal"
 								>
 									<Icon name={tab.icon} class="w-4 h-4" />
 									{tab.name}
@@ -107,8 +107,8 @@
 							value={tab.name.toLocaleLowerCase()}
 							class="w-full h-full -mt-2.5 overflow-y-auto pb-10"
 						>
-							<div class="flex flex-col items-start justify-start h-full w-full gap-5 px-1">
-								<h1 class="text-xl font-medium">{tab.name}</h1>
+							<div class="flex flex-col items-start justify-start h-full w-full gap-3 px-1">
+								<h1 class="text-lg font-medium">{tab.name}</h1>
 								<svelte:component this={tab.content} />
 							</div>
 						</Tabs.Content>
