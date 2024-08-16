@@ -1,12 +1,13 @@
 import { entry as entryTable } from '@/database/schema';
 import { EditorState } from '@tiptap/pm/state';
 import { clsx, type ClassValue } from 'clsx';
+import { setMode, userPrefersMode } from 'mode-watcher';
 import { cubicOut } from 'svelte/easing';
 import { get } from 'svelte/store';
 import type { TransitionConfig } from 'svelte/transition';
 import { twMerge } from 'tailwind-merge';
 import { pgClient } from './database/client';
-import { appTheme, collection, editor } from './store';
+import { collection, editor } from './store';
 import type { FileEntry, SearchResultParams, ShortcutParams } from './types';
 
 export function cn(...inputs: ClassValue[]) {
@@ -78,7 +79,7 @@ export function hideDotFiles(entries: FileEntry[]) {
  * Resets the editors document title, updating the editor state, and focusing on the
  * first element after the heading.
  */
-export function setEditorContent(content: string, title: string) {
+export function setEditorContent(content: string) {
 	const $editor = get(editor);
 
 	// Set content of the editor
@@ -196,43 +197,21 @@ export function formatFileSize(bytes: number) {
 	}
 }
 
-function hslToHex(hsl: string): string {
-	// Extract the H, S, and L values from the HSL string
-	const [h, sPercent, lPercent] = hsl
-		.replace(/%/g, '') // Remove percentage signs
-		.split(' ')
-		.map(Number);
-
-	const s = sPercent / 100;
-	const l = lPercent / 100;
-
-	const a = s * Math.min(l, 1 - l);
-	const f = (n: number) => {
-		const k = (n + h / 30) % 12;
-		const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-		return Math.round(255 * color)
-			.toString(16)
-			.padStart(2, '0'); // Convert to hex and ensure two digits
-	};
-
-	return `#${f(0)}${f(8)}${f(4)}`;
-}
-
 export function toggleTheme() {
 	// Theme options
-	const themes = ['auto', 'light', 'dark'];
+	const themes = ['system', 'light', 'dark'];
 
 	// Current theme
-	const currentTheme = get(appTheme);
+	const currentTheme = get(userPrefersMode);
 
 	// Get index of current theme
 	const index = themes.indexOf(currentTheme);
 
 	// Get next theme
-	const nextTheme = themes[(index + 1) % themes.length] as 'auto' | 'light' | 'dark';
+	const nextTheme = themes[(index + 1) % themes.length] as 'system' | 'light' | 'dark';
 
-	// Update theme
-	appTheme.set(nextTheme);
+	// Set the next theme
+	setMode(nextTheme);
 }
 
 export function buildFileTree(

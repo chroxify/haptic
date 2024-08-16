@@ -231,6 +231,9 @@ importers:
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.0
+      mode-watcher:
+        specifier: ^0.4.1
+        version: 0.4.1(svelte@4.2.8)
       tailwind-merge:
         specifier: ^2.2.1
         version: 2.2.1
@@ -3385,6 +3388,14 @@ packages:
     dependencies:
       minimist: 1.2.8
     dev: true
+
+  /mode-watcher@0.4.1(svelte@4.2.8):
+    resolution: {integrity: sha512-bNC+1NXmwEFZtziCdZSgP7HFQTpqJPcQn9GwwJQGSf6SBF3neEPYV1uRwkYuAQwbsvsXIYtzaqgedDzJ7D1mhg==}
+    peerDependencies:
+      svelte: ^4.0.0 || ^5.0.0-next.1
+    dependencies:
+      svelte: 4.2.8
+    dev: false
 
   /mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}

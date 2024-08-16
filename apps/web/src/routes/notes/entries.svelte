@@ -96,7 +96,7 @@
 			}, 100);
 
 			// Add blur event listener to the span
-			span?.addEventListener('blur', (event) => {
+			span?.addEventListener('blur', () => {
 				// Set the contenteditable attribute to false
 				span?.setAttribute('contenteditable', 'false');
 

@@ -1,18 +1,20 @@
 <script lang="ts">
+	import { SHORTCUTS } from '@/constants';
+	import { activeFile } from '@/store';
+	import { shortcutToString, toggleTheme } from '@/utils';
 	import { Button } from '@haptic/ui/components/button';
+	import * as Collapsible from '@haptic/ui/components/collapsible';
+	import { Input } from '@haptic/ui/components/input';
+	import * as Sheet from '@haptic/ui/components/sheet';
+	import { cn } from '@haptic/ui/lib/utils';
+	import { ChevronDown } from 'lucide-svelte';
+	import { userPrefersMode } from 'mode-watcher';
+	import { mainCommands as commands, createNoteCommands } from '../shared/command-menu/commands';
 	import Icon from '../shared/icon.svelte';
 	import Tooltip from '../shared/tooltip.svelte';
-	import * as Sheet from '@haptic/ui/components/sheet';
-	import { Input } from '@haptic/ui/components/input';
-	import * as Collapsible from '@haptic/ui/components/collapsible';
-	import { ChevronDown } from 'lucide-svelte';
-	import { cn } from '@haptic/ui/lib/utils';
-	import { mainCommands as commands, createNoteCommands } from '../shared/command-menu/commands';
-	import { shortcutToString, toggleTheme } from '@/utils';
-	import { activeFile, appTheme } from '@/store';
-	import { SHORTCUTS } from '@/constants';
-	import Shortcut from '../shared/shortcut.svelte';
+
 	import { settingsStore } from '@/store';
+	import Shortcut from '../shared/shortcut.svelte';
 
 	let open = false;
 	let searchValue = '';
@@ -54,9 +56,9 @@
 				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
 				scale="md"
 			>
-				{#if $appTheme === 'dark'}
+				{#if $userPrefersMode === 'dark'}
 					<Icon name="moon" class="w-4 h-4" />
-				{:else if $appTheme === 'light'}
+				{:else if $userPrefersMode === 'light'}
 					<Icon name="sun" class="w-4 h-4" />
 				{:else}
 					<Icon name="monitor" class="w-4 h-4" />

@@ -4,7 +4,6 @@ import { appSettings, collection, collectionSettings } from '@/store';
 import type { AppSettingsParams, CollectionSettingsParams } from '@/types';
 import { eq } from 'drizzle-orm';
 import { get } from 'svelte/store';
-// import { BaseDirectory, readTextFile, writeTextFile } from '@tauri-apps/api/fs';
 
 export const loadSettings = async (loadApp: boolean, loadCollection: boolean) => {
 	if (loadApp) {

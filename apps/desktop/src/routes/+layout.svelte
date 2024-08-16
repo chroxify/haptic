@@ -6,7 +6,7 @@
 	import Command from '@/components/shared/command-menu/command.svelte';
 	import { appTheme, collection } from '@/store';
 	import { updateWindowTheme, validateHapticFolder } from '@/utils';
-	import '@haptic/ui/app.css';
+	import '@haptic/ui/app.desktop.css';
 	import { BaseDirectory, readTextFile } from '@tauri-apps/api/fs';
 	import { invoke } from '@tauri-apps/api/tauri';
 	import { onMount } from 'svelte';

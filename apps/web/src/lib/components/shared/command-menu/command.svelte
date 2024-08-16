@@ -5,10 +5,11 @@
 	import { entry as entryTable } from '$lib/database/schema';
 	import { getCollections, loadCollection } from '@/api/collection';
 	import { moveNote, openNote } from '@/api/notes';
-	import { activeFile, appTheme, collection } from '@/store';
+	import { activeFile, collection } from '@/store';
 	import { formatTimeAgo, shortcutToString } from '@/utils';
 	import * as Command from '@haptic/ui/components/command';
 	import { Loader, Twitter } from 'lucide-svelte';
+	import { setMode, userPrefersMode } from 'mode-watcher';
 	import { onMount } from 'svelte';
 	import { mainCommands as commands, createNoteCommands } from './commands';
 	import { getAllItems } from './helpers';
@@ -301,12 +302,12 @@
 			</Command.Group>
 		{:else if page === 'change_theme'}
 			<Command.Group heading="Change theme...">
-				{#if $appTheme !== 'light'}
+				{#if $userPrefersMode !== 'light'}
 					<Command.Item
 						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 						value="light"
 						onSelect={() => {
-							appTheme.set('light');
+							setMode('light');
 							handlePageState(undefined);
 						}}
 					>
@@ -314,12 +315,12 @@
 						Light
 					</Command.Item>
 				{/if}
-				{#if $appTheme !== 'dark'}
+				{#if $userPrefersMode !== 'dark'}
 					<Command.Item
 						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 						value="dark"
 						onSelect={() => {
-							appTheme.set('dark');
+							setMode('dark');
 							handlePageState(undefined);
 						}}
 					>
@@ -327,12 +328,12 @@
 						Dark
 					</Command.Item>
 				{/if}
-				{#if $appTheme !== 'auto'}
+				{#if $userPrefersMode !== 'system'}
 					<Command.Item
 						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 						value="system"
 						onSelect={() => {
-							appTheme.set('auto');
+							setMode('system');
 							handlePageState(undefined);
 						}}
 					>

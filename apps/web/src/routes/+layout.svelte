@@ -8,7 +8,8 @@
 	import { db, pgClient } from '@/database/client';
 	import { collection as collectionTable } from '@/database/schema';
 	import { collection } from '@/store';
-	import '@haptic/ui/app.css';
+	import '@haptic/ui/app.web.css';
+	import { ModeWatcher } from 'mode-watcher';
 	import { onMount } from 'svelte';
 
 	// Migrate database
@@ -55,7 +56,7 @@
 </script>
 
 <Command />
-
+<ModeWatcher />
 <Header />
 <Sidebar />
 <main class="flex min-h-screen w-full items-center justify-center antialiased">

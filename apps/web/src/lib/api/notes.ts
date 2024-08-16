@@ -45,7 +45,7 @@ export const createNote = async (dirPath: string, name?: string) => {
 // Open a note
 export async function openNote(path: string, skipHistory = false) {
 	const file = await db.select().from(entryTable).where(eq(entryTable.path, path));
-	setEditorContent(file[0].content ?? '', path.split('/').pop()!.split('.').shift()!);
+	setEditorContent(file[0].content ?? '');
 	activeFile.set(path);
 	if (!skipHistory) {
 		noteHistory.update((history) => {

@@ -1,14 +1,14 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-import { cubicOut } from 'svelte/easing';
-import type { TransitionConfig } from 'svelte/transition';
-import { createDir, readDir, type FileEntry } from '@tauri-apps/api/fs';
-import { get } from 'svelte/store';
-import { appTheme, editor } from './store';
-import { EditorState } from '@tiptap/pm/state';
-import { invoke } from '@tauri-apps/api/tauri';
-import type { ShortcutParams } from './types';
 import { emit } from '@tauri-apps/api/event';
+import { createDir, readDir, type FileEntry } from '@tauri-apps/api/fs';
+import { invoke } from '@tauri-apps/api/tauri';
+import { EditorState } from '@tiptap/pm/state';
+import { clsx, type ClassValue } from 'clsx';
+import { cubicOut } from 'svelte/easing';
+import { get } from 'svelte/store';
+import type { TransitionConfig } from 'svelte/transition';
+import { twMerge } from 'tailwind-merge';
+import { appTheme, editor } from './store';
+import type { ShortcutParams } from './types';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -79,7 +79,7 @@ export function hideDotFiles(entries: FileEntry[]) {
  * Resets the editors document title, updating the editor state, and focusing on the
  * first element after the heading.
  */
-export function setEditorContent(content: string, title: string) {
+export function setEditorContent(content: string) {
 	const $editor = get(editor);
 
 	// Set content of the editor
