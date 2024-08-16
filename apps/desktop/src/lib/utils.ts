@@ -1,14 +1,14 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-import { cubicOut } from 'svelte/easing';
-import type { TransitionConfig } from 'svelte/transition';
-import { createDir, readDir, type FileEntry } from '@tauri-apps/api/fs';
-import { get } from 'svelte/store';
-import { appTheme, editor } from './store';
-import { EditorState } from '@tiptap/pm/state';
-import { invoke } from '@tauri-apps/api/tauri';
-import type { ShortcutParams } from './types';
 import { emit } from '@tauri-apps/api/event';
+import { createDir, readDir, type FileEntry } from '@tauri-apps/api/fs';
+import { invoke } from '@tauri-apps/api/tauri';
+import { EditorState } from '@tiptap/pm/state';
+import { clsx, type ClassValue } from 'clsx';
+import { cubicOut } from 'svelte/easing';
+import { get } from 'svelte/store';
+import type { TransitionConfig } from 'svelte/transition';
+import { twMerge } from 'tailwind-merge';
+import { appTheme, editor } from './store';
+import type { ShortcutParams } from './types';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -79,7 +79,7 @@ export function hideDotFiles(entries: FileEntry[]) {
  * Resets the editors document title, updating the editor state, and focusing on the
  * first element after the heading.
  */
-export function setEditorContent(content: string, title: string) {
+export function setEditorContent(content: string) {
 	const $editor = get(editor);
 
 	// Set content of the editor
@@ -270,3 +270,35 @@ export function toggleTheme() {
 	// Update theme
 	appTheme.set(nextTheme);
 }
+
+// Helper function to get the next available untitled name
+export const getNextUntitledName = (files: FileEntry[], prefix: string, extension: string = '') => {
+	const untitledItems = files
+		.filter(
+			(file) =>
+				file.name?.toLowerCase().startsWith(prefix.toLowerCase()) &&
+				(extension ? file.name?.toLowerCase().endsWith(extension.toLowerCase()) : true)
+		)
+		.map((file) => file.name!);
+
+	let maxNumber = 0;
+	const numberPattern = new RegExp(`^${prefix}(?: (\\d+))?${extension}$`, 'i');
+
+	untitledItems.forEach((name) => {
+		const match = name.match(numberPattern);
+		if (match) {
+			const num = match[1] ? parseInt(match[1]) : 0;
+			maxNumber = Math.max(maxNumber, num);
+		}
+	});
+
+	for (let i = 0; i <= maxNumber + 1; i++) {
+		const newName = i === 0 ? `${prefix}${extension}` : `${prefix} ${i}${extension}`;
+		if (!untitledItems.includes(newName)) {
+			return newName;
+		}
+	}
+
+	// This should never happen, but just in case
+	return `${prefix} ${maxNumber + 1}${extension}`;
+};

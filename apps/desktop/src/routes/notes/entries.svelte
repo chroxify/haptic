@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type { FileEntry } from '@tauri-apps/api/fs';
+	import { createFolder, deleteFolder, moveFolder, renameFolder } from '@/api/folders';
+	import { createNote, deleteNote, duplicateNote, moveNote, openNote } from '@/api/notes';
+	import Icon from '@/components/shared/icon.svelte';
+	import Shortcut from '@/components/shared/shortcut.svelte';
+	import { SHORTCUTS } from '@/constants';
+	import { activeFile, collection, editor } from '@/store';
+	import { shortcutToString, showInFolder } from '@/utils';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import * as Collapsible from '@haptic/ui/components/collapsible';
 	import * as ContextMenu from '@haptic/ui/components/context-menu';
-	import Icon from '@/components/shared/icon.svelte';
-	import { activeFile, collection, editor } from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
-	import { createNote, deleteNote, duplicateNote, moveNote, openNote } from '@/api/notes';
-	import { createFolder, deleteFolder, moveFolder, renameFolder } from '@/api/folders';
-	import { shortcutToString, showInFolder } from '@/utils';
-	import Shortcut from '@/components/shared/shortcut.svelte';
-	import { SHORTCUTS } from '@/constants';
+	import type { FileEntry } from '@tauri-apps/api/fs';
 	import { get } from 'svelte/store';
 
 	export let entries: FileEntry[];
@@ -96,7 +96,7 @@
 			}, 100);
 
 			// Add blur event listener to the span
-			span?.addEventListener('blur', (event) => {
+			span?.addEventListener('blur', () => {
 				// Set the contenteditable attribute to false
 				span?.setAttribute('contenteditable', 'false');
 
@@ -400,7 +400,7 @@
 								{#if directory.name !== entry.name}
 									<ContextMenu.Item
 										class="flex items-center gap-2 font-base group"
-										on:click={() => moveNote(entry.path, directory.path)}
+										on:click={() => moveFolder(entry.path, directory.path)}
 									>
 										<Icon
 											name="folder"
@@ -410,6 +410,30 @@
 									</ContextMenu.Item>
 								{/if}
 							{/each}
+
+							{#if getDirectories(entries).filter((directory) => directory.name !== entry.name).length === 0}
+								<ContextMenu.Item
+									class="flex items-center gap-2 font-base group"
+									on:click={async () => {
+										// Create a new folder in parent directory
+										const dirPath = await createFolder(
+											entry.path.split('/').slice(0, -1).join('/')
+										);
+
+										// Move the folder to the new directory
+										moveFolder(entry.path, dirPath);
+									}}
+								>
+									<Icon
+										name="folderPlus"
+										class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
+									/>
+									New folder
+									<ContextMenu.Shortcut
+										>{shortcutToString(SHORTCUTS['folder:create'])}</ContextMenu.Shortcut
+									>
+								</ContextMenu.Item>
+							{/if}
 						</ContextMenu.SubContent>
 					</ContextMenu.Sub>
 					<ContextMenu.Separator />
@@ -544,13 +568,24 @@
 						{/each}
 
 						{#if getDirectories(entries).length === 0}
-							<ContextMenu.Item class="flex items-center gap-2 font-base group">
+							<ContextMenu.Item
+								class="flex items-center gap-2 font-base group"
+								on:click={async () => {
+									// Create a new folder in parent directory
+									await createFolder(entry.path.split('/').slice(0, -1).join('/'));
+
+									// Move the folder to the new folder
+									moveNote(entry.path, entry.path.split('/').slice(0, -1).join('/') + '/Untitled');
+								}}
+							>
 								<Icon
 									name="folderPlus"
 									class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
 								/>
 								New folder
-								<ContextMenu.Shortcut>F</ContextMenu.Shortcut>
+								<ContextMenu.Shortcut
+									>{shortcutToString(SHORTCUTS['folder:create'])}</ContextMenu.Shortcut
+								>
 							</ContextMenu.Item>
 						{/if}
 					</ContextMenu.SubContent>

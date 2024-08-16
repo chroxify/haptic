@@ -1,3 +1,4 @@
+import { getNextUntitledName } from '@/utils';
 import { createDir, readDir, renameFile } from '@tauri-apps/api/fs';
 import { homeDir } from '@tauri-apps/api/path';
 
@@ -6,14 +7,13 @@ export const createFolder = async (dirPath: string) => {
 	// Read the directory
 	const files = await readDir(dirPath);
 
-	// Generate a new name (Untitled, if there are any exiting Untitled folders, increment the number by 1)
-	const untitledFolders = files.filter(
-		(file) => file.name?.toLowerCase().startsWith('untitled') && file.children !== undefined
-	);
-	const name = `Untitled${untitledFolders.length ? ` ${untitledFolders.length}` : ''}`;
+	// Generate a new name
+	const name = getNextUntitledName(files, 'Untitled');
 
 	// Save the new folder
 	await createDir(`${dirPath}/${name}`);
+
+	return `${dirPath}/${name}`;
 };
 
 // Delete a folder

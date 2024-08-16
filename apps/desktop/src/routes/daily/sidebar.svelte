@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { fetchCollectionEntries } from '@/api/collection';
+	import { createNote, openNote } from '@/api/notes';
 	import {
 		activeFile,
 		collection,
@@ -7,15 +9,14 @@
 		pageSidebarWidth,
 		resizingPageSidebar
 	} from '@/store';
-	import { createNote, openNote } from '@/api/notes';
-	import { watchImmediate } from 'tauri-plugin-fs-watch-api';
-	import type { FileEntry } from '@tauri-apps/api/fs';
-	import { fetchCollectionEntries } from '@/api/collection';
-	import type { UnlistenFn } from '@tauri-apps/api/event';
-	import { cn } from '@haptic/ui/lib/utils';
-	import Entries from './entries.svelte';
 	import { Calendar } from '@haptic/ui/components/calendar';
+	import Label from '@haptic/ui/components/label/label.svelte';
+	import { cn } from '@haptic/ui/lib/utils';
 	import { CalendarDate, getLocalTimeZone, today, type DateValue } from '@internationalized/date';
+	import type { UnlistenFn } from '@tauri-apps/api/event';
+	import type { FileEntry } from '@tauri-apps/api/fs';
+	import { watchImmediate } from 'tauri-plugin-fs-watch-api';
+	import Entries from './entries.svelte';
 
 	let calValue = today(getLocalTimeZone());
 	let entries: FileEntry[] = [];
@@ -189,7 +190,13 @@
 		data-collection-root
 		data-path={$collection + '/.haptic/daily'}
 	>
-		<Entries {entries} />
+		{#if entries.length === 0}
+			<div class="w-full h-full flex flex-col gap-1 items-center justify-center">
+				<Label class="text-muted-foreground text-xs text-center">No daily notes found</Label>
+			</div>
+		{:else}
+			<Entries {entries} />
+		{/if}
 	</div>
 
 	<Calendar

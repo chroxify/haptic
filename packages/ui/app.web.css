@@ -1,0 +1,61 @@
+@import './theme.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--background: var(--background-light);
+		--secondary-background: var(--secondary-background-light);
+		--foreground: var(--foreground-light);
+		--muted: var(--muted-light);
+		--muted-foreground: var(--muted-foreground-light);
+		--popover: var(--popover-light);
+		--popover-foreground: var(--popover-foreground-light);
+		--card: var(--card-light);
+		--card-foreground: var(--card-foreground-light);
+		--border: var(--border-light);
+		--input: var(--input-light);
+		--primary: var(--primary-light);
+		--primary-foreground: var(--primary-foreground-light);
+		--secondary: var(--secondary-light);
+		--secondary-foreground: var(--secondary-foreground-light);
+		--accent: var(--accent-light);
+		--accent-foreground: var(--accent-foreground-light);
+		--destructive: var(--destructive-light);
+		--destructive-foreground: var(--destructive-foreground-light);
+		--ring: var(--ring-light);
+	}
+
+	.dark {
+		--background: var(--background-dark);
+		--secondary-background: var(--secondary-background-dark);
+		--foreground: var(--foreground-dark);
+		--muted: var(--muted-dark);
+		--muted-foreground: var(--muted-foreground-dark);
+		--popover: var(--popover-dark);
+		--popover-foreground: var(--popover-foreground-dark);
+		--card: var(--card-dark);
+		--card-foreground: var(--card-foreground-dark);
+		--border: var(--border-dark);
+		--input: var(--input-dark);
+		--primary: var(--primary-dark);
+		--primary-foreground: var(--primary-foreground-dark);
+		--secondary: var(--secondary-dark);
+		--secondary-foreground: var(--secondary-foreground-dark);
+		--accent: var(--accent-dark);
+		--accent-foreground: var(--accent-foreground-dark);
+		--destructive: var(--destructive-dark);
+		--destructive-foreground: var(--destructive-foreground-dark);
+		--ring: var(--ring-dark);
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground select-none antialiased;
+	}
+}

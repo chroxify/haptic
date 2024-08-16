@@ -1,10 +1,10 @@
-import { writeTextFile, readDir, readTextFile, renameFile, removeFile } from '@tauri-apps/api/fs';
 import { activeFile, collection, collectionSettings, editor, noteHistory } from '@/store';
-import { calculateReadingTime, setEditorContent } from '@/utils';
+import type { NoteMetadataParams } from '@/types';
+import { calculateReadingTime, getNextUntitledName, setEditorContent } from '@/utils';
+import { readDir, readTextFile, removeFile, renameFile, writeTextFile } from '@tauri-apps/api/fs';
 import { homeDir } from '@tauri-apps/api/path';
 import { get } from 'svelte/store';
 import { metadata } from 'tauri-plugin-fs-extra-api';
-import type { NoteMetadataParams } from '@/types';
 
 // Create a new note
 export const createNote = async (dirPath: string, name?: string) => {
@@ -12,11 +12,8 @@ export const createNote = async (dirPath: string, name?: string) => {
 	const files = await readDir(dirPath);
 
 	// Generate a new name (Untitled.md, if there are any exiting Untitled notes, increment the number by 1)
-	const untitledNotes = files.filter(
-		(file) => file.name?.toLowerCase().startsWith('untitled') && file.children === undefined
-	);
 	if (!name) {
-		name = `Untitled${untitledNotes.length ? ` ${untitledNotes.length}` : ''}.md`;
+		name = getNextUntitledName(files, 'Untitled', '.md');
 	}
 
 	// Save the new note
@@ -28,9 +25,9 @@ export const createNote = async (dirPath: string, name?: string) => {
 
 // Open a note
 export async function openNote(path: string, skipHistory = false) {
-	const fileContent = await readTextFile(path);
-	setEditorContent(fileContent, path.split('/').pop()!.split('.').shift()!);
 	activeFile.set(path);
+	const fileContent = await readTextFile(path);
+	setEditorContent(fileContent);
 	if (!skipHistory) {
 		noteHistory.update((history) => {
 			if (history[history.length - 1] !== path) {
@@ -55,7 +52,7 @@ export const deleteNote = async (path: string) => {
 			await removeFile(path);
 			break;
 	}
-	activeFile.set('');
+	activeFile.set(null);
 };
 
 // Rename a note

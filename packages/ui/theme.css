@@ -1,0 +1,44 @@
+:root {
+	--background-light: 0 0% 100%;
+	--secondary-background-light: 0 0% 98.8%;
+	--foreground-light: 224 71.4% 4.1%;
+	--muted-light: 0 0% 88%;
+	--muted-foreground-light: 0 0% 46.1%;
+	--popover-light: 0 0% 100%;
+	--popover-foreground-light: 224 71.4% 4.1%;
+	--card-light: 0 0% 100%;
+	--card-foreground-light: 224 71.4% 4.1%;
+	--border-light: 220 13% 91%;
+	--input-light: 220 13% 91%;
+	--primary-light: 220.9 39.3% 11%;
+	--primary-foreground-light: 210 20% 98%;
+	--secondary-light: 0 0% 96%;
+	--secondary-foreground-light: 0 0% 20%;
+	--accent-light: 220 14.3% 95.9%;
+	--accent-foreground-light: 220.9 39.3% 11%;
+	--destructive-light: 0 72.2% 50.6%;
+	--destructive-foreground-light: 210 20% 98%;
+	--ring-light: 220 13% 91%;
+	--radius: 0.5rem;
+
+	--background-dark: 0 0% 7%;
+	--secondary-background-dark: 0 0% 9%;
+	--foreground-dark: 0 0% 90%;
+	--muted-dark: 0 0% 30%;
+	--muted-foreground-dark: 0 0% 55%;
+	--popover-dark: 0 0% 7%;
+	--popover-foreground-dark: 210 20% 98%;
+	--card-dark: 0 0% 7%;
+	--card-foreground-dark: 210 20% 98%;
+	--border-dark: 0 0% 18%;
+	--input-dark: 0 0% 18%;
+	--primary-dark: 210 20% 98%;
+	--primary-foreground-dark: 220.9 39.3% 11%;
+	--secondary-dark: 0 0% 15%;
+	--secondary-foreground-dark: 0 0% 85%;
+	--accent-dark: 0 0% 18%;
+	--accent-foreground-dark: 210 20% 98%;
+	--destructive-dark: 355 100% 75%;
+	--destructive-foreground-dark: 210 20% 98%;
+	--ring-dark: 0 0% 18%;
+}

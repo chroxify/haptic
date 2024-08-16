@@ -1,16 +1,16 @@
 <script lang="ts">
-	import * as Command from '@haptic/ui/components/command';
-	import { onMount } from 'svelte';
-	import Icon from '$lib/components/shared/icon.svelte';
-	import { activeFile, appTheme, collection } from '@/store';
-	import { moveNote, openNote } from '@/api/notes';
-	import { getAllItems } from './helpers';
-	import { mainCommands as commands, createNoteCommands } from './commands';
-	import { formatTimeAgo, shortcutToString } from '@/utils';
-	import { getCollections, loadCollection } from '@/api/collection';
-	import { Twitter } from 'lucide-svelte';
-	import { open as browserOpen } from '@tauri-apps/api/shell';
 	import { goto } from '$app/navigation';
+	import Icon from '$lib/components/shared/icon.svelte';
+	import { getCollections, loadCollection } from '@/api/collection';
+	import { moveNote, openNote } from '@/api/notes';
+	import { activeFile, appTheme, collection } from '@/store';
+	import { formatTimeAgo, shortcutToString } from '@/utils';
+	import * as Command from '@haptic/ui/components/command';
+	import { open as browserOpen } from '@tauri-apps/api/shell';
+	import { Twitter } from 'lucide-svelte';
+	import { onMount } from 'svelte';
+	import { mainCommands as commands, createNoteCommands } from './commands';
+	import { getAllItems } from './helpers';
 
 	let open = false;
 	let search = '';
@@ -259,40 +259,44 @@
 					Open new collection
 				</Command.Item>
 			</Command.Group>
-			<Command.Group heading="Browse recent collections">
-				{#await getCollections()}
-					<Command.Loading class="text-foreground/90">Recent collections</Command.Loading>
-				{:then collections}
-					{#each collections
-						.filter((c) => c.path !== $collection)
-						.sort((a, b) => +new Date(b.lastOpened) - +new Date(a.lastOpened)) as collection}
-						<Command.Item
-							class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
-							value={collection.path}
-							onSelect={async () => {
-								await goto('/notes');
-								loadCollection(collection.path);
-								handlePageState(undefined);
-							}}
-						>
-							<div class="flex w-full items-center justify-between">
-								<div class="flex items-center gap-1.5">
-									<Icon name="folder" />
-									<span class="text-foreground/80 group:hover:text-foreground/100"></span>
-									{collection.name}
+			{#await getCollections()}
+				<Command.Loading class="text-foreground/90">Recent collections</Command.Loading>
+			{:then collections}
+				{#if collections.filter((c) => c.path !== $collection).length > 0}
+					<Command.Group heading="Browse recent collections">
+						{#each collections
+							.filter((c) => c.path !== $collection)
+							.sort((a, b) => +new Date(b.lastOpened) - +new Date(a.lastOpened)) as collection}
+							<Command.Item
+								class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+								value={collection.path}
+								onSelect={async () => {
+									await goto('/notes');
+									loadCollection(collection.path);
+									handlePageState(undefined);
+								}}
+							>
+								<div class="flex w-full items-center justify-between">
+									<div class="flex items-center gap-1.5">
+										<Icon name="folder" />
+										<span class="text-foreground/80 group:hover:text-foreground/100"></span>
+										{collection.name}
+									</div>
+									<span class="ml-auto text-xs text-muted-foreground h-full"
+										>{formatTimeAgo(new Date(collection.lastOpened))}
+									</span>
 								</div>
-								<span class="ml-auto text-xs text-muted-foreground h-full"
-									>{formatTimeAgo(new Date(collection.lastOpened))}
-								</span>
-							</div>
-						</Command.Item>
-					{/each}
-				{:catch error}
+							</Command.Item>
+						{/each}
+					</Command.Group>
+				{/if}
+			{:catch error}
+				<Command.Group heading="Browse recent collections">
 					<Command.Item class="text-foreground/90"
 						>Error loading collections: {error.message}</Command.Item
 					>
-				{/await}
-			</Command.Group>
+				</Command.Group>
+			{/await}
 		{:else if page === 'help_and_feedback'}
 			<Command.Group heading="Help & Support">
 				<Command.Item

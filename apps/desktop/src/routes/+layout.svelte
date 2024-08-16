@@ -1,15 +1,15 @@
 <script lang="ts">
-	import '@haptic/ui/app.css';
-	import Header from '@/components/layout/header.svelte';
-	import Footer from '@/components/layout/footer.svelte';
-	import Sidebar from '@/components/layout/sidebar.svelte';
-	import { appTheme, collection } from '@/store';
-	import { readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
-	import Command from '@/components/shared/command-menu/command.svelte';
 	import { loadSettings } from '@/api/settings';
-	import { onMount } from 'svelte';
+	import Footer from '@/components/layout/footer.svelte';
+	import Header from '@/components/layout/header.svelte';
+	import Sidebar from '@/components/layout/sidebar.svelte';
+	import Command from '@/components/shared/command-menu/command.svelte';
+	import { appTheme, collection } from '@/store';
 	import { updateWindowTheme, validateHapticFolder } from '@/utils';
+	import '@haptic/ui/app.desktop.css';
+	import { BaseDirectory, readTextFile } from '@tauri-apps/api/fs';
 	import { invoke } from '@tauri-apps/api/tauri';
+	import { onMount } from 'svelte';
 
 	// Prevent right-clicking in production
 	// TODO: Test if this even works in production (not sure if tauri has access to env variables)
@@ -62,7 +62,7 @@
 
 <Header />
 <Sidebar />
-<main class="flex min-h-screen w-full items-center justify-center antialiased">
+<main class="flex min-h-screen w-full items-center justify-center">
 	<slot />
 </main>
 <Footer />

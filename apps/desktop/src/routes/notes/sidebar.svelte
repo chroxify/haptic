@@ -1,28 +1,30 @@
 <script lang="ts">
-	import { Button } from '@haptic/ui/components/button';
+	import { fetchCollectionEntries } from '@/api/collection';
+	import { createFolder } from '@/api/folders';
+	import { createNote, openNote } from '@/api/notes';
 	import Icon from '@/components/shared/icon.svelte';
-	import Entries from './entries.svelte';
+	import Shortcut from '@/components/shared/shortcut.svelte';
+	import Tooltip from '@/components/shared/tooltip.svelte';
+	import { SHORTCUTS } from '@/constants';
 	import {
+		activeFile,
 		collection,
-		editor,
 		collectionSearchActive,
+		editor,
 		isPageSidebarOpen,
 		pageSidebarWidth,
 		resizingPageSidebar
 	} from '@/store';
-	import { createNote, openNote } from '@/api/notes';
-	import { watchImmediate } from 'tauri-plugin-fs-watch-api';
-	import type { FileEntry } from '@tauri-apps/api/fs';
-	import { fetchCollectionEntries } from '@/api/collection';
-	import type { UnlistenFn } from '@tauri-apps/api/event';
-	import { createFolder } from '@/api/folders';
-	import Tooltip from '@/components/shared/tooltip.svelte';
+	import { Button } from '@haptic/ui/components/button';
+	import Label from '@haptic/ui/components/label/label.svelte';
 	import { cn } from '@haptic/ui/lib/utils';
-	import { SHORTCUTS } from '@/constants';
-	import Shortcut from '@/components/shared/shortcut.svelte';
+	import type { UnlistenFn } from '@tauri-apps/api/event';
+	import type { FileEntry } from '@tauri-apps/api/fs';
 	import { invoke } from '@tauri-apps/api/tauri';
-	import SearchResults from './search-results.svelte';
 	import { ALargeSmall, WholeWord } from 'lucide-svelte';
+	import { watchImmediate } from 'tauri-plugin-fs-watch-api';
+	import Entries from './entries.svelte';
+	import SearchResults from './search-results.svelte';
 
 	let searchValue: string;
 	let searchDebounce: NodeJS.Timeout;
@@ -57,6 +59,8 @@
 		// Open the first note
 		if (firstNote) {
 			openNote(firstNote.path);
+		} else {
+			activeFile.set(null);
 		}
 
 		if (value) {
@@ -367,6 +371,11 @@
 				loading={searchLoading}
 			/>
 		{:else}
+			{#if entries.length === 0}
+				<div class="w-full h-full flex flex-col gap-1 items-center justify-center">
+					<Label class="text-muted-foreground text-xs text-center">No notes found</Label>
+				</div>
+			{/if}
 			<Entries {entries} bind:toggleFolderStates bind:toggleState={folderToggleState} />
 		{/if}
 	</div>

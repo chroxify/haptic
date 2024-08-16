@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
-import type { CollectionSettingsParams, AppSettingsParams, SettingsStateParams } from './types';
-import { BASE_APP_SETTINGS, BASE_COLLECTION_SETTINGS } from './constants';
 import { createEditorStore } from './components/shared/editor/editor-store';
+import { BASE_APP_SETTINGS, BASE_COLLECTION_SETTINGS } from './constants';
+import type { AppSettingsParams, CollectionSettingsParams, SettingsStateParams } from './types';
 
 const editor = createEditorStore();
 
@@ -32,22 +32,22 @@ const appSettings = writable<AppSettingsParams>(BASE_APP_SETTINGS);
 const collectionSettings = writable<CollectionSettingsParams>(BASE_COLLECTION_SETTINGS);
 
 export {
-	editor,
 	activeFile,
-	collection,
-	tooltipsOpen,
-	collectionSearchActive,
-	isPageSidebarOpen,
-	pageSidebarWidth,
-	resizingPageSidebar,
-	noteHistory,
-	editorMode,
-	editorSearchValue,
-	editorSearchActive,
-	appTheme,
 	appSettings,
+	appTheme,
+	collection,
+	collectionSearchActive,
 	collectionSettings,
+	editor,
+	editorMode,
+	editorSearchActive,
+	editorSearchValue,
 	isNoteDetailSidebarOpen,
+	isPageSidebarOpen,
 	noteDetailSidebarWidth,
-	resizingNoteDetailSidebar
+	noteHistory,
+	pageSidebarWidth,
+	resizingNoteDetailSidebar,
+	resizingPageSidebar,
+	tooltipsOpen
 };
