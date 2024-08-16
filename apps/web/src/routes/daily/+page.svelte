@@ -1,9 +1,13 @@
 <script lang="ts">
-	import Editor from '@/components/shared/editor/editor.svelte';
-	import EditorToolbar from '$lib/components/shared/editor/toolbar.svelte';
-	import { collectionSettings } from '@/store';
 	import EditorInlineTitle from '$lib/components/shared/editor/inline-title.svelte';
 	import EditorSearch from '$lib/components/shared/editor/search.svelte';
+	import EditorToolbar from '$lib/components/shared/editor/toolbar.svelte';
+	import { createNote } from '@/api/notes';
+	import Editor from '@/components/shared/editor/editor.svelte';
+	import Shortcut from '@/components/shared/shortcut.svelte';
+	import { SHORTCUTS } from '@/constants';
+	import { activeFile, collection, collectionSettings } from '@/store';
+	import { shortcutToString } from '@/utils';
 </script>
 
 <div
@@ -12,7 +16,48 @@
 	{#if $collectionSettings.editor.show_toolbar}
 		<EditorToolbar hideHistory hideParentDirectories />
 	{/if}
-	<EditorSearch />
-	<EditorInlineTitle preCheckRegex={/^\d{4}-\d{2}-\d{2}$/} />
-	<Editor />
+
+	{#if $activeFile === null}
+		<div class="flex flex-col items-center justify-center w-full h-full -mt-10">
+			<div class="flex flex-col items-center gap-2">
+				<p class="text-secondary-foreground/85">Select a daily note to get started</p>
+				<div class="flex gap-5">
+					<button
+						class="text-sm gap-1.5 flex text-muted-foreground hover:text-secondary-foreground transition-colors items-center justify-center"
+						on:click={() => {
+							document.dispatchEvent(new KeyboardEvent('keydown', { key: 'o', metaKey: true }));
+						}}
+					>
+						<span
+							class="pointer-events-none inline-flex h-[18px] pl-1.5 tracking-widest select-none items-center gap-1 rounded bg-secondary px-1 font-mono text-muted-foreground opacity-100"
+						>
+							{shortcutToString(SHORTCUTS['app:open-collection'])}
+						</span>
+						Open Collection</button
+					>
+					<button
+						class="text-sm gap-1.5 flex text-muted-foreground hover:text-secondary-foreground transition-colors items-center justify-center"
+						on:click={() => {
+							createNote(
+								$collection + '/.haptic/daily',
+								new Date().toISOString().split('T')[0] + '.md'
+							);
+						}}
+					>
+						<Shortcut options={{ key: 'd', command: true }} />
+						<span
+							class="pointer-events-none inline-flex h-[18px] pl-1.5 tracking-widest select-none items-center gap-1 rounded bg-secondary px-1 font-mono text-muted-foreground opacity-100"
+						>
+							{shortcutToString({ key: 'd', command: true })}
+						</span>
+						Create today's note
+					</button>
+				</div>
+			</div>
+		</div>
+	{:else}
+		<EditorSearch />
+		<EditorInlineTitle preCheckRegex={/^\d{4}-\d{2}-\d{2}$/} />
+		<Editor />
+	{/if}
 </div>

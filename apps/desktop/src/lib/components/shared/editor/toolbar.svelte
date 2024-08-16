@@ -162,7 +162,7 @@
 					scale="sm"
 					class="h-6 text-[13px] w-fit px-1.5 text-foreground transition-all font-medium"
 				>
-					{$activeFile?.replace($collection, '').split('/')?.slice(-1)[0]}
+					{$activeFile?.replace($collection, '').split('/')?.slice(-1)[0] ?? ''}
 				</Button>
 			{/if}
 		</p>

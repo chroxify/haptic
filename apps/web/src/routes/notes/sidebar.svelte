@@ -8,6 +8,7 @@
 	import { SHORTCUTS } from '@/constants';
 	import { pgClient } from '@/database/client';
 	import {
+		activeFile,
 		collection,
 		collectionEntries,
 		collectionSearchActive,
@@ -19,6 +20,7 @@
 	import type { FileEntry, SearchResultParams } from '@/types';
 	import { searchEntries } from '@/utils';
 	import { Button } from '@haptic/ui/components/button';
+	import Label from '@haptic/ui/components/label/label.svelte';
 	import { cn } from '@haptic/ui/lib/utils';
 	import { ALargeSmall, WholeWord } from 'lucide-svelte';
 	import { onDestroy } from 'svelte';
@@ -59,6 +61,8 @@
 		// Open the first note
 		if (firstNote) {
 			openNote(firstNote.path);
+		} else {
+			activeFile.set(null);
 		}
 
 		if (value) {
@@ -368,6 +372,11 @@
 				loading={searchLoading}
 			/>
 		{:else}
+			{#if entries.length === 0}
+				<div class="w-full h-full flex flex-col gap-1 items-center justify-center">
+					<Label class="text-muted-foreground text-xs text-center">No notes found</Label>
+				</div>
+			{/if}
 			<Entries {entries} bind:toggleFolderStates bind:toggleState={folderToggleState} />
 		{/if}
 	</div>

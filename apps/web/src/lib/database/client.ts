@@ -4,7 +4,7 @@ import { drizzle } from 'drizzle-orm/pglite';
 import * as schema from './schema';
 
 export const pgClient = await PGlite.create({
-	dataDir: 'idb://haptic-pglite',
+	dataDir: 'idb://haptic',
 	extensions: {
 		live
 	}

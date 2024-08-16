@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { activeFile, collection, editor, editorSearchActive, editorSearchValue } from '@/store';
-	import { cn } from '@haptic/ui/lib/utils';
 	import { openNote } from '@/api/notes';
-	import Label from '@haptic/ui/components/label/label.svelte';
+	import { activeFile, collection, editor, editorSearchActive, editorSearchValue } from '@/store';
 	import * as Collapsible from '@haptic/ui/components/collapsible';
+	import Label from '@haptic/ui/components/label/label.svelte';
+	import { cn } from '@haptic/ui/lib/utils';
+	import { invoke } from '@tauri-apps/api/tauri';
 	import { ChevronDown, Loader } from 'lucide-svelte';
 	import markdownit from 'markdown-it';
-	import { invoke } from '@tauri-apps/api/tauri';
 	import { onDestroy, onMount } from 'svelte';
 
 	let tasks: { path: string; context_preview: string }[] = [];
@@ -97,6 +97,8 @@
 	});
 
 	onMount(async () => {
+		activeFile.set(null);
+
 		await searchCollection();
 
 		// Handle opening file on mount

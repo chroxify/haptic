@@ -93,6 +93,8 @@
 	});
 
 	onMount(async () => {
+		activeFile.set(null);
+
 		await searchCollection();
 
 		// Handle opening file on mount

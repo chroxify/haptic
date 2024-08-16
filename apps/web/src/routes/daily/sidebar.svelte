@@ -13,6 +13,7 @@
 	} from '@/store';
 	import type { FileEntry } from '@/types';
 	import { Calendar } from '@haptic/ui/components/calendar';
+	import Label from '@haptic/ui/components/label/label.svelte';
 	import { cn } from '@haptic/ui/lib/utils';
 	import { CalendarDate, getLocalTimeZone, today, type DateValue } from '@internationalized/date';
 	import { onDestroy } from 'svelte';
@@ -195,7 +196,13 @@
 		data-collection-root
 		data-path={$collection + '/.haptic/daily'}
 	>
-		<Entries {entries} />
+		{#if entries.length === 0}
+			<div class="w-full h-full flex flex-col gap-1 items-center justify-center">
+				<Label class="text-muted-foreground text-xs text-center">No daily notes found</Label>
+			</div>
+		{:else}
+			<Entries {entries} />
+		{/if}
 	</div>
 
 	<Calendar

@@ -44,9 +44,9 @@ export const createNote = async (dirPath: string, name?: string) => {
 
 // Open a note
 export async function openNote(path: string, skipHistory = false) {
+	activeFile.set(path);
 	const file = await db.select().from(entryTable).where(eq(entryTable.path, path));
 	setEditorContent(file[0].content ?? '');
-	activeFile.set(path);
 	if (!skipHistory) {
 		noteHistory.update((history) => {
 			if (history[history.length - 1] !== path) {
@@ -61,7 +61,7 @@ export async function openNote(path: string, skipHistory = false) {
 export const deleteNote = async (path: string) => {
 	// TODO: Wont work on Windows
 	await db.delete(entryTable).where(eq(entryTable.path, path));
-	activeFile.set('');
+	activeFile.set(null);
 };
 
 // Rename a note

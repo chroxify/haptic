@@ -28,9 +28,9 @@ export const createNote = async (dirPath: string, name?: string) => {
 
 // Open a note
 export async function openNote(path: string, skipHistory = false) {
+	activeFile.set(path);
 	const fileContent = await readTextFile(path);
 	setEditorContent(fileContent);
-	activeFile.set(path);
 	if (!skipHistory) {
 		noteHistory.update((history) => {
 			if (history[history.length - 1] !== path) {
@@ -55,7 +55,7 @@ export const deleteNote = async (path: string) => {
 			await removeFile(path);
 			break;
 	}
-	activeFile.set('');
+	activeFile.set(null);
 };
 
 // Rename a note
