@@ -1,33 +1,24 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
+	import { openNote } from '@/api/notes';
+	import { setSettings } from '@/api/settings';
+	import { activeFile, collectionSettings } from '@/store';
+	import { cn } from '@/utils';
 	import Label from '@haptic/ui/components/label/label.svelte';
 	import * as Select from '@haptic/ui/components/select';
 	import { Switch } from '@haptic/ui/components/switch';
-	import { cn } from '@/utils';
-	import { setSettings } from '@/api/settings';
-	import { activeFile, collectionSettings } from '@/store';
-	import { invalidateAll } from '$app/navigation';
-	import { openNote } from '@/api/notes';
 
 	let selectedFont = { value: 'inter', label: 'Inter' };
 	let selectedFontSize = { value: 'normal', label: 'Normal' };
-	let textCorrections = {
-		spellCheck: true,
-		autoCorrect: true
-	};
-	let additionalSettings = {
-		inlineTitle: true,
-		lineNumbers: true,
-		editorToolbar: true
-	};
 </script>
 
 <div class="space-y-5">
 	<div class="space-y-1">
-		<Label class="text-base">Font</Label>
+		<Label class="text-sm">Font</Label>
 		<p class="text-muted-foreground text-xs">Change the editor font.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Select.Root bind:selected={selectedFont} disabled>
-				<Select.Trigger class="w-32">
+				<Select.Trigger>
 					<Select.Value class="text-sm text-foreground/85">{selectedFont.label}</Select.Value>
 				</Select.Trigger>
 				<Select.Content>
@@ -43,11 +34,11 @@
 	</div>
 
 	<div class="space-y-1">
-		<Label class="text-base">Font size</Label>
+		<Label class="text-sm">Font size</Label>
 		<p class="text-muted-foreground text-xs">Change the editor font size.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Select.Root bind:selected={selectedFontSize} disabled>
-				<Select.Trigger class="w-32">
+				<Select.Trigger>
 					<Select.Value class="text-sm text-foreground/85">{selectedFontSize.label}</Select.Value>
 				</Select.Trigger>
 				<Select.Content>
@@ -62,7 +53,7 @@
 	</div>
 
 	<div class="space-y-1">
-		<Label class="text-base">Text correction</Label>
+		<Label class="text-sm">Text correction</Label>
 		<p class="text-muted-foreground text-xs">Enable or disable various text correction features.</p>
 		<div class="flex flex-col items-start gap-2.5 pt-2">
 			<div class="flex items-center gap-2">
@@ -76,11 +67,11 @@
 				/>
 				<Label
 					class={cn(
-						'text-foreground/60 text-sm font-normal',
-						textCorrections.autoCorrect && 'text-foreground'
+						'text-sm font-normal transition-colors',
+						$collectionSettings.editor.auto_correct ? 'text-foreground/90' : 'text-foreground/60'
 					)}
 				>
-					Auto correct
+					Auto Correct
 				</Label>
 			</div>
 			<div class="flex items-center gap-2">
@@ -94,18 +85,18 @@
 				/>
 				<Label
 					class={cn(
-						'text-foreground/60 text-sm font-normal',
-						textCorrections.spellCheck && 'text-foreground'
+						'text-sm font-normal transition-colors',
+						$collectionSettings.editor.spell_check ? 'text-foreground/90' : 'text-foreground/60'
 					)}
 				>
-					Spell check
+					Spell Check
 				</Label>
 			</div>
 		</div>
 	</div>
 
 	<div class="space-y-1">
-		<Label class="text-base">Additional settings</Label>
+		<Label class="text-sm">Additional settings</Label>
 		<p class="text-muted-foreground text-xs">Additional settings for the editor.</p>
 		<div class="flex flex-col items-start gap-2.5 pt-2">
 			<div class="flex items-center gap-2">
@@ -122,8 +113,10 @@
 				/>
 				<Label
 					class={cn(
-						'text-foreground/60 text-sm font-normal',
-						additionalSettings.inlineTitle && 'text-foreground'
+						'text-sm font-normal transition-colors',
+						$collectionSettings.editor.show_inline_title
+							? 'text-foreground/90'
+							: 'text-foreground/60'
 					)}
 				>
 					Show inline title
@@ -139,14 +132,9 @@
 							editor: { ...$collectionSettings.editor, show_line_numbers: value }
 						})}
 				/>
-				<Label
-					class={cn(
-						'text-foreground/60 text-sm font-normal',
-						additionalSettings.lineNumbers && 'text-foreground'
-					)}
+				<Label class={cn('text-sm font-normal transition-colors text-foreground/60')}
+					>Show line numbers</Label
 				>
-					Show line numbers
-				</Label>
 			</div>
 			<div class="flex items-center gap-2">
 				<Switch
@@ -159,8 +147,8 @@
 				/>
 				<Label
 					class={cn(
-						'text-foreground/60 text-sm font-normal',
-						additionalSettings.editorToolbar && 'text-foreground'
+						'text-sm font-normal transition-colors',
+						$collectionSettings.editor.show_toolbar ? 'text-foreground/90' : 'text-foreground/60'
 					)}
 				>
 					Show editor toolbar

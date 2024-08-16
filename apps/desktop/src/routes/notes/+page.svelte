@@ -10,7 +10,7 @@
 </script>
 
 <div
-	class="relative flex flex-col w-full h-full min-h-[calc(100vh-4.5rem)] items-start bg-secondary-background overflow-y-auto"
+	class="relative flex flex-col w-full h-full min-h-[calc(100vh-4.5rem)] items-start bg-secondary-background overflow-y-auto scroll-p-20"
 >
 	{#if $collectionSettings.editor.show_toolbar}
 		<EditorToolbar />
