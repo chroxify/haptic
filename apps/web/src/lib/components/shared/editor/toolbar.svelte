@@ -1,20 +1,21 @@
 <script lang="ts">
-	import { cn } from '@haptic/ui/lib/utils';
+	import { openNote } from '@/api/notes';
 	import Icon from '@/components/shared/icon.svelte';
+	import Shortcut from '@/components/shared/shortcut.svelte';
+	import Tooltip from '@/components/shared/tooltip.svelte';
+	import { SHORTCUTS } from '@/constants';
 	import {
 		activeFile,
 		collection,
 		editor,
 		editorMode,
+		editorSearchActive,
 		isNoteDetailSidebarOpen,
 		isPageSidebarOpen,
 		noteHistory
 	} from '@/store';
 	import Button from '@haptic/ui/components/button/button.svelte';
-	import Tooltip from '@/components/shared/tooltip.svelte';
-	import { openNote } from '@/api/notes';
-	import { SHORTCUTS } from '@/constants';
-	import Shortcut from '@/components/shared/shortcut.svelte';
+	import { cn } from '@haptic/ui/lib/utils';
 
 	export let hideHistory: boolean = false;
 	export let hideParentDirectories: boolean = false;
@@ -192,6 +193,19 @@
 				<Shortcut options={SHORTCUTS['editor:toggle-mode']} />
 				<Icon name="editPencil" class={cn('w-4 h-4', $editorMode === 'edit' && 'hidden')} />
 				<Icon name="glasses" class={cn('w-4 h-4', $editorMode === 'view' && 'hidden')} />
+			</Button>
+		</Tooltip>
+		<Tooltip text="Search" side="bottom" shortcut={SHORTCUTS['editor:search']}>
+			<Button
+				size="icon"
+				variant="ghost"
+				scale="md"
+				class="h-6 w-6 fill-muted-foreground hover:fill-foreground transition-all"
+				on:click={() => {
+					editorSearchActive.set($editorSearchActive ? false : true);
+				}}
+			>
+				<Icon name="searchDocument" class={cn('w-4 h-4')} />
 			</Button>
 		</Tooltip>
 		<Tooltip text="Expand" side="bottom" shortcut={SHORTCUTS['notes:toggle-details']}>
