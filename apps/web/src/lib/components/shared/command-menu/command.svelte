@@ -418,40 +418,42 @@
 			{/if}
 		{:else if page === 'help_and_feedback'}
 			<Command.Group heading="Help & Support">
-				<Command.Item
-					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
-					value="sponsor"
-					onSelect={() => {
-						goto('https://go.haptic.md/sponsor');
-						handlePageState(undefined);
-					}}
-				>
-					<Icon name="heart" />
-					Sponsor Haptic
-				</Command.Item>
-				<Command.Item
-					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
-					value="help"
-					onSelect={() => {
-						goto('https://go.haptic.md/help');
-						handlePageState(undefined);
-					}}
-				>
-					<Icon name="lifebouy" />
-					Get help
-				</Command.Item>
-
-				<Command.Item
-					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
-					value="feedback"
-					onSelect={() => {
-						goto('https://go.haptic.md/feedback');
-						handlePageState(undefined);
-					}}
-				>
-					<Icon name="commentSquareText" />
-					Leave feedback
-				</Command.Item>
+				<a href="https://go.haptic.md/sponsor" target="_blank" rel="noopener noreferrer">
+					<Command.Item
+						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+						value="sponsor"
+						onSelect={() => {
+							handlePageState(undefined);
+						}}
+					>
+						<Icon name="heart" />
+						Sponsor Haptic
+					</Command.Item>
+				</a>
+				<a href="https://go.haptic.md/help" target="_blank" rel="noopener noreferrer">
+					<Command.Item
+						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+						value="help"
+						onSelect={() => {
+							handlePageState(undefined);
+						}}
+					>
+						<Icon name="lifebouy" />
+						Get help
+					</Command.Item>
+				</a>
+				<a href="https://go.haptic.md/feedback" target="_blank" rel="noopener noreferrer">
+					<Command.Item
+						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+						value="feedback"
+						onSelect={() => {
+							handlePageState(undefined);
+						}}
+					>
+						<Icon name="commentSquareText" />
+						Leave feedback
+					</Command.Item>
+				</a>
 			</Command.Group>
 		{:else if page === 'share'}
 			<Command.Group heading="Share">
@@ -466,18 +468,18 @@
 					<Icon name="browserUrl" />
 					Copy link
 				</Command.Item>
-				<Command.Item
-					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:stroke-foreground [&>*]:stroke-foreground/50 [&>*]:stroke-[2px]"
-					value="share_on_twitter"
-					onSelect={() => {
-						// Text: Check out this awesome open-source, local-first note-taking app I found! \n\nhttps://haptic.md by @chroxify
-						goto('https://go.haptic.md/tweet');
-						handlePageState(undefined);
-					}}
-				>
-					<Twitter />
-					Share on Twitter
-				</Command.Item>
+				<a href="https://go.haptic.md/tweet" target="_blank" rel="noopener noreferrer">
+					<Command.Item
+						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:stroke-foreground [&>*]:stroke-foreground/50 [&>*]:stroke-[2px]"
+						value="share_on_twitter"
+						onSelect={() => {
+							handlePageState(undefined);
+						}}
+					>
+						<Twitter />
+						Share on Twitter
+					</Command.Item>
+				</a>
 			</Command.Group>
 		{/if}
 	</Command.List>

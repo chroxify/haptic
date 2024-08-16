@@ -14,6 +14,8 @@ export const createFolder = async (dirPath: string) => {
 
 	// Save the new folder
 	await createDir(`${dirPath}/${name}`);
+
+	return `${dirPath}/${name}`;
 };
 
 // Delete a folder

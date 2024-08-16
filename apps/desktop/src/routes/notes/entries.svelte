@@ -96,7 +96,7 @@
 			}, 100);
 
 			// Add blur event listener to the span
-			span?.addEventListener('blur', (event) => {
+			span?.addEventListener('blur', () => {
 				// Set the contenteditable attribute to false
 				span?.setAttribute('contenteditable', 'false');
 
@@ -400,7 +400,7 @@
 								{#if directory.name !== entry.name}
 									<ContextMenu.Item
 										class="flex items-center gap-2 font-base group"
-										on:click={() => moveNote(entry.path, directory.path)}
+										on:click={() => moveFolder(entry.path, directory.path)}
 									>
 										<Icon
 											name="folder"
@@ -410,6 +410,30 @@
 									</ContextMenu.Item>
 								{/if}
 							{/each}
+
+							{#if getDirectories(entries).filter((directory) => directory.name !== entry.name).length === 0}
+								<ContextMenu.Item
+									class="flex items-center gap-2 font-base group"
+									on:click={async () => {
+										// Create a new folder in parent directory
+										const dirPath = await createFolder(
+											entry.path.split('/').slice(0, -1).join('/')
+										);
+
+										// Move the folder to the new directory
+										moveFolder(entry.path, dirPath);
+									}}
+								>
+									<Icon
+										name="folderPlus"
+										class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
+									/>
+									New folder
+									<ContextMenu.Shortcut
+										>{shortcutToString(SHORTCUTS['folder:create'])}</ContextMenu.Shortcut
+									>
+								</ContextMenu.Item>
+							{/if}
 						</ContextMenu.SubContent>
 					</ContextMenu.Sub>
 					<ContextMenu.Separator />
@@ -544,13 +568,24 @@
 						{/each}
 
 						{#if getDirectories(entries).length === 0}
-							<ContextMenu.Item class="flex items-center gap-2 font-base group">
+							<ContextMenu.Item
+								class="flex items-center gap-2 font-base group"
+								on:click={async () => {
+									// Create a new folder in parent directory
+									await createFolder(entry.path.split('/').slice(0, -1).join('/'));
+
+									// Move the folder to the new folder
+									moveNote(entry.path, entry.path.split('/').slice(0, -1).join('/') + '/Untitled');
+								}}
+							>
 								<Icon
 									name="folderPlus"
 									class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground"
 								/>
 								New folder
-								<ContextMenu.Shortcut>F</ContextMenu.Shortcut>
+								<ContextMenu.Shortcut
+									>{shortcutToString(SHORTCUTS['folder:create'])}</ContextMenu.Shortcut
+								>
 							</ContextMenu.Item>
 						{/if}
 					</ContextMenu.SubContent>
