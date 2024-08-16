@@ -1,6 +1,6 @@
 import { activeFile, collection, collectionSettings, editor, noteHistory } from '@/store';
 import type { NoteMetadataParams } from '@/types';
-import { calculateReadingTime, setEditorContent } from '@/utils';
+import { calculateReadingTime, getNextUntitledName, setEditorContent } from '@/utils';
 import { readDir, readTextFile, removeFile, renameFile, writeTextFile } from '@tauri-apps/api/fs';
 import { homeDir } from '@tauri-apps/api/path';
 import { get } from 'svelte/store';
@@ -12,11 +12,8 @@ export const createNote = async (dirPath: string, name?: string) => {
 	const files = await readDir(dirPath);
 
 	// Generate a new name (Untitled.md, if there are any exiting Untitled notes, increment the number by 1)
-	const untitledNotes = files.filter(
-		(file) => file.name?.toLowerCase().startsWith('untitled') && file.children === undefined
-	);
 	if (!name) {
-		name = `Untitled${untitledNotes.length ? ` ${untitledNotes.length}` : ''}.md`;
+		name = getNextUntitledName(files, 'Untitled', '.md');
 	}
 
 	// Save the new note
