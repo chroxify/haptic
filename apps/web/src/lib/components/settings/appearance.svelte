@@ -13,7 +13,7 @@
 
 <div class="space-y-5">
 	<div class="space-y-1">
-		<Label class="text-base">Color scheme</Label>
+		<Label class="text-sm">Color scheme</Label>
 		<p class="text-muted-foreground text-xs">Change the color scheme of the app.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Tooltip text="System" side="bottom">
@@ -27,7 +27,7 @@
 					scale="md"
 					on:click={() => setMode('system')}
 				>
-					<Icon name="monitor" class="w-[18px] h-[18px]" />
+					<Icon name="monitor" class="w-4 h-4" />
 				</Button>
 			</Tooltip>
 			<Tooltip text="Light" side="bottom">
@@ -41,7 +41,7 @@
 					scale="md"
 					on:click={() => setMode('light')}
 				>
-					<Icon name="sun" class="w-[18px] h-[18px]" />
+					<Icon name="sun" class="w-4 h-4" />
 				</Button>
 			</Tooltip>
 			<Tooltip text="Dark" side="bottom">
@@ -55,18 +55,18 @@
 					scale="md"
 					on:click={() => setMode('dark')}
 				>
-					<Icon name="moon" class="w-[18px] h-[18px]" />
+					<Icon name="moon" class="w-4 h-4" />
 				</Button>
 			</Tooltip>
 		</div>
 	</div>
 
 	<div class="space-y-1">
-		<Label class="text-base">Theme</Label>
+		<Label class="text-sm">Theme</Label>
 		<p class="text-muted-foreground text-xs">Change the theme of the app.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Select.Root bind:selected={selectedTheme}>
-				<Select.Trigger class="w-32">
+				<Select.Trigger>
 					<Select.Value class="text-sm text-foreground/85">{selectedTheme.label}</Select.Value>
 				</Select.Trigger>
 				<Select.Content>
@@ -76,7 +76,7 @@
 			<Button
 				variant="default"
 				size="sm"
-				class="text-primary-foreground/85 hover:text-primary-foreground text-sm font-normal"
+				class="h-7 text-primary-foreground/85 hover:text-primary-foreground text-sm font-normal"
 				scale="sm"
 				disabled
 			>
@@ -86,11 +86,11 @@
 	</div>
 
 	<div class="space-y-1">
-		<Label class="text-base">Fonts</Label>
+		<Label class="text-sm">Fonts</Label>
 		<p class="text-muted-foreground text-xs">Change the interface font.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Select.Root bind:selected={selectedFont} disabled>
-				<Select.Trigger class="w-32">
+				<Select.Trigger>
 					<Select.Value class="text-sm text-foreground/85">{selectedFont.label}</Select.Value>
 				</Select.Trigger>
 				<Select.Content>

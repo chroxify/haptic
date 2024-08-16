@@ -13,7 +13,7 @@
 
 <div class="space-y-5">
 	<div class="space-y-1">
-		<Label class="text-base">Auto sync</Label>
+		<Label class="text-sm">Auto sync</Label>
 		<p class="text-muted-foreground text-xs">Automatically sync your notes.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Tooltip text="Coming soon">
@@ -23,11 +23,11 @@
 	</div>
 
 	<div class="space-y-1">
-		<Label class="text-base">Sync interval</Label>
+		<Label class="text-sm">Sync interval</Label>
 		<p class="text-muted-foreground text-xs">How often to sync your notes.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Select.Root bind:selected={selectedSyncInterval} disabled={!autoSync}>
-				<Select.Trigger class="w-32">
+				<Select.Trigger>
 					<Select.Value class="text-sm text-foreground/85"
 						>{selectedSyncInterval.label}</Select.Value
 					>
@@ -49,7 +49,7 @@
 	</div>
 
 	<div class="space-y-1">
-		<Label class="text-base">Backups</Label>
+		<Label class="text-sm">Backups</Label>
 		<p class="text-muted-foreground text-xs">Wheter or not to create scheduled backups.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Tooltip text="Coming soon">
@@ -59,11 +59,11 @@
 	</div>
 
 	<div class="space-y-1">
-		<Label class="text-base">Backup interval</Label>
+		<Label class="text-sm">Backup interval</Label>
 		<p class="text-muted-foreground text-xs">How often to create backups of your notes.</p>
 		<div class="flex items-center gap-2 pt-2">
 			<Select.Root bind:selected={selectedBackupInterval} disabled={!autoBackup}>
-				<Select.Trigger class="w-32">
+				<Select.Trigger>
 					<Select.Value class="text-sm text-foreground/85"
 						>{selectedBackupInterval.label}</Select.Value
 					>
@@ -78,7 +78,7 @@
 			<Button
 				variant="default"
 				size="sm"
-				class="text-primary-foreground/85 hover:text-primary-foreground text-sm font-normal"
+				class="h-7 text-primary-foreground/85 hover:text-primary-foreground text-sm font-normal"
 				scale="sm"
 				disabled={!autoBackup}
 			>
