@@ -5,6 +5,7 @@
 	import Header from '@/components/layout/header.svelte';
 	import Sidebar from '@/components/layout/sidebar.svelte';
 	import Command from '@/components/shared/command-menu/command.svelte';
+	import Icon from '@/components/shared/icon.svelte';
 	import { db, pgClient } from '@/database/client';
 	import { collection as collectionTable } from '@/database/schema';
 	import { collection } from '@/store';
@@ -55,14 +56,28 @@
 	});
 </script>
 
-<Command />
-<ModeWatcher />
-<Header />
-<Sidebar />
-<main class="flex min-h-screen w-full items-center justify-center antialiased">
-	<slot />
-</main>
-<Footer />
+<div class="hidden sm:block">
+	<Command />
+	<ModeWatcher />
+	<Header />
+	<Sidebar />
+	<main class="flex min-h-screen w-full items-center justify-center">
+		<slot />
+	</main>
+	<Footer />
+</div>
+
+<div class="block sm:hidden">
+	<main class="flex min-h-[100dvh] w-full flex-col items-center justify-center gap-5">
+		<Icon name="phoneOff" class="w-9 h-9 fill-none text-secondary-foreground" />
+		<div class="flex flex-col text-center gap-2">
+			<h1 class="text-secondary-foreground">Seems like you're on mobile</h1>
+			<p class="text-muted-foreground text-sm leading-relaxed">
+				Haptic isn't yet supported on mobile devices.<br />Please try again on a desktop.
+			</p>
+		</div>
+	</main>
+</div>
 
 <style>
 	/* Custom scrollbar */
