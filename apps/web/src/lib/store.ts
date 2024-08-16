@@ -1,7 +1,12 @@
 import { writable } from 'svelte/store';
 import { createEditorStore } from './components/shared/editor/editor-store';
 import { BASE_APP_SETTINGS, BASE_COLLECTION_SETTINGS } from './constants';
-import type { AppSettingsParams, CollectionSettingsParams, SettingsStateParams } from './types';
+import type {
+	AppSettingsParams,
+	CollectionSettingsParams,
+	FileEntry,
+	SettingsStateParams
+} from './types';
 
 const editor = createEditorStore();
 
@@ -12,6 +17,7 @@ const editorSearchValue = writable<string>('');
 const editorSearchActive = writable<boolean>(false);
 
 const collection = writable<string>();
+const collectionEntries = writable<FileEntry[]>([]);
 
 const tooltipsOpen = writable<number>(0);
 
@@ -36,6 +42,7 @@ export {
 	appSettings,
 	appTheme,
 	collection,
+	collectionEntries,
 	collectionSearchActive,
 	collectionSettings,
 	editor,

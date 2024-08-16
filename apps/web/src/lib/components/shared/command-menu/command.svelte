@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Icon from '$lib/components/shared/icon.svelte';
+	import { db } from '$lib/database/client';
+	import { entry as entryTable } from '$lib/database/schema';
 	import { getCollections, loadCollection } from '@/api/collection';
 	import { moveNote, openNote } from '@/api/notes';
 	import { activeFile, appTheme, collection } from '@/store';
 	import { formatTimeAgo, shortcutToString } from '@/utils';
 	import * as Command from '@haptic/ui/components/command';
-	import { open as browserOpen } from '@tauri-apps/api/shell';
-	import { Twitter } from 'lucide-svelte';
+	import { Loader, Twitter } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { mainCommands as commands, createNoteCommands } from './commands';
 	import { getAllItems } from './helpers';
@@ -17,6 +18,8 @@
 	let value: string | undefined = undefined;
 	let page: string | undefined = undefined;
 	let openedWithShortcut = '';
+	let fileInput: HTMLInputElement | null = null;
+	let loadingCollection: { loading: boolean; progress: number } | undefined = undefined;
 
 	const shortcutKeyMap: Record<string, string | undefined> = {
 		'cmd+k': 'default',
@@ -95,6 +98,97 @@
 			value = commands[0].commands[0].title;
 		}
 	});
+
+	async function openCollection() {
+		if (!files || files.length === 0) {
+			return console.error('No files selected');
+		}
+
+		// Set loading state
+		loadingCollection = { loading: true, progress: 0 };
+
+		// Load collection
+		const collectionName = files[0]?.webkitRelativePath.split('/')[0];
+		await loadCollection(`/${collectionName}`);
+
+		const processedPaths = new Set<string>();
+
+		for (let i = 0; i < files.length; i++) {
+			const file = files[i];
+			if (!file) continue;
+
+			const filePath = `/${file.webkitRelativePath}`;
+			const pathParts = file.webkitRelativePath.split('/');
+			const fileName = pathParts[pathParts.length - 1];
+
+			// Log progress
+			let progress = Math.round(((i + 1) / files.length) * 100);
+			loadingCollection = { loading: true, progress };
+
+			// Create folder entries
+			let currentPath = '';
+			for (let j = 0; j < pathParts.length - 1; j++) {
+				currentPath += '/' + pathParts[j];
+				if (!processedPaths.has(currentPath)) {
+					await createFolderEntry(currentPath, collectionName);
+					processedPaths.add(currentPath);
+				}
+			}
+
+			// Process file
+			if (file.name.toLowerCase().endsWith('.md')) {
+				try {
+					const fileText = await file.text();
+					await db.insert(entryTable).values({
+						name: fileName,
+						path: filePath,
+						content: fileText,
+						parentPath: currentPath,
+						collectionPath: `/${collectionName}`,
+						size: file.size,
+						isFolder: false
+					});
+					console.log('Inserted file:', fileName);
+				} catch (error) {
+					console.error('Error processing file:', fileName, error);
+				}
+			} else {
+				console.warn('Skipping non-Markdown file:', fileName);
+			}
+		}
+
+		// Reset loading state
+		loadingCollection = undefined;
+
+		// Close dialog
+		await goto('/notes');
+		handlePageState(undefined);
+	}
+
+	async function createFolderEntry(path: string, collectionName: string) {
+		const pathParts = path.split('/').filter(Boolean);
+		const folderName = pathParts[pathParts.length - 1];
+		const parentPath = '/' + pathParts.slice(0, -1).join('/');
+
+		try {
+			await db.insert(entryTable).values({
+				name: folderName,
+				path: path,
+				content: undefined,
+				parentPath: parentPath,
+				collectionPath: `/${collectionName}`,
+				isFolder: true
+			});
+			console.log('Created folder entry:', path);
+		} catch (error) {
+			console.error('Error creating folder entry:', path, error);
+		}
+	}
+
+	let files: FileList | undefined;
+	$: if (files) {
+		openCollection();
+	}
 </script>
 
 <Command.Dialog
@@ -117,7 +211,9 @@
 >
 	<Command.Input bind:value={search} placeholder="Search or jump to..." />
 	<Command.List>
-		<Command.Empty class="text-foreground/60 font-light">No commands found</Command.Empty>
+		{#if !loadingCollection}
+			<Command.Empty class="text-foreground/60 font-light">No commands found</Command.Empty>
+		{/if}
 		{#if page === 'default'}
 			{#each commands as group}
 				<Command.Group heading={group.name}>
@@ -246,64 +342,86 @@
 				{/if}
 			</Command.Group>
 		{:else if page === 'open_collection'}
-			<Command.Group heading="Open collection">
-				<Command.Item
-					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
-					onSelect={async () => {
-						await goto('/notes');
-						loadCollection();
-						handlePageState(undefined);
-					}}
-				>
-					<Icon name="folderPlus" />
-					Open new collection
-				</Command.Item>
-			</Command.Group>
-			{#await getCollections()}
-				<Command.Loading class="text-foreground/90">Recent collections</Command.Loading>
-			{:then collections}
-				{#if collections.filter((c) => c.path !== $collection).length > 0}
-					<Command.Group heading="Browse recent collections">
-						{#each collections
-							.filter((c) => c.path !== $collection)
-							.sort((a, b) => +new Date(b.lastOpened) - +new Date(a.lastOpened)) as collection}
-							<Command.Item
-								class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
-								value={collection.path}
-								onSelect={async () => {
-									await goto('/notes');
-									loadCollection(collection.path);
-									handlePageState(undefined);
-								}}
+			{#if loadingCollection}
+				<Command.Empty class="text-foreground/60 font-light">
+					<div class="flex flex-col items-center gap-1.5">
+						<Loader class="w-3.5 h-3.5 animate-spin text-muted-foreground" />
+						<div class="flex flex-col gap-0.5">
+							Loading collection... ({loadingCollection.progress}%)
+							<span class="text-xs text-muted-foreground"
+								>Hint: You can close this window and continue working.</span
 							>
-								<div class="flex w-full items-center justify-between">
-									<div class="flex items-center gap-1.5">
-										<Icon name="folder" />
-										<span class="text-foreground/80 group:hover:text-foreground/100"></span>
-										{collection.name}
-									</div>
-									<span class="ml-auto text-xs text-muted-foreground h-full"
-										>{formatTimeAgo(new Date(collection.lastOpened))}
-									</span>
-								</div>
-							</Command.Item>
-						{/each}
-					</Command.Group>
-				{/if}
-			{:catch error}
-				<Command.Group heading="Browse recent collections">
-					<Command.Item class="text-foreground/90"
-						>Error loading collections: {error.message}</Command.Item
+						</div>
+					</div>
+				</Command.Empty>
+			{:else}
+				<Command.Group heading="Open collection">
+					<Command.Item
+						class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+						onSelect={async () => {
+							fileInput?.click();
+						}}
 					>
+						<Icon name="folderPlus" />
+						<!-- Accept folders only -->
+						<input
+							type="file"
+							bind:files
+							bind:this={fileInput}
+							class="hidden"
+							webkitdirectory
+							directory
+							multiple
+						/>
+						Open new collection
+					</Command.Item>
 				</Command.Group>
-			{/await}
+				{#await getCollections()}
+					<Command.Loading class="text-foreground/90">Recent collections</Command.Loading>
+				{:then collections}
+					{#if collections.filter((c) => c.path !== $collection).length > 0}
+						<Command.Group heading="Browse recent collections">
+							{#each collections
+								.filter((c) => c.path !== $collection)
+								.sort((a, b) => +new Date(b.lastOpened) - +new Date(a.lastOpened)) as collection}
+								<Command.Item
+									class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
+									value={collection.path}
+									onSelect={async () => {
+										await goto('/notes');
+										loadCollection(collection.path);
+										handlePageState(undefined);
+									}}
+								>
+									<div class="flex w-full items-center justify-between">
+										<div class="flex items-center gap-1.5">
+											<Icon name="folder" />
+											<span class="text-foreground/80 group:hover:text-foreground/100"></span>
+											{collection.name}
+										</div>
+										<span class="ml-auto text-xs text-muted-foreground h-full"
+											>{formatTimeAgo(new Date(collection.lastOpened))}
+										</span>
+									</div>
+								</Command.Item>
+							{/each}
+						</Command.Group>
+					{/if}
+				{:catch error}
+					<Command.Group heading="Browse recent collections">
+						<Command.Item class="text-foreground/90"
+							>Error loading collections: {error.message}</Command.Item
+						>
+					</Command.Group>
+				{/await}
+			{/if}
 		{:else if page === 'help_and_feedback'}
 			<Command.Group heading="Help & Support">
 				<Command.Item
 					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 					value="sponsor"
 					onSelect={() => {
-						browserOpen('https://go.haptic.md/sponsor');
+						goto('https://go.haptic.md/sponsor');
 						handlePageState(undefined);
 					}}
 				>
@@ -314,7 +432,7 @@
 					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 					value="help"
 					onSelect={() => {
-						browserOpen('https://go.haptic.md/help');
+						goto('https://go.haptic.md/help');
 						handlePageState(undefined);
 					}}
 				>
@@ -326,7 +444,7 @@
 					class="text-foreground/90 gap-3 [&>*]:text-foreground/90 [&>*]:aria-selected:text-foreground [&>*]:fill-foreground/50 [&>*]:aria-selected:fill-foreground"
 					value="feedback"
 					onSelect={() => {
-						browserOpen('https://go.haptic.md/feedback');
+						goto('https://go.haptic.md/feedback');
 						handlePageState(undefined);
 					}}
 				>
@@ -352,7 +470,7 @@
 					value="share_on_twitter"
 					onSelect={() => {
 						// Text: Check out this awesome open-source, local-first note-taking app I found! \n\nhttps://haptic.md by @chroxify
-						browserOpen('https://go.haptic.md/tweet');
+						goto('https://go.haptic.md/tweet');
 						handlePageState(undefined);
 					}}
 				>

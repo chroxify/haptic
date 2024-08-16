@@ -5,12 +5,12 @@
 	import Shortcut from '@/components/shared/shortcut.svelte';
 	import { SHORTCUTS } from '@/constants';
 	import { activeFile, collection, editor } from '@/store';
-	import { shortcutToString, showInFolder } from '@/utils';
+	import type { FileEntry } from '@/types';
+	import { shortcutToString } from '@/utils';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import * as Collapsible from '@haptic/ui/components/collapsible';
 	import * as ContextMenu from '@haptic/ui/components/context-menu';
 	import { cn } from '@haptic/ui/lib/utils';
-	import type { FileEntry } from '@tauri-apps/api/fs';
 	import { get } from 'svelte/store';
 
 	export let entries: FileEntry[];
@@ -319,10 +319,6 @@
 									options={SHORTCUTS['folder:delete']}
 									callback={() => !isRenaming && deleteFolder(entry.path)}
 								/>
-								<Shortcut
-									options={SHORTCUTS['folder:show-in-folder']}
-									callback={() => !isRenaming && showInFolder(entry.path)}
-								/>
 								<div class="flex items-center w-[calc(100%-20px)] gap-2">
 									<Icon
 										name="folder"
@@ -414,17 +410,6 @@
 					</ContextMenu.Sub>
 					<ContextMenu.Separator />
 					<ContextMenu.Item
-						class="flex items-center gap-2 font-base group"
-						on:click={() => showInFolder(entry.path)}
-					>
-						<Icon name="eye" class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground" />
-						Show in Finder
-						<ContextMenu.Shortcut
-							>{shortcutToString(SHORTCUTS['folder:show-in-folder'])}</ContextMenu.Shortcut
-						>
-					</ContextMenu.Item>
-					<ContextMenu.Separator />
-					<ContextMenu.Item
 						class="flex text-destructive data-[highlighted]:bg-destructive/20 data-[highlighted]:text-destructive items-center gap-2 font-base group"
 						on:click={() => deleteFolder(entry.path)}
 					>
@@ -478,10 +463,6 @@
 							options={SHORTCUTS['note:delete']}
 							callback={() => !isRenaming && deleteNote(entry.path)}
 						/>
-						<Shortcut
-							options={SHORTCUTS['note:show-in-folder']}
-							callback={() => !isRenaming && showInFolder(entry.path)}
-						/>
 						<span class="text-xs truncate" autocorrect="off" spellcheck="false">{entry.name}</span>
 					</Button>
 				</div>
@@ -511,16 +492,6 @@
 					>
 				</ContextMenu.Item>
 				<ContextMenu.Separator />
-				<ContextMenu.Item
-					class="flex items-center gap-2 font-base group"
-					on:click={() => showInFolder(entry.path)}
-				>
-					<Icon name="eye" class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground" />
-					Show in Finder
-					<ContextMenu.Shortcut
-						>{shortcutToString(SHORTCUTS['note:show-in-folder'])}</ContextMenu.Shortcut
-					>
-				</ContextMenu.Item>
 				<ContextMenu.Sub>
 					<ContextMenu.SubTrigger class="flex items-center gap-2 font-base group">
 						<Icon name="motionCirclesLines" class="w-3.5 h-3.5 fill-foreground/70" />
