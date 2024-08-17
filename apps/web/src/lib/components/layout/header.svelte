@@ -8,7 +8,7 @@
 >
 	<div />
 	<p
-		class="pointer-events-none text-sm text-foreground/85 hover:text-foreground/100 transition-all cursor-default outline-none -mr-[162px]"
+		class="pointer-events-none text-sm text-foreground/85 hover:text-foreground/100 transition-all cursor-default outline-none -mr-[159px]"
 	>
 		{$collection?.split('/').pop()}
 	</p>
