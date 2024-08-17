@@ -67,7 +67,11 @@
 			autocomplete="off"
 			autocorrect="off"
 			disabled={$editorMode !== 'edit'}
-			class="w-[655px] prose font-bold text-4xl text-foreground mx-auto bg-transparent focus:outline-none"
+			class={cn(
+				'w-[655px] prose font-bold text-4xl text-foreground mx-auto bg-transparent focus:outline-none',
+				// Safari / Webkit for some reason has a smaller editor width so we need to adjust
+				/^((?!chrome|android).)*safari/i.test(navigator.userAgent) && 'w-[635px]'
+			)}
 			on:keydown={handleKeydown}
 			on:blur={handleBlur}
 			bind:value

@@ -3,9 +3,6 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
-	build: {
-		target: 'esnext'
-	},
 	optimizeDeps: {
 		exclude: ['@electric-sql/pglite']
 	}
