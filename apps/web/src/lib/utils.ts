@@ -1,9 +1,10 @@
+import { browser } from '$app/environment';
 import { entry as entryTable } from '@/database/schema';
 import { EditorState } from '@tiptap/pm/state';
 import { clsx, type ClassValue } from 'clsx';
 import { setMode, userPrefersMode } from 'mode-watcher';
 import { cubicOut } from 'svelte/easing';
-import { get } from 'svelte/store';
+import { get, readable } from 'svelte/store';
 import type { TransitionConfig } from 'svelte/transition';
 import { twMerge } from 'tailwind-merge';
 import { pgClient } from './database/client';
@@ -347,3 +348,57 @@ export const getNextUntitledName = (
 	// This should never happen, but just in case
 	return `${prefix} ${maxNumber + 1}${extension}`;
 };
+
+interface DeviceInfo {
+	isDesktop: boolean;
+	isMobileOrTablet: boolean;
+}
+
+export function createDeviceDetector() {
+	return readable<DeviceInfo>(
+		{
+			isDesktop: false,
+			isMobileOrTablet: false
+		},
+		(set) => {
+			if (!browser) return;
+
+			const detectDevice = () => {
+				// Check for touch capability
+				const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+				// Check for mobile-specific browser features
+				const hasMobileUserAgent =
+					/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+						navigator.userAgent
+					);
+
+				// Check screen size and pixel ratio
+				const smallScreen = window.screen.width < 768 || window.screen.height < 768;
+				const highPixelRatio = window.devicePixelRatio > 1.5;
+
+				// Determine if it's a mobile/tablet device
+				const isMobileOrTablet =
+					(hasTouch && hasMobileUserAgent) || (hasTouch && (smallScreen || highPixelRatio));
+
+				set({
+					isDesktop: !isMobileOrTablet,
+					isMobileOrTablet: isMobileOrTablet
+				});
+			};
+
+			// Initial detection
+			detectDevice();
+
+			// Listener for orientation change and resize
+			window.addEventListener('orientationchange', detectDevice);
+			window.addEventListener('resize', detectDevice);
+
+			// Cleanup listeners
+			return () => {
+				window.removeEventListener('orientationchange', detectDevice);
+				window.removeEventListener('resize', detectDevice);
+			};
+		}
+	);
+}

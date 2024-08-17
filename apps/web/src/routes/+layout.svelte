@@ -9,9 +9,13 @@
 	import { db, pgClient } from '@/database/client';
 	import { collection as collectionTable } from '@/database/schema';
 	import { collection } from '@/store';
+	import { createDeviceDetector } from '@/utils';
 	import '@haptic/ui/app.web.css';
 	import { ModeWatcher } from 'mode-watcher';
 	import { onMount } from 'svelte';
+
+	// Device detector
+	const device = createDeviceDetector();
 
 	// Migrate database
 	async function migrateDatabase() {
@@ -56,7 +60,7 @@
 	});
 </script>
 
-<div class="hidden sm:block">
+{#if $device.isDesktop}
 	<Command />
 	<ModeWatcher />
 	<Header />
@@ -65,9 +69,7 @@
 		<slot />
 	</main>
 	<Footer />
-</div>
-
-<div class="block sm:hidden">
+{:else}
 	<main class="flex min-h-[100dvh] w-full flex-col items-center justify-center gap-5">
 		<Icon name="phoneOff" class="w-9 h-9 fill-none text-secondary-foreground" />
 		<div class="flex flex-col text-center gap-2">
@@ -77,7 +79,7 @@
 			</p>
 		</div>
 	</main>
-</div>
+{/if}
 
 <style>
 	/* Custom scrollbar */
