@@ -30,7 +30,7 @@
 
 	<!-- Main Content -->
 	<main
-		class="flex min-h-[calc(100dvh-8rem)] w-full flex-col items-center justify-center gap-5 overflow-x-hidden gap-4 max-w-screen-2xl py-16"
+		class="flex min-h-[calc(100dvh-8rem)] w-full flex-col items-center justify-center overflow-x-hidden gap-4 max-w-screen-2xl py-16"
 	>
 		<slot />
 	</main>

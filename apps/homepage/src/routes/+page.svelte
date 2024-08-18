@@ -4,6 +4,10 @@
 	import { ArrowUpRight } from 'lucide-svelte';
 </script>
 
+<svelte:head>
+	<link rel="preload" href="/hero-screenshot-dark.png" as="image" />
+</svelte:head>
+
 <h1
 	class="text-5xl sm:text-6xl font-medium text-foreground font-['Gambarino-Regular'] text-center z-10"
 >
@@ -33,7 +37,9 @@
 </p>
 
 <div class="flex items-center justify-center gap-4 z-10 mt-2">
-	<Button scale="sm" class="rounded-full select-none">Download</Button>
+	<a href="/download">
+		<Button scale="sm" class="rounded-full select-none">Download</Button>
+	</a>
 	<a href="/github">
 		<Button scale="sm" variant="secondary" class="rounded-full select-none">Learn More</Button>
 	</a>
