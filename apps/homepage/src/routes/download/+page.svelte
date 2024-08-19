@@ -174,9 +174,11 @@
 						>
 					</div>
 				{:else if $selected === 'web'}
-					<Button class="flex items-center gap-2 rounded-[0.55rem] w-full sm:w-fit" scale="sm"
-						>Open Web App</Button
-					>
+					<a href="/app" rel="noopener noreferrer" target="_blank">
+						<Button class="flex items-center gap-2 rounded-[0.55rem] w-full sm:w-fit" scale="sm"
+							>Open Web App</Button
+						>
+					</a>
 				{:else if $selected === 'mobile'}
 					<div class="flex flex-col items-center gap-4">
 						<div class="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">

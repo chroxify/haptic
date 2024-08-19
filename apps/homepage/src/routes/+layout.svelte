@@ -22,7 +22,7 @@
 				<Button variant="secondary" size="sm" scale="sm" class="rounded-full">Star on Github</Button
 				>
 			</a>
-			<a href="/app">
+			<a href="/app" target="_blank" rel="noopener noreferrer">
 				<Button size="sm" scale="sm" class="rounded-full">Open App</Button>
 			</a>
 		</div>
@@ -39,21 +39,21 @@
 	<footer class="flex items-start justify-between w-full h-16 z-10 max-w-screen-2xl px-7">
 		<p class="text-secondary-foreground/70 text-sm sm:text-[15px]">© 2024 Haptic</p>
 
-		<nav class="items-center gap-4 ml-4 text-sm sm:text-[15px] hidden sm:flex">
+		<nav class="items-center gap-4 ml-4 text-sm sm:text-[15px] hidden sm:flex -ml-20">
 			<a href="/download" class="text-secondary-foreground/70 hover:text-foreground transition-all"
 				>Download</a
 			>
 			<a href="/sponsor" class="text-secondary-foreground/70 hover:text-foreground transition-all">
 				Sponsor
 			</a>
-			<a href="/contact" class="text-secondary-foreground/70 hover:text-foreground transition-all">
-				About
+			<a href="/tweet" class="text-secondary-foreground/70 hover:text-foreground transition-all">
+				Spread the word
 			</a>
 		</nav>
 
 		<!-- Socials -->
 		<div class="flex items-center gap-4">
-			<a href="/twitter">
+			<a href="/twitter" rel="noopener noreferrer" target="_blank">
 				<svg
 					stroke="currentColor"
 					fill="currentColor"
@@ -68,7 +68,7 @@
 					></path></svg
 				>
 			</a>
-			<a href="/github">
+			<a href="/github" rel="noopener noreferrer" target="_blank">
 				<svg
 					viewBox="0 0 256 250"
 					width="256"

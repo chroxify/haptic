@@ -40,7 +40,7 @@
 	<a href="/download">
 		<Button scale="sm" class="rounded-full select-none">Download</Button>
 	</a>
-	<a href="/github">
+	<a href="/github" target="_blank" rel="noopener noreferrer">
 		<Button scale="sm" variant="secondary" class="rounded-full select-none">Learn More</Button>
 	</a>
 </div>

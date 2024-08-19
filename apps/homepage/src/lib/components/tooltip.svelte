@@ -147,7 +147,7 @@
 		{:else if type === 'lightweight'}
 			<Zap class="h-3.5 w-3.5 fill-foreground" /> below 15mb, no bloat.
 		{:else if type === 'shortcuts'}
-			Never leave your keyboard with shortcuts
+			Never leave your keyboard
 			<span
 				class="pointer-events-none inline-flex h-[18px] pl-1.5 tracking-widest -mr-2 select-none items-center gap-1 rounded bg-muted px-1 font-mono font-medium text-foreground/70 opacity-100"
 			>
