@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { tooltipsOpen } from '$lib/store';
+	import { tooltipsOpen, currentOpenTooltip } from '$lib/store';
 	import * as Tooltip from '@haptic/ui/components/tooltip';
 	import { Monitor, Smartphone, Tablet, Zap } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+
 	export let type: 'github' | 'privacy' | 'rust' | 'lightweight' | 'shortcuts' = 'github';
 	let githubData: { stars: number; issues: number; forks: number } = {
 		stars: 0,
@@ -12,6 +13,8 @@
 
 	let isTouchDevice: boolean;
 	let isOpen = false;
+	let tooltipId =
+		Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 	onMount(() => {
 		// Fetch GitHub stars
@@ -27,16 +30,22 @@
 
 		// Check if the device is mobile
 		isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-		console.log(isTouchDevice);
 	});
 
 	function handleInteraction(event: Event) {
 		if (isTouchDevice) {
 			event.preventDefault();
-			isOpen = !isOpen;
+			currentOpenTooltip.update((current) => {
+				if (current === tooltipId) {
+					return null;
+				} else {
+					return tooltipId;
+				}
+			});
 		}
 	}
+
+	$: isOpen = $currentOpenTooltip === tooltipId;
 </script>
 
 <Tooltip.Root
@@ -46,19 +55,20 @@
 	onOpenChange={(open) => {
 		if (open) {
 			tooltipsOpen.update((value) => value + 1);
+			if (isTouchDevice) {
+				currentOpenTooltip.set(tooltipId);
+			}
 		} else {
 			setTimeout(() => {
 				tooltipsOpen.update((value) => value - 1);
 			}, 500);
-		}
-		if (isTouchDevice) {
-			isOpen = open;
+			if (isTouchDevice) {
+				currentOpenTooltip.set(null);
+			}
 		}
 	}}
 >
-	<Tooltip.Trigger on:pointerdown={handleInteraction} on:blur={handleInteraction}
-		><slot /></Tooltip.Trigger
-	>
+	<Tooltip.Trigger on:pointerdown={handleInteraction}><slot /></Tooltip.Trigger>
 	<Tooltip.Content
 		{...$$props}
 		sideOffset={0}

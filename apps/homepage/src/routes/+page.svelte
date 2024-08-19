@@ -18,8 +18,8 @@
 	Haptic is a new
 	<Tooltip type="privacy">
 		<span class="underline decoration-dotted cursor-not-allowed">local-first & privacy-focused</span
-		>
-	</Tooltip>,
+		>,
+	</Tooltip>
 	<Tooltip type="github">
 		<span class="underline decoration-dotted cursor-help">open-source</span>
 	</Tooltip>
