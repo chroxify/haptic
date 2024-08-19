@@ -43,10 +43,20 @@
 			<a href="/download" class="text-secondary-foreground/70 hover:text-foreground transition-all"
 				>Download</a
 			>
-			<a href="/sponsor" class="text-secondary-foreground/70 hover:text-foreground transition-all">
+			<a
+				href="/sponsor"
+				class="text-secondary-foreground/70 hover:text-foreground transition-all"
+				rel="noopener noreferrer"
+				target="_blank"
+			>
 				Sponsor
 			</a>
-			<a href="/tweet" class="text-secondary-foreground/70 hover:text-foreground transition-all">
+			<a
+				href="/tweet"
+				class="text-secondary-foreground/70 hover:text-foreground transition-all"
+				rel="noopener noreferrer"
+				target="_blank"
+			>
 				Spread the word
 			</a>
 		</nav>

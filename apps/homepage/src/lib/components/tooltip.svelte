@@ -10,6 +10,9 @@
 		forks: 0
 	};
 
+	let isTouchDevice: boolean;
+	let isOpen = false;
+
 	onMount(() => {
 		// Fetch GitHub stars
 		fetch('https://api.github.com/repos/chroxify/haptic')
@@ -21,12 +24,25 @@
 					forks: data.forks_count
 				};
 			});
+
+		// Check if the device is mobile
+		isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+		console.log(isTouchDevice);
 	});
+
+	function handleInteraction(event: Event) {
+		if (isTouchDevice) {
+			event.preventDefault();
+			isOpen = !isOpen;
+		}
+	}
 </script>
 
 <Tooltip.Root
 	openDelay={300}
 	closeDelay={50}
+	open={isTouchDevice ? isOpen : undefined}
 	onOpenChange={(open) => {
 		if (open) {
 			tooltipsOpen.update((value) => value + 1);
@@ -35,9 +51,12 @@
 				tooltipsOpen.update((value) => value - 1);
 			}, 500);
 		}
+		if (isTouchDevice) {
+			isOpen = open;
+		}
 	}}
 >
-	<Tooltip.Trigger><slot /></Tooltip.Trigger>
+	<Tooltip.Trigger on:pointerdown={handleInteraction}><slot /></Tooltip.Trigger>
 	<Tooltip.Content
 		{...$$props}
 		sideOffset={0}
@@ -63,9 +82,10 @@
 			Your <span class="glitch">data</span> never leaves your <Smartphone
 				class="h-4 w-4 block -ml-0.5 sm:hidden"
 			/><span class="-ml-1 sm:hidden">phone</span>
-			<Tablet class="h-4 w-4 block -ml-0.5 lg:hidden" /><span class="-ml-0.5 lg:hidden">tablet</span
+			<Tablet class="h-4 w-4 block -ml-0.5 hidden sm:inline xl:hidden" /><span
+				class="-ml-0.5 hidden sm:inline xl:hidden">tablet</span
 			>
-			<Monitor class="h-4 w-4 block hidden lg:inline" /><span class="-hidden lg:inline"
+			<Monitor class="h-4 w-4 block hidden xl:inline" /><span class="hidden xl:inline"
 				>computer</span
 			>
 		{:else if type === 'rust'}
