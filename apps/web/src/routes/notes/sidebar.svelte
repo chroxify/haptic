@@ -151,7 +151,6 @@
 
 		try {
 			results = await searchEntries(get(collection), searchValue, caseSensitive, wholeWord);
-			console.log('Results:', results);
 			searchLoading = false;
 		} catch (error) {
 			console.error('Error searching files:', error);

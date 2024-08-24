@@ -74,7 +74,7 @@ export const moveFolder = async (source: string, target: string) => {
 
 	// Make sure there are no name conflicts
 	const folderName = source.split('/').pop()!;
-	console.log(targetFiles);
+
 	if (targetFiles.some((file) => file.name === folderName && file.isFolder)) {
 		throw new Error('Name conflict');
 	}

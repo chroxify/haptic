@@ -137,7 +137,6 @@
 						on:click={async () => {
 							editorSearchValue.set('');
 							if ($activeFile !== path) {
-								console.log('File already open');
 								openNote(path, true);
 							}
 

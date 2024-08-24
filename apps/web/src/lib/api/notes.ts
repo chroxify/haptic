@@ -26,8 +26,6 @@ export const createNote = async (dirPath: string, name?: string) => {
 			);
 	}
 
-	console.log('files', files);
-
 	// Generate a new name (Untitled.md, if there are any exiting Untitled notes, increment the number by 1)
 	if (!name) {
 		name = getNextUntitledName(files, 'Untitled', '.md');
@@ -191,7 +189,7 @@ export const getNoteMetadataParams = async (path: string): Promise<NoteMetadataP
 
 	// Calculate average reading time (in seconds if < 1min and in minutes if >= 1min)
 	const avgReadingTime = calculateReadingTime(editorWordCount);
-	console.log('Metadata');
+
 	return {
 		fileMetadata: {
 			createdAt: fileMetadata[0].createdAt,

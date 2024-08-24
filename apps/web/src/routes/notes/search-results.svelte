@@ -35,8 +35,6 @@
 		return grouped;
 	}
 
-	$: console.log(groupedResults);
-
 	// Initialize all collapsibles as open
 	$: {
 		Object.keys(groupedResults).forEach((path) => {
@@ -110,7 +108,6 @@
 
 							// Open the file
 							if ($activeFile !== path) {
-								console.log('File already open');
 								openNote(path, true);
 							}
 

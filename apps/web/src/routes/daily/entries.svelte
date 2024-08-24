@@ -82,8 +82,6 @@
 	}
 
 	$: groupedEntries = groupEntries(entries);
-
-	console.log(groupEntries(entries));
 </script>
 
 {#each Object.entries(groupedEntries) as [groupName, groupEntries]}
