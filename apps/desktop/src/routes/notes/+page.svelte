@@ -7,6 +7,7 @@
 	import { SHORTCUTS } from '@/constants';
 	import { activeFile, collection, collectionSettings } from '@/store';
 	import { shortcutToString } from '@/utils';
+	import { cn } from '@haptic/ui/lib/utils';
 </script>
 
 <div
@@ -16,44 +17,48 @@
 		<EditorToolbar />
 	{/if}
 
-	{#if $activeFile === null}
-		<div class="flex flex-col items-center justify-center w-full h-full -mt-10">
-			<!-- Row with following options: Open collection, create note -->
-			<div class="flex flex-col items-center gap-2">
-				<p class="text-secondary-foreground/85">Select a note to start editing</p>
-				<div class="flex gap-5">
-					<button
-						class="text-sm gap-1.5 flex text-muted-foreground hover:text-secondary-foreground transition-colors items-center justify-center"
-						on:click={() => {
-							document.dispatchEvent(new KeyboardEvent('keydown', { key: 'o', metaKey: true }));
-						}}
+	<div
+		class={cn(
+			'flex flex-col items-center justify-center w-full h-full -mt-10',
+			$activeFile !== null && 'hidden'
+		)}
+	>
+		<!-- Row with following options: Open collection, create note -->
+		<div class="flex flex-col items-center gap-2">
+			<p class="text-secondary-foreground/85">Select a note to start editing</p>
+			<div class="flex gap-5">
+				<button
+					class="text-sm gap-1.5 flex text-muted-foreground hover:text-secondary-foreground transition-colors items-center justify-center"
+					on:click={() => {
+						document.dispatchEvent(new KeyboardEvent('keydown', { key: 'o', metaKey: true }));
+					}}
+				>
+					<span
+						class="pointer-events-none inline-flex h-[18px] pl-1.5 tracking-widest select-none items-center gap-1 rounded bg-secondary px-1 font-mono text-muted-foreground opacity-100"
 					>
-						<span
-							class="pointer-events-none inline-flex h-[18px] pl-1.5 tracking-widest select-none items-center gap-1 rounded bg-secondary px-1 font-mono text-muted-foreground opacity-100"
-						>
-							{shortcutToString(SHORTCUTS['app:open-collection'])}
-						</span>
-						Open Collection</button
+						{shortcutToString(SHORTCUTS['app:open-collection'])}
+					</span>
+					Open Collection</button
+				>
+				<button
+					class="text-sm gap-1.5 flex text-muted-foreground hover:text-secondary-foreground transition-colors items-center justify-center"
+					on:click={() => {
+						createNote($collection);
+					}}
+				>
+					<span
+						class="pointer-events-none inline-flex h-[18px] pl-1.5 tracking-widest select-none items-center gap-1 rounded bg-secondary px-1 font-mono text-muted-foreground opacity-100"
 					>
-					<button
-						class="text-sm gap-1.5 flex text-muted-foreground hover:text-secondary-foreground transition-colors items-center justify-center"
-						on:click={() => {
-							createNote($collection);
-						}}
-					>
-						<span
-							class="pointer-events-none inline-flex h-[18px] pl-1.5 tracking-widest select-none items-center gap-1 rounded bg-secondary px-1 font-mono text-muted-foreground opacity-100"
-						>
-							{shortcutToString(SHORTCUTS['notes:create'])}
-						</span>
-						Create note
-					</button>
-				</div>
+						{shortcutToString(SHORTCUTS['notes:create'])}
+					</span>
+					Create note
+				</button>
 			</div>
 		</div>
-	{:else}
+	</div>
+	<div class={cn('w-full h-full', $activeFile === null && 'hidden')}>
 		<EditorSearch />
 		<EditorInlineTitle />
 		<Editor />
-	{/if}
+	</div>
 </div>

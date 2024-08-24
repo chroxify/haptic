@@ -113,6 +113,9 @@
 		if (filePath) {
 			nodeHeadings = $editor.$nodes('heading');
 			activeNoteMetadataParams = await getNoteMetadataParams(filePath);
+		} else {
+			nodeHeadings = null;
+			activeNoteMetadataParams = null;
 		}
 	});
 

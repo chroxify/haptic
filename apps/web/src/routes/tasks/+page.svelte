@@ -6,6 +6,7 @@
 	import { SHORTCUTS } from '@/constants';
 	import { activeFile, collectionSettings } from '@/store';
 	import { shortcutToString } from '@/utils';
+	import { cn } from '@haptic/ui/lib/utils';
 </script>
 
 <div
@@ -15,7 +16,12 @@
 		<EditorToolbar hideHistory hideParentDirectories />
 	{/if}
 
-	{#if $activeFile === null}
+	<div
+		class={cn(
+			'flex flex-col items-center justify-center w-full h-full -mt-10',
+			$activeFile !== null && 'hidden'
+		)}
+	>
 		<div class="flex flex-col items-center justify-center w-full h-full -mt-10">
 			<div class="flex flex-col items-center gap-2">
 				<p class="text-secondary-foreground/85">Select a task to get started</p>
@@ -36,9 +42,10 @@
 				</div>
 			</div>
 		</div>
-	{:else}
+	</div>
+	<div class={cn('w-full h-full', $activeFile === null && 'hidden')}>
 		<EditorSearch />
 		<EditorInlineTitle />
 		<Editor />
-	{/if}
+	</div>
 </div>

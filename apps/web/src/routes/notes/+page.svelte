@@ -7,6 +7,7 @@
 	import { SHORTCUTS } from '@/constants';
 	import { activeFile, collection, collectionSettings } from '@/store';
 	import { shortcutToString } from '@/utils';
+	import { cn } from '@haptic/ui/lib/utils';
 </script>
 
 <div
@@ -16,7 +17,12 @@
 		<EditorToolbar />
 	{/if}
 
-	{#if $activeFile === null}
+	<div
+		class={cn(
+			'flex flex-col items-center justify-center w-full h-full -mt-10',
+			$activeFile !== null && 'hidden'
+		)}
+	>
 		<div class="flex flex-col items-center justify-center w-full h-full -mt-10">
 			<!-- Row with following options: Open collection, create note -->
 			<div class="flex flex-col items-center gap-2">
@@ -51,9 +57,10 @@
 				</div>
 			</div>
 		</div>
-	{:else}
+	</div>
+	<div class={cn('w-full h-full', $activeFile === null && 'hidden')}>
 		<EditorSearch />
 		<EditorInlineTitle />
 		<Editor />
-	{/if}
+	</div>
 </div>

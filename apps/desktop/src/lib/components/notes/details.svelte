@@ -1,19 +1,19 @@
 <script lang="ts">
-	import { Button } from '@haptic/ui/components/button';
+	import { getNoteMetadataParams } from '@/api/notes';
 	import Icon from '@/components/shared/icon.svelte';
+	import Tooltip from '@/components/shared/tooltip.svelte';
 	import {
-		editor,
 		activeFile,
+		editor,
 		isNoteDetailSidebarOpen,
 		noteDetailSidebarWidth,
 		resizingNoteDetailSidebar
 	} from '@/store';
-	import { getNoteMetadataParams } from '@/api/notes';
-	import Tooltip from '@/components/shared/tooltip.svelte';
-	import { cn } from '@haptic/ui/lib/utils';
-	import Label from '@haptic/ui/components/label/label.svelte';
-	import { formatFileSize, formatTimeAgo } from '@/utils';
 	import { type NoteMetadataParams } from '@/types';
+	import { formatFileSize, formatTimeAgo } from '@/utils';
+	import { Button } from '@haptic/ui/components/button';
+	import Label from '@haptic/ui/components/label/label.svelte';
+	import { cn } from '@haptic/ui/lib/utils';
 	import type { NodePos } from '@tiptap/core';
 	import { onDestroy, onMount } from 'svelte';
 
@@ -113,6 +113,9 @@
 		if (filePath) {
 			nodeHeadings = $editor.$nodes('heading');
 			activeNoteMetadataParams = await getNoteMetadataParams(filePath);
+		} else {
+			nodeHeadings = null;
+			activeNoteMetadataParams = null;
 		}
 	});
 
