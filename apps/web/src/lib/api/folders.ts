@@ -2,7 +2,7 @@ import { db } from '@/database/client';
 import { entry as entryTable } from '@/database/schema';
 import { collection } from '@/store';
 import { getNextUntitledName } from '@/utils';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { get } from 'svelte/store';
 import { moveNote } from './notes';
 
@@ -13,9 +13,17 @@ export const createFolder = async (dirPath: string) => {
 
 	let files = [];
 	if (entry.length === 0) {
-		files = await db.select().from(entryTable);
+		files = await db
+			.select()
+			.from(entryTable)
+			.where(eq(entryTable.collectionPath, get(collection)));
 	} else {
-		files = await db.select().from(entryTable).where(eq(entryTable.parentPath, dirPath));
+		files = await db
+			.select()
+			.from(entryTable)
+			.where(
+				and(eq(entryTable.parentPath, dirPath), eq(entryTable.collectionPath, get(collection)))
+			);
 	}
 
 	// Generate a new name (Untitled, if there are any exiting Untitled folders, increment the number by 1)

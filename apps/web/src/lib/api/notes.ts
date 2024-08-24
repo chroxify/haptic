@@ -3,7 +3,7 @@ import { entry as entryTable } from '@/database/schema';
 import { activeFile, collection, editor, noteHistory } from '@/store';
 import type { NoteMetadataParams } from '@/types';
 import { calculateReadingTime, getNextUntitledName, setEditorContent } from '@/utils';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { get } from 'svelte/store';
 
 // Create a new note
@@ -13,10 +13,20 @@ export const createNote = async (dirPath: string, name?: string) => {
 
 	let files = [];
 	if (dirEntry.length === 0) {
-		files = await db.select().from(entryTable);
+		files = await db
+			.select()
+			.from(entryTable)
+			.where(eq(entryTable.collectionPath, get(collection)));
 	} else {
-		files = await db.select().from(entryTable).where(eq(entryTable.parentPath, dirPath));
+		files = await db
+			.select()
+			.from(entryTable)
+			.where(
+				and(eq(entryTable.parentPath, dirPath), eq(entryTable.collectionPath, get(collection)))
+			);
 	}
+
+	console.log('files', files);
 
 	// Generate a new name (Untitled.md, if there are any exiting Untitled notes, increment the number by 1)
 	if (!name) {
