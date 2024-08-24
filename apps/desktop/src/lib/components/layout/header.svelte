@@ -9,6 +9,6 @@
 	<p
 		class="pointer-events-none text-sm text-foreground/85 hover:text-foreground/100 transition-all cursor-default outline-none"
 	>
-		{$collection?.split('/').pop()}
+		{$collection?.split('/').pop() || ''}
 	</p>
 </header>
