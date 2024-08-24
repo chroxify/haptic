@@ -36,7 +36,7 @@
 		entries = value;
 	});
 
-	collection.subscribe(async (value) => {
+	const stopWatchingCollectionStore = collection.subscribe(async (value) => {
 		entries = await fetchCollectionEntries(value + '/.haptic/daily');
 
 		// Validate if there is a note for today
@@ -173,6 +173,7 @@
 	onDestroy(() => {
 		if (stopWatching) stopWatching();
 		stopWatchingStore();
+		stopWatchingCollectionStore();
 	});
 </script>
 

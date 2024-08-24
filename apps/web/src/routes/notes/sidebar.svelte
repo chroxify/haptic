@@ -52,7 +52,7 @@
 		entries = value;
 	});
 
-	collection.subscribe(async (value) => {
+	const stopWatchingCollectionStore = collection.subscribe(async (value) => {
 		entries = await fetchCollectionEntries(value);
 
 		// Find first item that is a note (entry.children === undefined)
@@ -170,6 +170,7 @@
 	onDestroy(() => {
 		if (stopWatching) stopWatching();
 		stopWatchingStore();
+		stopWatchingCollectionStore();
 	});
 </script>
 
