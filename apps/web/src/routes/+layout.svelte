@@ -1,5 +1,6 @@
 <script lang="ts">
-	import migrations from '$lib/database/migrations.sql?raw';
+	import migrations from '$lib/database/migrations/migrations.sql?raw';
+	import seed from '$lib/database/migrations/seed.sql?raw';
 	import { loadSettings } from '@/api/settings';
 	import Footer from '@/components/layout/footer.svelte';
 	import Header from '@/components/layout/header.svelte';
@@ -22,12 +23,8 @@
 		try {
 			await pgClient.exec(migrations);
 
-			// Create default collection
-			await db.insert(collectionTable).values({
-				path: '/Playground',
-				name: 'Playground',
-				lastOpened: new Date()
-			});
+			// Seed database
+			await pgClient.exec(seed);
 		} catch (error) {
 			console.log('Table already exists');
 		}

@@ -1,11 +1,13 @@
 <script lang="ts">
 	import Tooltip from '$lib/components/tooltip.svelte';
 	import { Button } from '@haptic/ui/components/button';
+	import banner from '$lib/assets/hero-dark.png';
+
 	import { ArrowUpRight } from 'lucide-svelte';
 </script>
 
 <svelte:head>
-	<link rel="preload" href="/hero-screenshot-dark.png" as="image" />
+	<link rel="preload" href={banner} as="image" />
 </svelte:head>
 
 <h1
@@ -51,13 +53,9 @@
 	/>
 	<div class="relative xl:-mx-36">
 		<div
-			class="relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg md:rounded-xl bg-neutral-950 md:rounded-xl border"
+			class="relative flex min-h-full h-full w-full items-center justify-center overflow-hidden rounded-lg md:rounded-xl bg-neutral-950 md:rounded-xl border"
 		>
-			<img
-				src="/hero-screenshot-dark.png"
-				alt="Screenshot"
-				class="rounded-[inherit] opacity-45 grayscale z-10"
-			/>
+			<img src={banner} alt="Screenshot" class="rounded-[inherit] opacity-45 grayscale z-10" />
 		</div>
 		<div
 			class="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-transparent to-neutral-950 rounded-lg md:rounded-xl z-10"
