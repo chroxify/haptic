@@ -108,7 +108,9 @@
 	</p>
 
 	<!-- Selection -->
-	<div class="no-scrollbar mb-0 sm:mb-5 flex min-w-0 w-full max-w-[610px] gap-4 overflow-x-auto">
+	<div
+		class="no-scrollbar mb-0 sm:mb-5 flex min-w-0 w-full max-w-[610px] gap-2 sm:gap-4 overflow-x-auto"
+	>
 		<PlatformButton
 			name={platforms[0].name}
 			on:click={() => updateSelected('mac')}

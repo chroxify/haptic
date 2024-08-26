@@ -67,10 +67,10 @@
 				class="group overflow-hidden rounded-full border border-primary-foreground/10 dark:border-border bg-background/5 dark:bg-background dark:brightness-110 backdrop-blur-sm transition hover:scale-[1.05]"
 			>
 				<div
-					class="m-3.5 flex items-center justify-center rounded-full border border-primary-foreground/15 dark:border-border bg-gradient-to-b from-neutral-800 to-neutral-700 p-5 shadow-xl transition group-hover:scale-[1.06] backdrop-blur-md"
+					class="m-2.5 sm:m-3.5 flex items-center justify-center rounded-full border border-primary-foreground/15 dark:border-border bg-gradient-to-b from-neutral-800 to-neutral-700 p-3.5 sm:p-5 shadow-xl transition group-hover:scale-[1.06] backdrop-blur-md"
 				>
 					<ArrowUpRight
-						class="w-6 h-6 stroke-[1.5px] text-primary-foreground/50 dark:text-foreground/40 group-hover:text-primary-foreground/60 dark:group-hover:text-foreground/60 group-hover:scale-105 transition-all"
+						class="h-5 w-5 sm:w-6 sm:h-6 stroke-[1.5px] text-primary-foreground/50 dark:text-foreground/40 group-hover:text-primary-foreground/60 dark:group-hover:text-foreground/60 group-hover:scale-105 transition-all"
 					/>
 				</div>
 			</a>

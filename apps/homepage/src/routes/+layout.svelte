@@ -3,6 +3,33 @@
 	import { Button } from '@haptic/ui/components/button';
 </script>
 
+<svelte:head>
+	<title>Haptic - Write Notes at the speed of touch</title>
+	<meta
+		name="description"
+		content="Haptic is a new local-first & privacy-focused home for your markdown notes. It's a minimalistic, lightweight and fast note-taking app that's designed to be distraction-free."
+	/>
+	<meta
+		name="keywords"
+		content="Haptic, Note-taking, Markdown, Local-first, Privacy-focused, Open-source, Online Markdown Editor, Fast Note-taking, Minimalistic Design"
+	/>
+	<meta name="author" content="Haptic" />
+	<meta name="robots" content="index, follow" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="theme-color" content="#0F0F0F" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+	<!-- Og image -->
+	<meta property="og:image" content="https://haptic.md/hero-dark.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="Haptic - Write Notes at the speed of touch" />
+
+	<!-- Seline -->
+	<!-- Seline -->
+	<script async src="https://cdn.seline.so/seline.js" data-token="d028e058129b859"></script>
+</svelte:head>
+
 <div
 	class="flex min-h-[100dvh] w-full flex-col items-center bg-gradient-to-b from-transparent to-neutral-950 justify-between select-text px-4 selection:text-primary-foreground selection:bg-primary bg-[#FAFAF9] dark:bg-background"
 >
