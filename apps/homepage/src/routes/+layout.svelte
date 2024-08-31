@@ -19,14 +19,31 @@
 	<meta name="theme-color" content="#0F0F0F" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-	<!-- Og image -->
+	<!-- Open Graph -->
+	<meta property="og:site_name" content="Haptic" />
+	<meta property="og:locale" content="en" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://haptic.md/" />
+	<meta property="og:title" content="Haptic - Write Notes at the speed of touch" />
+	<meta
+		property="og:description"
+		content="Haptic is a new local-first & privacy-focused home for your markdown notes. It's a minimalistic, lightweight and fast note-taking app that's designed to be distraction-free."
+	/>
 	<meta property="og:image" content="https://haptic.md/hero-dark.png" />
+	<meta property="og:image:alt" content="Haptic - Markdown Editor" />
 	<meta property="og:image:width" content="1200" />
-	<meta property="og:image:height" content="630" />
-	<meta property="og:image:alt" content="Haptic - Write Notes at the speed of touch" />
+	<meta property="og:image:height" content="627" />
 
-	<!-- Seline -->
-	<!-- Seline -->
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content="https://haptic.md/" />
+	<meta property="twitter:title" content="Haptic - Write Notes at the speed of touch" />
+	<meta
+		property="twitter:description"
+		content="Haptic is a new local-first & privacy-focused home for your markdown notes. It's a minimalistic, lightweight and fast note-taking app that's designed to be distraction-free."
+	/>
+	<meta property="twitter:image" content="https://haptic.md/hero-dark.png" />
+
 	<script async src="https://cdn.seline.so/seline.js" data-token="d028e058129b859"></script>
 </svelte:head>
 
