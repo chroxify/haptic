@@ -4,7 +4,7 @@ VALUES ('/Haptic', 'Haptic', CURRENT_TIMESTAMP);
 
 -- Insert README.md
 INSERT INTO entry (path, name, parent_path, collection_path, content, is_folder) 
-VALUES ('/Haptic/README.md', 'README.md', '/Haptic', '/Haptic', 'Haptic is a new local-first & privacy-focused, open-source home for your markdown notes. It''s minimal, lightweight, efficient, and aims to have **_all you need and nothing you don''t_**.
+VALUES ('/Haptic/README.md', 'README.md', '/Haptic', '/Haptic', 'Haptic is a new local-first & privacy-focused, open-source home for your markdown notes. It''s minimal, lightweight, efficient, and aims to have _all you need and nothing you don''t_.
 
 ---
 
@@ -51,37 +51,50 @@ Haptic is licensed under the [GNU Affero General Public License Version 3 (AGPLv
 
 -- Insert Supported Devices.md
 INSERT INTO entry (path, name, parent_path, collection_path, content, is_folder)
-VALUES ('/Haptic/Supported Devices.md', 'Supported Devices.md', '/Haptic', '/Haptic', 'Haptic is accessible across various platforms. Currently supported devices:
+VALUES ('/Haptic/Supported Devices.md', 'Supported Devices.md', '/Haptic', '/Haptic', 'Haptic offers a seamless experience across multiple platforms, with ongoing development to expand accessibility.
 
-- **Mac**: Fully supported with a dedicated app.
-- **Web App**: Accessible via web browsers, but not functional on mobile.
+### Currently Supported
+
+#### Mac
+* **Full Support**: Enjoy the complete Haptic experience with the dedicated macOS application
+
+#### Web
+* **Browser Access**: Use Haptic directly in your web browser, from any device
+* **Note**: Functionality is currently limited on mobile devices
 
 ### Coming Soon
 
-- **Windows**: Dedicated app in development.
-- **Linux**: Support planned for the future.
-- **Mobile App**: Coming soon for smartphones and tablets.
+We''re actively working to bring Haptic to more platforms:
+
+#### Windows
+* Dedicated application in active development
+
+#### Linux
+* Support planned for future releases
+
+#### Mobile
+* Native apps for smartphones and tablets on the horizon
+
+Stay tuned for updates as we expand Haptic''s reach across devices and operating systems! You can support our development efforts by [sponsoring the project](https://haptic.md/sponsor).
 ', false);
 
 -- Insert Why Haptic.md
 INSERT INTO entry (path, name, parent_path, collection_path, content, is_folder)
-VALUES ('/Haptic/Why Haptic.md', 'Why Haptic.md', '/Haptic', '/Haptic', 'Haptic was built to create a markdown editor focused on simplicity and accessibility, addressing the complexity of existing editors.
+VALUES ('/Haptic/Why Haptic.md', 'Why Haptic.md', '/Haptic', '/Haptic', 'We built Haptic to make markdown writing simpler and more accessible. We believe that many existing editors are too complex for simple use cases and day-to-day note writing, so we decided to fix that.
+
+### What Makes Haptic Special
+
+1. **Ready to Use**: Open Haptic and start writing. No setup needed.
+2. **Simple Design**: Clean interface so you can focus on your writing.
+3. **Write Anywhere**: Use Haptic on any computer with internet. Great for public or work computers where you can''t download software.
+4. **Made for Everyone**: If other editors feel overwhelming, you''ll like Haptic.
+5. **Open Source**: Self-host your own instance, giving you full control over your setup.
+
+Haptic is all about making writing easier. We''ve left out extra features to keep things simple and help you get your ideas down without fuss.
 
 ---
 
-If you seek a feature-rich markdown editor, Haptic may not be for you.
-
-## Core Reasons for Building Haptic:
-
-1. **Out-of-the-Box Functionality**: Designed for immediate use, allowing users to start writing without setup.
-
-2. **Simplicity**: A clean, intuitive interface minimizes distractions for focused writing.
-
-3. **Accessibility**: Users can access their work from any machine, crucial for environments with restricted downloads. (e.g., public or work computers)
-
-4. **User-Centric Design**: Haptic caters to users overwhelmed by other editors, promoting a more enjoyable writing experience.
-
-In essence, Haptic aims to provide a straightforward and efficient writing experience without unnecessary features.
+**Note**: If you''re looking for a markdown editor with plugin systems, complex setups, or feature-packed interfaces, Haptic might not be for you. But if you want something straightforward that just works, give Haptic a try!
 ', false);
 
 -- Insert 10 entries with daily task todos in markdown format
