@@ -19,18 +19,16 @@ export const GET: RequestHandler = async ({ url }) => {
 	const arch = url.searchParams.get('arch') as Arch | undefined;
 
 	// Parse target and arch and validate with type
-	if (!target || !arch) {
-		if (!target || !arch || !currentVersion) {
-			return new Response(
-				JSON.stringify({
-					error: 'Missing required parameters. Please provide target, arch, and currentVersion.'
-				}),
-				{
-					status: 400,
-					headers: { 'Content-Type': 'application/json' }
-				}
-			);
-		}
+	if (!target || !arch || !currentVersion) {
+		return new Response(
+			JSON.stringify({
+				error: 'Missing required parameters. Please provide target, arch, and currentVersion.'
+			}),
+			{
+				status: 400,
+				headers: { 'Content-Type': 'application/json' }
+			}
+		);
 	}
 
 	// Validate target
@@ -64,7 +62,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	const edgeConfig = (await configClient.getAll()) as { latest_version: string; notes?: string };
 
 	// Validate versions
-	if (currentVersion === edgeConfig.latest_version) {
+	if (currentVersion.replace('v', '') === edgeConfig.latest_version.replace('v', '')) {
 		return new Response(null, { status: 204 });
 	}
 

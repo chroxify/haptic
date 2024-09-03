@@ -8,7 +8,7 @@
 	},
 	"package": {
 		"productName": "Haptic",
-		"version": "0.1.2"
+		"version": "0.1.3"
 	},
 	"tauri": {
 		"allowlist": {
@@ -56,7 +56,9 @@
 		},
 		"updater": {
 			"active": true,
-			"endpoints": ["https://releases.myapp.com/{{target}}/{{arch}}/{{current_version}}"],
+			"endpoints": [
+				"https://haptic.md/api/check-updates?target={{target}}&arch={{arch}}&currentVersion={{current_version}}"
+			],
 			"dialog": true,
 			"windows": {
 				"installMode": "passive"
