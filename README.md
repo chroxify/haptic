@@ -67,27 +67,21 @@ You can one-click deploy your own instance of Haptic on Vercel. Just click the b
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/chroxify/haptic&project-name=haptic-web&repository-name=haptic-web&path=apps/desktop)
 
-### Build from Source
+### Docker
 
-1. **Clone the Repository**
+1. Pull the image from the docker hub
 
-   ```bash
-   git clone https://github.com/chroxify/haptic.git && cd haptic
-   ```
+```bash
+docker pull chroxify/haptic-web:latest
+```
 
-2. **Install Dependencies**
+2. Run the container
 
-   ```bash
-   pnpm install
-   ```
+```bash
+docker run -d -p 3000:80 chroxify/haptic-web:latest
+```
 
-3. **Build the App**
-
-   ```bash
-   pnpm build
-   ```
-
-   This compiles the web app into static files located in the `build` directory.
+3. Visit `http://localhost:3000` in your browser
 
 ## Roadmap
 
