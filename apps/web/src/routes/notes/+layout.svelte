@@ -3,6 +3,10 @@
 	import Layout from '$lib/components/notes/layout.svelte';
 </script>
 
+<svelte:head>
+	<title>Haptic | Notes</title>
+</svelte:head>
+
 <Layout sidebar={NotesSidebar}>
 	<slot />
 </Layout>
