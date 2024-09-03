@@ -38,15 +38,15 @@ RUN cd apps/web && pnpm add -D @tailwindcss/typography
 RUN pnpm run build --filter=web
 
 # Final stage
-FROM node:18-alpine AS runner
+FROM nginx:stable AS runner
 WORKDIR /app
 
-# Copy built application
-COPY --from=installer /app/apps/web/build ./build
-COPY --from=installer /app/apps/web/package.json .
+# Copy nginx.conf from the apps/web directory
+COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=installer /app/apps/web/build /usr/share/nginx/html
 
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 80
 
-# Start the application
-CMD ["node", "build"]
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
