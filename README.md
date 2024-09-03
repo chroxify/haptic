@@ -94,6 +94,7 @@ You can one-click deploy your own instance of Haptic on Vercel. Just click the b
 Haptic is currently still in active development. Here are some of the features planned for the future:
 
 - [ ] Haptic Sync - Sync your notes across devices
+- [ ] Note sharing - Share single notes or entire collections via link
 - [ ] Mobile support for the web app - Currently dependent on PGlite support for mobile
 - [ ] Native mobile apps for iOS & Android
 - [ ] Windows & Linux support for the desktop app
