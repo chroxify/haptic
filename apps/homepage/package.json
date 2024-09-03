@@ -35,6 +35,7 @@
 	},
 	"dependencies": {
 		"@haptic/ui": "workspace:^",
+		"@vercel/edge-config": "^1.2.1",
 		"lucide-svelte": "^0.428.0"
 	},
 	"type": "module"

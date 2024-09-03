@@ -5,14 +5,15 @@
 	import { onMount } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { writable } from 'svelte/store';
+	import { browser } from '$app/environment';
 
 	type PlatformId = 'mac' | 'windows' | 'web' | 'mobile';
 
 	const platforms = [
-		{ id: 'mac', name: 'Mac', url: 'https://apps.apple.com/app/haptic/id1585492443' },
-		{ id: 'windows', name: 'Windows', url: 'https://example.com/windows-download' },
-		{ id: 'web', name: 'Web App', url: 'https://example.com/web-app' },
-		{ id: 'mobile', name: 'Mobile', url: 'https://example.com/mobile-app' }
+		{ id: 'mac', name: 'Mac' },
+		{ id: 'windows', name: 'Windows' },
+		{ id: 'web', name: 'Web App' },
+		{ id: 'mobile', name: 'Mobile' }
 	];
 
 	const selected = writable<PlatformId>('mac');
@@ -70,13 +71,20 @@
 		}, 100);
 	}
 
+	function downloadForMac(arch: 'aarch64' | 'x86_64') {
+		if (browser) {
+			const downloadUrl = `/api/download?target=darwin&arch=${arch}`;
+			window.location.href = downloadUrl;
+		}
+	}
+
 	onMount(() => {
 		detectPlatform();
 	});
 </script>
 
 <div
-	class="flex h-full w-full flex-col items-center justify-center gap-4 max-w-screen-2xl sm:py-16 z-10"
+	class="flex h-fit min-h-0 w-full flex-col items-center justify-center gap-4 max-w-screen-2xl sm:pb-[100px] z-10"
 >
 	<!-- Logo -->
 	<div
@@ -95,7 +103,7 @@
 		/>
 	</div>
 
-	<!-- Titlte -->
+	<!-- Title -->
 	<h1
 		class="text-4xl sm:text-5xl font-medium text-foreground font-['Gambarino-Regular'] text-center"
 	>
@@ -158,12 +166,20 @@
 				out:smoothTransition={{ direction: $direction === 'left' ? 'right' : 'left' }}
 			>
 				{#if $selected === 'mac'}
-					<Button class="flex items-center gap-2 rounded-[0.55rem] w-full sm:w-[210px]" scale="sm"
-						>Download for Apple Silicon</Button
+					<Button
+						class="flex items-center gap-2 rounded-[0.55rem] w-full sm:w-[210px]"
+						scale="sm"
+						on:click={() => downloadForMac('aarch64')}
 					>
-					<Button class="flex items-center gap-2 rounded-[0.55rem] w-full sm:w-[210px]" scale="sm"
-						>Download for Intel Chip</Button
+						Download for Apple Silicon
+					</Button>
+					<Button
+						class="flex items-center gap-2 rounded-[0.55rem] w-full sm:w-[210px]"
+						scale="sm"
+						on:click={() => downloadForMac('x86_64')}
 					>
+						Download for Intel Chip
+					</Button>
 				{:else if $selected === 'windows'}
 					<div class="flex flex-col items-center gap-4">
 						<Button

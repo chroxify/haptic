@@ -8,7 +8,7 @@
 	},
 	"package": {
 		"productName": "Haptic",
-		"version": "0.1.0"
+		"version": "0.1.2"
 	},
 	"tauri": {
 		"allowlist": {
@@ -55,7 +55,13 @@
 			"csp": null
 		},
 		"updater": {
-			"active": false
+			"active": true,
+			"endpoints": ["https://releases.myapp.com/{{target}}/{{arch}}/{{current_version}}"],
+			"dialog": true,
+			"windows": {
+				"installMode": "passive"
+			},
+			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDMxQjA0RjhDQjBFN0I4MTkKUldRWnVPZXdqRSt3TWN0QjNDZUV1SDRtNVdyNFRtWnZQR3ZsL3RWY1plbVBFeFVMeHFLVU5tcnIK"
 		},
 		"windows": [
 			{
