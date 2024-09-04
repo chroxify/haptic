@@ -83,7 +83,7 @@
 		property="og:description"
 		content="Haptic is a new local-first & privacy-focused home for your markdown notes. It's a minimalistic, lightweight and fast note-taking app that's designed to be distraction-free."
 	/>
-	<meta property="og:image" content="https://haptic.md/hero-dark.png" />
+	<meta property="og:image" content="https://haptic.md/landing.png" />
 	<meta property="og:image:alt" content="Haptic - Markdown Editor" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="627" />
@@ -96,7 +96,7 @@
 		property="twitter:description"
 		content="Haptic is a new local-first & privacy-focused home for your markdown notes. It's a minimalistic, lightweight and fast note-taking app that's designed to be distraction-free."
 	/>
-	<meta property="twitter:image" content="https://haptic.md/hero-dark.png" />
+	<meta property="twitter:image" content="https://haptic.md/landing.png" />
 
 	{#if import.meta.env.PROD}
 		<script

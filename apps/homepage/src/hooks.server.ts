@@ -7,7 +7,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.url.pathname = event.url.pathname.slice(0, -1);
 	}
 
-	console.log('event', event.url.pathname);
 	const newPath = redirects[event.url.pathname];
 	if (newPath) {
 		return new Response(null, {
