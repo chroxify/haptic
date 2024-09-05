@@ -367,6 +367,10 @@ export function createDeviceDetector() {
 				// Check for touch capability
 				const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+				// Check for laptop-specific indicators
+				const hasMouseEvents = 'onmousemove' in window;
+				const hasKeyboard = 'onkeydown' in window;
+
 				// Check for mobile-specific browser features
 				const hasMobileUserAgent =
 					/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -377,9 +381,20 @@ export function createDeviceDetector() {
 				const smallScreen = window.screen.width < 768 || window.screen.height < 768;
 				const highPixelRatio = window.devicePixelRatio > 1.5;
 
-				// Determine if it's a mobile/tablet device
-				const isMobileOrTablet =
-					(hasTouch && hasMobileUserAgent) || (hasTouch && (smallScreen || highPixelRatio));
+				const isMobileOrTablet = (() => {
+					if (hasTouch && hasMobileUserAgent) {
+						return true; // Definitely mobile or tablet
+					} else if (hasTouch && (smallScreen || highPixelRatio)) {
+						// Additional checks for touchscreen laptops
+						if (hasMouseEvents && hasKeyboard) {
+							return false; // Likely a touchscreen laptop
+						} else {
+							return true; // Likely mobile or tablet
+						}
+					} else {
+						return false; // Likely not mobile or tablet
+					}
+				})();
 
 				set({
 					isDesktop: !isMobileOrTablet,
