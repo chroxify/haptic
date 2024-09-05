@@ -65,7 +65,7 @@ If you're interested in self-hosting your own web instance of Haptic, you can do
 
 You can one-click deploy your own instance of Haptic on Vercel. Just click the button below and follow the instructions:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/chroxify/haptic&project-name=haptic-web&repository-name=haptic-web&path=apps/desktop)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/chroxify/haptic&project-name=haptic-web&repository-name=haptic-web&root-directory=apps/web)
 
 ### Docker
 
