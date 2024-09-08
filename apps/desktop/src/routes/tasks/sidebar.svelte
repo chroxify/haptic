@@ -4,12 +4,16 @@
 		editor,
 		isPageSidebarOpen,
 		pageSidebarWidth,
-		resizingPageSidebar
+		resizingPageSidebar,
+		platform
 	} from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
 	import TaskEntries from './task-entries.svelte';
 
-	const handleMouseMove = (e: MouseEvent) => {
+	let startX: number | null;
+	let startWidth: number;
+
+	const handleMouseMoveMacOS = (e: MouseEvent) => {
 		resizingPageSidebar.set(true);
 
 		const x = e.x;
@@ -38,32 +42,76 @@
 		pageSidebarWidth.update((value) => value + e.movementX);
 	};
 
-	// Resize sidebar handler
-	const resizeHandler = () => {
-		// Set resizing state
+	const handleMouseMoveOther = (e: MouseEvent) => {
+		if (startX === null) return;
 		resizingPageSidebar.set(true);
 
-		// Blur the editor
+		const x = e.clientX;
+
+		// Set collapsing bounds
+		if (x < 100) {
+			resizingPageSidebar.set(false);
+			isPageSidebarOpen.set(false);
+			return;
+		} else if (x > 100 && !$isPageSidebarOpen) {
+			resizingPageSidebar.set(false);
+			isPageSidebarOpen.set(true);
+			return;
+		}
+
+		const diff = x - startX;
+		const newWidth = Math.max(210, Math.min(500, startWidth + diff));
+
+		// Set cursor resize bounds to prevent resizing when cursor is outside of the width bounds
+		if (x < 245 || x > 550) {
+			return;
+		}
+
+		pageSidebarWidth.set(newWidth);
+	};
+
+	const resizeHandlerMacOS = () => {
+		resizingPageSidebar.set(true);
 		$editor.commands.blur();
+		document.body.classList.add('cursor-col-resize');
 
-		// Set cusor-col-resize class to body
-		document.body.classList.toggle('cursor-col-resize');
-
-		// Mouse up event listener
 		const handleMouseUp = () => {
-			document.removeEventListener('mousemove', handleMouseMove);
+			document.removeEventListener('mousemove', handleMouseMoveMacOS);
 			document.removeEventListener('mouseup', handleMouseUp);
-
-			// Remove cursor-col-resize class from body
 			document.body.classList.remove('cursor-col-resize');
-
 			resizingPageSidebar.set(false);
 		};
 
-		// Add event listeners
-		document.addEventListener('mousemove', handleMouseMove);
+		document.addEventListener('mousemove', handleMouseMoveMacOS);
 		document.addEventListener('mouseup', handleMouseUp);
 	};
+
+	const resizeHandlerOther = (e: MouseEvent) => {
+		e.preventDefault();
+		startX = e.clientX;
+		startWidth = $pageSidebarWidth;
+
+		resizingPageSidebar.set(true);
+		$editor.commands.blur();
+		document.body.classList.add('cursor-col-resize');
+
+		const handleMouseUp = () => {
+			startX = null;
+			document.removeEventListener('mousemove', handleMouseMoveOther);
+			document.removeEventListener('mouseup', handleMouseUp);
+			document.body.classList.remove('cursor-col-resize');
+			resizingPageSidebar.set(false);
+
+			if ($pageSidebarWidth < 100) {
+				isPageSidebarOpen.set(false);
+			}
+		};
+
+		document.addEventListener('mousemove', handleMouseMoveOther);
+		document.addEventListener('mouseup', handleMouseUp);
+	};
+
+	$: resizeHandler = $platform === 'darwin' ? resizeHandlerMacOS : resizeHandlerOther;
 </script>
 
 <div
@@ -93,8 +141,8 @@
 
 <style>
 	:global(body.cursor-col-resize) {
-		/* cursor: col-resize !important;
-		user-select: none !important; */
+		cursor: col-resize !important;
+		user-select: none !important;
 		pointer-events: none;
 	}
 </style>

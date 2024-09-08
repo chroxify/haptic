@@ -7,7 +7,8 @@
 		editor,
 		isNoteDetailSidebarOpen,
 		noteDetailSidebarWidth,
-		resizingNoteDetailSidebar
+		resizingNoteDetailSidebar,
+		platform
 	} from '@/store';
 	import { type NoteMetadataParams } from '@/types';
 	import { formatFileSize, formatTimeAgo } from '@/utils';
@@ -26,10 +27,12 @@
 	let modifiedTimeAgo: string;
 	let timeUpdateInterval: NodeJS.Timeout;
 
-	// Sidebar handlers
-	const handleMouseMove = (e: MouseEvent) => {
+	let startX: number | null;
+	let startWidth: number;
+
+	const handleMouseMoveMacOS = (e: MouseEvent) => {
 		resizingNoteDetailSidebar.set(true);
-		console.log(document.body.clientWidth);
+
 		const x = e.x;
 		const clientWidth = document.body.clientWidth;
 
@@ -38,52 +41,99 @@
 			resizingNoteDetailSidebar.set(false);
 			isNoteDetailSidebarOpen.set(false);
 			return;
-		} else if (x > 100 && !$isNoteDetailSidebarOpen) {
+		} else if (clientWidth - x > 100 && !$isNoteDetailSidebarOpen) {
 			resizingNoteDetailSidebar.set(false);
 			isNoteDetailSidebarOpen.set(true);
 			return;
 		}
 
-		// Set cursor resize bounds to prevent resizing when cursor is outside of the width bounds
-		if (clientWidth - x < 245 || clientWidth - x > 500) {
+		// Set width bounds
+		if (
+			$noteDetailSidebarWidth - e.movementX < 210 ||
+			$noteDetailSidebarWidth - e.movementX > 500
+		) {
 			return;
 		}
 
-		// Resize sidebar
-		if (
-			$noteDetailSidebarWidth - e.movementX >= 210 &&
-			$noteDetailSidebarWidth - e.movementX <= 500
-		) {
-			noteDetailSidebarWidth.update((value) => value - e.movementX);
+		// Set cursor resize bounds to prevent resizing when cursor is outside of the width bounds
+		if (clientWidth - x < 245 || clientWidth - x > 550) {
+			return;
 		}
+
+		noteDetailSidebarWidth.update((value) => value - e.movementX);
 	};
 
-	// Resize sidebar handler
-	const resizeHandler = () => {
-		// Set resizing state
+	const handleMouseMoveOther = (e: MouseEvent) => {
+		if (startX === null) return;
 		resizingNoteDetailSidebar.set(true);
 
-		// Blur the editor
+		const x = e.clientX;
+		const clientWidth = document.body.clientWidth;
+
+		// Set collapsing bounds
+		if (clientWidth - x < 100) {
+			resizingNoteDetailSidebar.set(false);
+			isNoteDetailSidebarOpen.set(false);
+			return;
+		} else if (clientWidth - x > 100 && !$isNoteDetailSidebarOpen) {
+			resizingNoteDetailSidebar.set(false);
+			isNoteDetailSidebarOpen.set(true);
+			return;
+		}
+
+		const diff = startX - x;
+		const newWidth = Math.max(210, Math.min(500, startWidth + diff));
+
+		// Set cursor resize bounds to prevent resizing when cursor is outside of the width bounds
+		if (clientWidth - x < 245 || clientWidth - x > 550) {
+			return;
+		}
+
+		noteDetailSidebarWidth.set(newWidth);
+	};
+
+	const resizeHandlerMacOS = () => {
+		resizingNoteDetailSidebar.set(true);
 		$editor.commands.blur();
+		document.body.classList.add('cursor-col-resize');
 
-		// Set cusor-col-resize class to body
-		document.body.classList.toggle('cursor-col-resize');
-
-		// Mouse up event listener
 		const handleMouseUp = () => {
-			document.removeEventListener('mousemove', handleMouseMove);
+			document.removeEventListener('mousemove', handleMouseMoveMacOS);
 			document.removeEventListener('mouseup', handleMouseUp);
-
-			// Remove cursor-col-resize class from body
 			document.body.classList.remove('cursor-col-resize');
-
 			resizingNoteDetailSidebar.set(false);
 		};
 
-		// Add event listeners
-		document.addEventListener('mousemove', handleMouseMove);
+		document.addEventListener('mousemove', handleMouseMoveMacOS);
 		document.addEventListener('mouseup', handleMouseUp);
 	};
+
+	const resizeHandlerOther = (e: MouseEvent) => {
+		e.preventDefault();
+		startX = e.clientX;
+		startWidth = $noteDetailSidebarWidth;
+
+		resizingNoteDetailSidebar.set(true);
+		$editor.commands.blur();
+		document.body.classList.add('cursor-col-resize');
+
+		const handleMouseUp = () => {
+			startX = null;
+			document.removeEventListener('mousemove', handleMouseMoveOther);
+			document.removeEventListener('mouseup', handleMouseUp);
+			document.body.classList.remove('cursor-col-resize');
+			resizingNoteDetailSidebar.set(false);
+
+			if ($noteDetailSidebarWidth < 100) {
+				isNoteDetailSidebarOpen.set(false);
+			}
+		};
+
+		document.addEventListener('mousemove', handleMouseMoveOther);
+		document.addEventListener('mouseup', handleMouseUp);
+	};
+
+	$: resizeHandler = $platform === 'darwin' ? resizeHandlerMacOS : resizeHandlerOther;
 
 	// Handle reactivity for time ago values
 	function updateTimes() {
@@ -298,6 +348,8 @@
 
 <style>
 	:global(body.cursor-col-resize) {
+		cursor: col-resize !important;
+		user-select: none !important;
 		pointer-events: none;
 	}
 </style>
