@@ -30,7 +30,7 @@
 <div
 	class="sticky gap-2 min-h-10 top-0 px-3 z-50 flex items-center justify-between w-full bg-secondary-background"
 >
-	<div class="flex gap-1.5 select-none">
+	<div class="flex gap-1.5 select-none w-fit">
 		<Tooltip
 			text={$isPageSidebarOpen ? 'Collapse' : 'Expand'}
 			side="bottom"
@@ -133,7 +133,7 @@
 			<div class="w-6" />
 		{/if}
 	</div>
-	<div class="flex gap-1.5">
+	<div class="flex gap-1.5 w-fit">
 		<p class="text-xs flex items-center text-muted-foreground fill-muted-foreground">
 			{#if !hideParentDirectories}
 				{#each $activeFile?.replace($collection, '').split('/') ?? [] as folder, i}
@@ -167,7 +167,7 @@
 			{/if}
 		</p>
 	</div>
-	<div class="flex gap-1.5">
+	<div class="flex gap-1.5 w-fit">
 		<Tooltip
 			text={$editorMode === 'edit' ? 'View mode' : 'Edit mode'}
 			side="bottom"
