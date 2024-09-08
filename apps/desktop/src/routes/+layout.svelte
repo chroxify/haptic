@@ -47,7 +47,7 @@
 		loadSettings(true, true);
 
 		// Set platform
-		platform.set(await osPlatform());
+		platform.set((await osPlatform()) as 'darwin' | 'linux' | 'windows');
 	});
 
 	// Keep local theme synced

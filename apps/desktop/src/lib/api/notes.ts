@@ -1,4 +1,5 @@
-import { activeFile, collection, collectionSettings, editor, noteHistory } from '@/store';
+import { OS_TRASH_DIR } from '@/constants';
+import { activeFile, collection, collectionSettings, editor, noteHistory, platform } from '@/store';
 import type { NoteMetadataParams } from '@/types';
 import { calculateReadingTime, getNextUntitledName, setEditorContent } from '@/utils';
 import { readDir, readTextFile, removeFile, renameFile, writeTextFile } from '@tauri-apps/api/fs';
@@ -40,10 +41,12 @@ export async function openNote(path: string, skipHistory = false) {
 
 // Delete a note
 export const deleteNote = async (path: string) => {
-	// TODO: Wont work on Windows
 	switch (get(collectionSettings).notes.trash_dir) {
 		case 'system':
-			await renameFile(path, `${await homeDir()}.trash/${path.split('/').pop()!}`);
+			await renameFile(
+				path,
+				`${await homeDir()}${OS_TRASH_DIR[get(platform)]}${path.split('/').pop()!}`
+			);
 			break;
 		case 'haptic':
 			await renameFile(path, `${get(collection)}/.haptic/trash/${path.split('/').pop()!}`);

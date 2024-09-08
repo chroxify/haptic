@@ -54,3 +54,10 @@ export const BASE_COLLECTION_SETTINGS: CollectionSettingsParams = {
 		excluded_files: []
 	}
 };
+
+// This is from home dir
+export const OS_TRASH_DIR = {
+	darwin: '.trash/',
+	linux: '.local/share/Trash/files/',
+	windows: '$Recycle.Bin/'
+};

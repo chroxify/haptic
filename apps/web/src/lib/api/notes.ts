@@ -61,7 +61,6 @@ export async function openNote(path: string, skipHistory = false) {
 
 // Delete a note
 export const deleteNote = async (path: string) => {
-	// TODO: Wont work on Windows
 	await db.delete(entryTable).where(eq(entryTable.path, path));
 	activeFile.set(null);
 };
