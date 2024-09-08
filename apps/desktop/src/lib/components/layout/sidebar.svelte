@@ -7,7 +7,7 @@
 	import SettingsModal from '../settings/settings-modal.svelte';
 	import { SHORTCUTS } from '@/constants';
 	import { goto } from '$app/navigation';
-	import { collection } from '@/store';
+	import { collection, platform } from '@/store';
 
 	let selected: 'notes' | 'daily' | 'tasks' | null = null;
 
@@ -29,7 +29,10 @@
 </script>
 
 <div
-	class="fixed left-0 h-full flex flex-col justify-between items-center w-12 py-12 border-r z-10 bg-background"
+	class={cn(
+		'fixed left-0 h-full flex flex-col justify-between items-center w-12 py-12 border-r z-10 bg-background',
+		$platform !== 'darwin' && 'pt-3'
+	)}
 >
 	<div class="flex flex-col items-center gap-2">
 		<Tooltip text="Notes" side="right">

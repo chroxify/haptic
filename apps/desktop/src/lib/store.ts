@@ -2,8 +2,10 @@ import { writable } from 'svelte/store';
 import { createEditorStore } from './components/shared/editor/editor-store';
 import { BASE_APP_SETTINGS, BASE_COLLECTION_SETTINGS } from './constants';
 import type { AppSettingsParams, CollectionSettingsParams, SettingsStateParams } from './types';
+import type { Platform } from '@tauri-apps/api/os';
 
 const editor = createEditorStore();
+const platform = writable<Platform>();
 
 const activeFile = writable<string | null>(null);
 const noteHistory = writable<string[]>([]);
@@ -35,6 +37,7 @@ export {
 	activeFile,
 	appSettings,
 	appTheme,
+	platform,
 	collection,
 	collectionSearchActive,
 	collectionSettings,

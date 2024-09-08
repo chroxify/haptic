@@ -4,7 +4,7 @@
 	import Icon from '@/components/shared/icon.svelte';
 	import Shortcut from '@/components/shared/shortcut.svelte';
 	import { SHORTCUTS } from '@/constants';
-	import { activeFile, collection, editor } from '@/store';
+	import { activeFile, collection, editor, platform } from '@/store';
 	import { shortcutToString, showInFolder } from '@/utils';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import * as Collapsible from '@haptic/ui/components/collapsible';
@@ -442,7 +442,7 @@
 						on:click={() => showInFolder(entry.path)}
 					>
 						<Icon name="eye" class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground" />
-						Show in Finder
+						Show in {#if $platform === 'darwin'}Finder{:else if $platform === 'linux'}Files{:else}Explorer{/if}
 						<ContextMenu.Shortcut
 							>{shortcutToString(SHORTCUTS['folder:show-in-folder'])}</ContextMenu.Shortcut
 						>
@@ -540,7 +540,7 @@
 					on:click={() => showInFolder(entry.path)}
 				>
 					<Icon name="eye" class="w-3.5 h-3.5 fill-foreground/70 group-hover:fill-foreground" />
-					Show in Finder
+					Show in {#if $platform === 'darwin'}Finder{:else if $platform === 'linux'}Files{:else}Explorer{/if}
 					<ContextMenu.Shortcut
 						>{shortcutToString(SHORTCUTS['note:show-in-folder'])}</ContextMenu.Shortcut
 					>

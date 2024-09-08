@@ -1,8 +1,6 @@
 #[cfg(target_os = "linux")]
-use std::{fs::metadata, path::PathBuf};
+use std::path::Path;
 use std::process::Command;
-#[cfg(target_os = "linux")]
-use fork::{daemon, Fork}; // dep: fork = "0.1"
 
 #[tauri::command]
 pub async fn show_in_folder(path: String) {
@@ -16,30 +14,12 @@ pub async fn show_in_folder(path: String) {
 
   #[cfg(target_os = "linux")]
   {
-    if path.contains(",") {
-      // see https://gitlab.freedesktop.org/dbus/dbus/-/issues/76
-      let new_path = match metadata(&path).unwrap().is_dir() {
-        true => path,
-        false => {
-          let mut path2 = PathBuf::from(path);
-          path2.pop();
-          path2.into_os_string().into_string().unwrap()
-        }
-      };
-      Command::new("xdg-open")
-          .arg(&new_path)
-          .spawn()
-          .unwrap();
-    } else {
-      if let Ok(Fork::Child) = daemon(false, false) {
-        Command::new("dbus-send")
-            .args(["--session", "--dest=org.freedesktop.FileManager1", "--type=method_call",
-                  "/org/freedesktop/FileManager1", "org.freedesktop.FileManager1.ShowItems",
-                  format!("array:string:\"file://{path}\"").as_str(), "string:\"\""])
-            .spawn()
-            .unwrap();
-      }
-    }
+    let path = Path::new(&path);
+    let parent = path.parent().unwrap_or(path);
+    Command::new("xdg-open")
+        .arg(parent)
+        .spawn()
+        .unwrap();
   }
 
   #[cfg(target_os = "macos")]

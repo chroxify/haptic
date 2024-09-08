@@ -8,7 +8,8 @@ import {
 	isPageSidebarOpen,
 	collectionSearchActive,
 	settingsStore,
-	isNoteDetailSidebarOpen
+	isNoteDetailSidebarOpen,
+	platform
 } from '@/store';
 import { get } from 'svelte/store';
 import type { IconKey } from '$lib/components/shared/icon.svelte';
@@ -254,7 +255,9 @@ export const createNoteCommands = (notePath: string): CommandGroup => {
 				}
 			},
 			{
-				title: 'Reveal in Finder',
+				title: `Reveal in ${
+					get(platform) === 'darwin' ? 'Finder' : get(platform) === 'linux' ? 'Files' : 'Explorer'
+				}`,
 				icon: 'eye',
 				shortcut: SHORTCUTS['note:show-in-folder'],
 				onSelect: () => {

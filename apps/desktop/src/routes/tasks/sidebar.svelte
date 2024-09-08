@@ -68,7 +68,8 @@
 
 <div
 	class={cn(
-		'fixed left-12 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
+		// TODO: Review if h-full is not a breaking change on macos, but it should be fine
+		'fixed left-12 h-full flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
 		!$isPageSidebarOpen && '-translate-x-52'
 	)}
 	style={`width: ${$pageSidebarWidth}px`}
