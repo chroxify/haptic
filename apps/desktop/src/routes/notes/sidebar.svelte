@@ -13,6 +13,7 @@
 		editor,
 		isPageSidebarOpen,
 		pageSidebarWidth,
+		platform,
 		resizingPageSidebar
 	} from '@/store';
 	import { Button } from '@haptic/ui/components/button';
@@ -36,6 +37,62 @@
 	let folderToggleState: 'collapse' | 'expand';
 	let toggleFolderStates: () => void;
 	let stopWatching: UnlistenFn;
+
+	let startX: number | null;
+	let startWidth: number;
+
+	const handleMouseMove = (e: MouseEvent) => {
+		if (startX === null) return;
+		resizingPageSidebar.set(true);
+
+		const x = e.clientX;
+
+		// Set collapsing bounds
+		if (x < 100) {
+			resizingPageSidebar.set(false);
+			isPageSidebarOpen.set(false);
+			return;
+		} else if (x > 100 && !$isPageSidebarOpen) {
+			resizingPageSidebar.set(false);
+			isPageSidebarOpen.set(true);
+			return;
+		}
+
+		const diff = x - startX;
+		const newWidth = Math.max(210, Math.min(500, startWidth + diff));
+
+		// Set cursor resize bounds to prevent resizing when cursor is outside of the width bounds
+		if (x < 245 || x > 550) {
+			return;
+		}
+
+		pageSidebarWidth.set(newWidth);
+	};
+
+	const resizeHandler = (e: MouseEvent) => {
+		e.preventDefault();
+		startX = e.clientX;
+		startWidth = $pageSidebarWidth;
+
+		resizingPageSidebar.set(true);
+		$editor.commands.blur();
+		document.body.classList.add('cursor-col-resize');
+
+		const handleMouseUp = () => {
+			startX = null;
+			document.removeEventListener('mousemove', handleMouseMove);
+			document.removeEventListener('mouseup', handleMouseUp);
+			document.body.classList.remove('cursor-col-resize');
+			resizingPageSidebar.set(false);
+
+			if ($pageSidebarWidth < 100) {
+				isPageSidebarOpen.set(false);
+			}
+		};
+
+		document.addEventListener('mousemove', handleMouseMove);
+		document.addEventListener('mouseup', handleMouseUp);
+	};
 
 	// Watch for changes in the collection
 	async function watchCollection() {
@@ -83,62 +140,6 @@
 		}
 	});
 
-	const handleMouseMove = (e: MouseEvent) => {
-		resizingPageSidebar.set(true);
-
-		const x = e.x;
-
-		// Set collapsing bounds
-		if (x < 100) {
-			resizingPageSidebar.set(false);
-			isPageSidebarOpen.set(false);
-			return;
-		} else if (x > 100 && !$isPageSidebarOpen) {
-			resizingPageSidebar.set(false);
-			isPageSidebarOpen.set(true);
-			return;
-		}
-
-		// Set width bounds
-		if ($pageSidebarWidth + e.movementX < 210 || $pageSidebarWidth + e.movementX > 500) {
-			return;
-		}
-
-		// Set cursor resize bounds to prevent resizing when cursor is outside of the width bounds
-		if (x < 245 || x > 550) {
-			return;
-		}
-
-		pageSidebarWidth.update((value) => value + e.movementX);
-	};
-
-	// Resize sidebar handler
-	const resizeHandler = () => {
-		// Set resizing state
-		resizingPageSidebar.set(true);
-
-		// Blur the editor
-		$editor.commands.blur();
-
-		// Set cusor-col-resize class to body
-		document.body.classList.toggle('cursor-col-resize');
-
-		// Mouse up event listener
-		const handleMouseUp = () => {
-			document.removeEventListener('mousemove', handleMouseMove);
-			document.removeEventListener('mouseup', handleMouseUp);
-
-			// Remove cursor-col-resize class from body
-			document.body.classList.remove('cursor-col-resize');
-
-			resizingPageSidebar.set(false);
-		};
-
-		// Add event listeners
-		document.addEventListener('mousemove', handleMouseMove);
-		document.addEventListener('mouseup', handleMouseUp);
-	};
-
 	async function searchCollection() {
 		if (!searchValue) {
 			results = [];
@@ -174,8 +175,9 @@
 
 <div
 	class={cn(
-		'fixed left-12 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
-		!$isPageSidebarOpen && '-translate-x-52'
+		'fixed left-12 flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
+		!$isPageSidebarOpen && '-translate-x-52',
+		$platform === 'darwin' ? 'h-[calc(100vh-4.5rem)]' : 'h-[calc(100vh-2.25rem)]'
 	)}
 	style={`width: ${$pageSidebarWidth}px`}
 >
@@ -383,8 +385,8 @@
 
 <style>
 	:global(body.cursor-col-resize) {
-		/* cursor: col-resize !important;
-		user-select: none !important; */
+		cursor: col-resize !important;
+		user-select: none !important;
 		pointer-events: none;
 	}
 </style>

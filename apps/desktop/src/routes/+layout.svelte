@@ -3,8 +3,9 @@
 	import Footer from '@/components/layout/footer.svelte';
 	import Header from '@/components/layout/header.svelte';
 	import Sidebar from '@/components/layout/sidebar.svelte';
+	import { platform as osPlatform } from '@tauri-apps/api/os';
 	import Command from '@/components/shared/command-menu/command.svelte';
-	import { appTheme, collection } from '@/store';
+	import { appTheme, collection, platform } from '@/store';
 	import { updateWindowTheme, validateHapticFolder } from '@/utils';
 	import '@haptic/ui/app.desktop.css';
 	import { BaseDirectory, readTextFile } from '@tauri-apps/api/fs';
@@ -44,6 +45,9 @@
 
 		// Load app & collection settings
 		loadSettings(true, true);
+
+		// Set platform
+		platform.set((await osPlatform()) as 'darwin' | 'linux' | 'windows');
 	});
 
 	// Keep local theme synced
@@ -60,7 +64,9 @@
 
 <Command />
 
-<Header />
+{#if $platform === 'darwin'}
+	<Header />
+{/if}
 <Sidebar />
 <main class="flex min-h-screen w-full items-center justify-center">
 	<slot />

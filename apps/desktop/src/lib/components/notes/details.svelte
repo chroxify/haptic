@@ -7,6 +7,7 @@
 		editor,
 		isNoteDetailSidebarOpen,
 		noteDetailSidebarWidth,
+		platform,
 		resizingNoteDetailSidebar
 	} from '@/store';
 	import { type NoteMetadataParams } from '@/types';
@@ -26,11 +27,14 @@
 	let modifiedTimeAgo: string;
 	let timeUpdateInterval: NodeJS.Timeout;
 
-	// Sidebar handlers
+	let startX: number | null;
+	let startWidth: number;
+
 	const handleMouseMove = (e: MouseEvent) => {
+		if (startX === null) return;
 		resizingNoteDetailSidebar.set(true);
-		console.log(document.body.clientWidth);
-		const x = e.x;
+
+		const x = e.clientX;
 		const clientWidth = document.body.clientWidth;
 
 		// Set collapsing bounds
@@ -38,49 +42,44 @@
 			resizingNoteDetailSidebar.set(false);
 			isNoteDetailSidebarOpen.set(false);
 			return;
-		} else if (x > 100 && !$isNoteDetailSidebarOpen) {
+		} else if (clientWidth - x > 100 && !$isNoteDetailSidebarOpen) {
 			resizingNoteDetailSidebar.set(false);
 			isNoteDetailSidebarOpen.set(true);
 			return;
 		}
 
+		const diff = startX - x;
+		const newWidth = Math.max(210, Math.min(500, startWidth + diff));
+
 		// Set cursor resize bounds to prevent resizing when cursor is outside of the width bounds
-		if (clientWidth - x < 245 || clientWidth - x > 500) {
+		if (clientWidth - x < 245 || clientWidth - x > 550) {
 			return;
 		}
 
-		// Resize sidebar
-		if (
-			$noteDetailSidebarWidth - e.movementX >= 210 &&
-			$noteDetailSidebarWidth - e.movementX <= 500
-		) {
-			noteDetailSidebarWidth.update((value) => value - e.movementX);
-		}
+		noteDetailSidebarWidth.set(newWidth);
 	};
 
-	// Resize sidebar handler
-	const resizeHandler = () => {
-		// Set resizing state
+	const resizeHandler = (e: MouseEvent) => {
+		e.preventDefault();
+		startX = e.clientX;
+		startWidth = $noteDetailSidebarWidth;
+
 		resizingNoteDetailSidebar.set(true);
-
-		// Blur the editor
 		$editor.commands.blur();
+		document.body.classList.add('cursor-col-resize');
 
-		// Set cusor-col-resize class to body
-		document.body.classList.toggle('cursor-col-resize');
-
-		// Mouse up event listener
 		const handleMouseUp = () => {
+			startX = null;
 			document.removeEventListener('mousemove', handleMouseMove);
 			document.removeEventListener('mouseup', handleMouseUp);
-
-			// Remove cursor-col-resize class from body
 			document.body.classList.remove('cursor-col-resize');
-
 			resizingNoteDetailSidebar.set(false);
+
+			if ($noteDetailSidebarWidth < 100) {
+				isNoteDetailSidebarOpen.set(false);
+			}
 		};
 
-		// Add event listeners
 		document.addEventListener('mousemove', handleMouseMove);
 		document.addEventListener('mouseup', handleMouseUp);
 	};
@@ -144,8 +143,9 @@
 
 <div
 	class={cn(
-		'fixed right-0 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
-		!$isNoteDetailSidebarOpen && 'translate-x-full'
+		'fixed right-0 flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
+		!$isNoteDetailSidebarOpen && 'translate-x-full',
+		$platform === 'darwin' ? 'h-[calc(100vh-4.5rem)]' : 'h-[calc(100vh-2.25rem)]'
 	)}
 	style={`width: ${$noteDetailSidebarWidth}px`}
 >
@@ -297,6 +297,8 @@
 
 <style>
 	:global(body.cursor-col-resize) {
+		cursor: col-resize !important;
+		user-select: none !important;
 		pointer-events: none;
 	}
 </style>

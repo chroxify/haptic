@@ -7,7 +7,7 @@ import { cubicOut } from 'svelte/easing';
 import { get } from 'svelte/store';
 import type { TransitionConfig } from 'svelte/transition';
 import { twMerge } from 'tailwind-merge';
-import { appTheme, editor } from './store';
+import { appTheme, editor, platform } from './store';
 import type { ShortcutParams } from './types';
 
 export function cn(...inputs: ClassValue[]) {
@@ -105,8 +105,9 @@ export async function showInFolder(path: string) {
 // Shortcut to string
 export function shortcutToString(shortcut: ShortcutParams) {
 	const keys = [];
+	const isDarwin = get(platform) === 'darwin';
 
-	if (shortcut.command) keys.push('⌘');
+	if (shortcut.command) keys.push(isDarwin ? '⌘' : '⌃');
 	if (shortcut.alt) keys.push('⌥');
 	if (shortcut.shift) keys.push('⇧');
 

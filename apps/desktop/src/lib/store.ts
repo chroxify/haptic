@@ -4,6 +4,7 @@ import { BASE_APP_SETTINGS, BASE_COLLECTION_SETTINGS } from './constants';
 import type { AppSettingsParams, CollectionSettingsParams, SettingsStateParams } from './types';
 
 const editor = createEditorStore();
+const platform = writable<'darwin' | 'linux' | 'windows'>();
 
 const activeFile = writable<string | null>(null);
 const noteHistory = writable<string[]>([]);
@@ -35,6 +36,7 @@ export {
 	activeFile,
 	appSettings,
 	appTheme,
+	platform,
 	collection,
 	collectionSearchActive,
 	collectionSettings,

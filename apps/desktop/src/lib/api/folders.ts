@@ -1,6 +1,9 @@
+import { OS_TRASH_DIR } from '@/constants';
+import { collection, collectionSettings, platform } from '@/store';
 import { getNextUntitledName } from '@/utils';
-import { createDir, readDir, renameFile } from '@tauri-apps/api/fs';
+import { createDir, readDir, removeFile, renameFile } from '@tauri-apps/api/fs';
 import { homeDir } from '@tauri-apps/api/path';
+import { get } from 'svelte/store';
 
 // Create a new folder
 export const createFolder = async (dirPath: string) => {
@@ -18,7 +21,7 @@ export const createFolder = async (dirPath: string) => {
 
 // Delete a folder
 export const deleteFolder = async (path: string, recursive = false) => {
-	let folderName = path.split('/').pop()!;
+	const folderName = path.split('/').pop()!;
 
 	if (!recursive) {
 		let children = await readDir(path);
@@ -33,13 +36,16 @@ export const deleteFolder = async (path: string, recursive = false) => {
 		}
 	}
 
-	try {
-		await renameFile(path, `${await homeDir()}/.trash/${folderName}`);
-	} catch (error) {
-		if ((error as string).includes('os error 66')) {
-			folderName = `${folderName}-${Date.now()}`;
-			await renameFile(path, `${await homeDir()}/.trash/${folderName}`);
-		}
+	switch (get(collectionSettings).notes.trash_dir) {
+		case 'system':
+			await renameFile(path, `${await homeDir()}${OS_TRASH_DIR[get(platform)]}${folderName}`);
+			break;
+		case 'haptic':
+			await renameFile(path, `${get(collection)}/.haptic/trash/${path.split('/').pop()!}`);
+			break;
+		case 'delete':
+			await removeFile(path);
+			break;
 	}
 };
 

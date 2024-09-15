@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { cn } from '@/utils';
 	import NoteDetails from './details.svelte';
 	import {
 		isPageSidebarOpen,
 		pageSidebarWidth,
 		resizingPageSidebar,
+		platform,
 		isNoteDetailSidebarOpen,
 		noteDetailSidebarWidth,
 		resizingNoteDetailSidebar
@@ -14,7 +16,10 @@
 </script>
 
 <div
-	class="flex flex-col w-full h-[calc(100vh-4.5rem)] bg-secondary-background ml-12 overflow-hidden"
+	class={cn(
+		'flex flex-col w-full h-[calc(100vh-4.5rem)] bg-secondary-background ml-12 overflow-hidden',
+		$platform !== 'darwin' && 'h-[100vh]'
+	)}
 >
 	<svelte:component this={sidebar} />
 	<div
