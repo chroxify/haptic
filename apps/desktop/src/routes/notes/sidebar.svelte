@@ -13,8 +13,7 @@
 		editor,
 		isPageSidebarOpen,
 		pageSidebarWidth,
-		resizingPageSidebar,
-		platform
+		resizingPageSidebar
 	} from '@/store';
 	import { Button } from '@haptic/ui/components/button';
 	import Label from '@haptic/ui/components/label/label.svelte';
@@ -41,68 +40,13 @@
 	let startX: number | null;
 	let startWidth: number;
 
-	const handleMouseMoveMacOS = (e: MouseEvent) => {
-		resizingPageSidebar.set(true);
-
-		const x = e.x;
-
-		// Set collapsing bounds
-		if (x < 100) {
-			resizingPageSidebar.set(false);
-			isPageSidebarOpen.set(false);
-			return;
-		} else if (x > 100 && !$isPageSidebarOpen) {
-			resizingPageSidebar.set(false);
-			isPageSidebarOpen.set(true);
-			return;
-		}
-
-		// Set width bounds
-		if ($pageSidebarWidth + e.movementX < 210 || $pageSidebarWidth + e.movementX > 500) {
-			return;
-		}
-
-		// Set cursor resize bounds to prevent resizing when cursor is outside of the width bounds
-		if (x < 245 || x > 550) {
-			return;
-		}
-
-		pageSidebarWidth.update((value) => value + e.movementX);
-	};
-
-	const resizeHandlerMacOS = () => {
-		// Set resizing state
-		resizingPageSidebar.set(true);
-
-		// Blur the editor
-		$editor.commands.blur();
-
-		// Set cusor-col-resize class to body
-		document.body.classList.toggle('cursor-col-resize');
-
-		// Mouse up event listener
-		const handleMouseUp = () => {
-			document.removeEventListener('mousemove', handleMouseMove);
-			document.removeEventListener('mouseup', handleMouseUp);
-
-			// Remove cursor-col-resize class from body
-			document.body.classList.remove('cursor-col-resize');
-
-			resizingPageSidebar.set(false);
-		};
-
-		// Add event listeners
-		document.addEventListener('mousemove', handleMouseMoveMacOS);
-		document.addEventListener('mouseup', handleMouseUp);
-	};
-
-	const handleMouseMoveOther = (e: MouseEvent) => {
+	const handleMouseMove = (e: MouseEvent) => {
 		if (startX === null) return;
 		resizingPageSidebar.set(true);
 
 		const x = e.clientX;
 
-		// Set collapsing bounds (copied from macOS handler)
+		// Set collapsing bounds
 		if (x < 100) {
 			resizingPageSidebar.set(false);
 			isPageSidebarOpen.set(false);
@@ -124,7 +68,7 @@
 		pageSidebarWidth.set(newWidth);
 	};
 
-	const resizeHandlerOther = (e: MouseEvent) => {
+	const resizeHandler = (e: MouseEvent) => {
 		e.preventDefault();
 		startX = e.clientX;
 		startWidth = $pageSidebarWidth;
@@ -135,7 +79,7 @@
 
 		const handleMouseUp = () => {
 			startX = null;
-			document.removeEventListener('mousemove', handleMouseMoveOther);
+			document.removeEventListener('mousemove', handleMouseMove);
 			document.removeEventListener('mouseup', handleMouseUp);
 			document.body.classList.remove('cursor-col-resize');
 			resizingPageSidebar.set(false);
@@ -145,12 +89,9 @@
 			}
 		};
 
-		document.addEventListener('mousemove', handleMouseMoveOther);
+		document.addEventListener('mousemove', handleMouseMove);
 		document.addEventListener('mouseup', handleMouseUp);
 	};
-
-	$: resizeHandler = $platform === 'darwin' ? resizeHandlerMacOS : resizeHandlerOther;
-	$: handleMouseMove = $platform === 'darwin' ? handleMouseMoveMacOS : handleMouseMoveOther;
 
 	// Watch for changes in the collection
 	async function watchCollection() {
@@ -233,8 +174,7 @@
 
 <div
 	class={cn(
-		// TODO: Review if this is not a breaking change on macos, but it should be fine
-		'fixed left-12 h-full flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
+		'fixed left-12 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
 		!$isPageSidebarOpen && '-translate-x-52'
 	)}
 	style={`width: ${$pageSidebarWidth}px`}

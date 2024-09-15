@@ -4,8 +4,7 @@
 		editor,
 		isPageSidebarOpen,
 		pageSidebarWidth,
-		resizingPageSidebar,
-		platform
+		resizingPageSidebar
 	} from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
 	import TaskEntries from './task-entries.svelte';
@@ -13,36 +12,7 @@
 	let startX: number | null;
 	let startWidth: number;
 
-	const handleMouseMoveMacOS = (e: MouseEvent) => {
-		resizingPageSidebar.set(true);
-
-		const x = e.x;
-
-		// Set collapsing bounds
-		if (x < 100) {
-			resizingPageSidebar.set(false);
-			isPageSidebarOpen.set(false);
-			return;
-		} else if (x > 100 && !$isPageSidebarOpen) {
-			resizingPageSidebar.set(false);
-			isPageSidebarOpen.set(true);
-			return;
-		}
-
-		// Set width bounds
-		if ($pageSidebarWidth + e.movementX < 210 || $pageSidebarWidth + e.movementX > 500) {
-			return;
-		}
-
-		// Set cursor resize bounds to prevent resizing when cursor is outside of the width bounds
-		if (x < 245 || x > 550) {
-			return;
-		}
-
-		pageSidebarWidth.update((value) => value + e.movementX);
-	};
-
-	const handleMouseMoveOther = (e: MouseEvent) => {
+	const handleMouseMove = (e: MouseEvent) => {
 		if (startX === null) return;
 		resizingPageSidebar.set(true);
 
@@ -70,23 +40,7 @@
 		pageSidebarWidth.set(newWidth);
 	};
 
-	const resizeHandlerMacOS = () => {
-		resizingPageSidebar.set(true);
-		$editor.commands.blur();
-		document.body.classList.add('cursor-col-resize');
-
-		const handleMouseUp = () => {
-			document.removeEventListener('mousemove', handleMouseMoveMacOS);
-			document.removeEventListener('mouseup', handleMouseUp);
-			document.body.classList.remove('cursor-col-resize');
-			resizingPageSidebar.set(false);
-		};
-
-		document.addEventListener('mousemove', handleMouseMoveMacOS);
-		document.addEventListener('mouseup', handleMouseUp);
-	};
-
-	const resizeHandlerOther = (e: MouseEvent) => {
+	const resizeHandler = (e: MouseEvent) => {
 		e.preventDefault();
 		startX = e.clientX;
 		startWidth = $pageSidebarWidth;
@@ -97,7 +51,7 @@
 
 		const handleMouseUp = () => {
 			startX = null;
-			document.removeEventListener('mousemove', handleMouseMoveOther);
+			document.removeEventListener('mousemove', handleMouseMove);
 			document.removeEventListener('mouseup', handleMouseUp);
 			document.body.classList.remove('cursor-col-resize');
 			resizingPageSidebar.set(false);
@@ -107,17 +61,14 @@
 			}
 		};
 
-		document.addEventListener('mousemove', handleMouseMoveOther);
+		document.addEventListener('mousemove', handleMouseMove);
 		document.addEventListener('mouseup', handleMouseUp);
 	};
-
-	$: resizeHandler = $platform === 'darwin' ? resizeHandlerMacOS : resizeHandlerOther;
 </script>
 
 <div
 	class={cn(
-		// TODO: Review if h-full is not a breaking change on macos, but it should be fine
-		'fixed left-12 h-full flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
+		'fixed left-12 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
 		!$isPageSidebarOpen && '-translate-x-52'
 	)}
 	style={`width: ${$pageSidebarWidth}px`}

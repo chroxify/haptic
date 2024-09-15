@@ -1,6 +1,10 @@
 name: 'test-on-pr'
 
-on: [pull_request]
+on:
+  pull_request:
+    paths:
+      - 'apps/desktop/**'
+      - 'packages/ui/**'
 
 # This workflow will build the app without publishing
 jobs:

@@ -7,8 +7,7 @@
 		editor,
 		isNoteDetailSidebarOpen,
 		noteDetailSidebarWidth,
-		resizingNoteDetailSidebar,
-		platform
+		resizingNoteDetailSidebar
 	} from '@/store';
 	import { type NoteMetadataParams } from '@/types';
 	import { formatFileSize, formatTimeAgo } from '@/utils';
@@ -30,40 +29,7 @@
 	let startX: number | null;
 	let startWidth: number;
 
-	const handleMouseMoveMacOS = (e: MouseEvent) => {
-		resizingNoteDetailSidebar.set(true);
-
-		const x = e.x;
-		const clientWidth = document.body.clientWidth;
-
-		// Set collapsing bounds
-		if (clientWidth - x < 100) {
-			resizingNoteDetailSidebar.set(false);
-			isNoteDetailSidebarOpen.set(false);
-			return;
-		} else if (clientWidth - x > 100 && !$isNoteDetailSidebarOpen) {
-			resizingNoteDetailSidebar.set(false);
-			isNoteDetailSidebarOpen.set(true);
-			return;
-		}
-
-		// Set width bounds
-		if (
-			$noteDetailSidebarWidth - e.movementX < 210 ||
-			$noteDetailSidebarWidth - e.movementX > 500
-		) {
-			return;
-		}
-
-		// Set cursor resize bounds to prevent resizing when cursor is outside of the width bounds
-		if (clientWidth - x < 245 || clientWidth - x > 550) {
-			return;
-		}
-
-		noteDetailSidebarWidth.update((value) => value - e.movementX);
-	};
-
-	const handleMouseMoveOther = (e: MouseEvent) => {
+	const handleMouseMove = (e: MouseEvent) => {
 		if (startX === null) return;
 		resizingNoteDetailSidebar.set(true);
 
@@ -92,23 +58,7 @@
 		noteDetailSidebarWidth.set(newWidth);
 	};
 
-	const resizeHandlerMacOS = () => {
-		resizingNoteDetailSidebar.set(true);
-		$editor.commands.blur();
-		document.body.classList.add('cursor-col-resize');
-
-		const handleMouseUp = () => {
-			document.removeEventListener('mousemove', handleMouseMoveMacOS);
-			document.removeEventListener('mouseup', handleMouseUp);
-			document.body.classList.remove('cursor-col-resize');
-			resizingNoteDetailSidebar.set(false);
-		};
-
-		document.addEventListener('mousemove', handleMouseMoveMacOS);
-		document.addEventListener('mouseup', handleMouseUp);
-	};
-
-	const resizeHandlerOther = (e: MouseEvent) => {
+	const resizeHandler = (e: MouseEvent) => {
 		e.preventDefault();
 		startX = e.clientX;
 		startWidth = $noteDetailSidebarWidth;
@@ -119,7 +69,7 @@
 
 		const handleMouseUp = () => {
 			startX = null;
-			document.removeEventListener('mousemove', handleMouseMoveOther);
+			document.removeEventListener('mousemove', handleMouseMove);
 			document.removeEventListener('mouseup', handleMouseUp);
 			document.body.classList.remove('cursor-col-resize');
 			resizingNoteDetailSidebar.set(false);
@@ -129,11 +79,9 @@
 			}
 		};
 
-		document.addEventListener('mousemove', handleMouseMoveOther);
+		document.addEventListener('mousemove', handleMouseMove);
 		document.addEventListener('mouseup', handleMouseUp);
 	};
-
-	$: resizeHandler = $platform === 'darwin' ? resizeHandlerMacOS : resizeHandlerOther;
 
 	// Handle reactivity for time ago values
 	function updateTimes() {
@@ -194,8 +142,7 @@
 
 <div
 	class={cn(
-		// TODO: Review if h-full is not a breaking change on macos, but it should be fine
-		'fixed right-0 h-full flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
+		'fixed right-0 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
 		!$isNoteDetailSidebarOpen && 'translate-x-full'
 	)}
 	style={`width: ${$noteDetailSidebarWidth}px`}
