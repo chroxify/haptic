@@ -4,6 +4,7 @@
 		editor,
 		isPageSidebarOpen,
 		pageSidebarWidth,
+		platform,
 		resizingPageSidebar
 	} from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
@@ -68,8 +69,9 @@
 
 <div
 	class={cn(
-		'fixed left-12 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
-		!$isPageSidebarOpen && '-translate-x-52'
+		'fixed left-12 flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
+		!$isPageSidebarOpen && '-translate-x-52',
+		$platform === 'darwin' ? 'h-[calc(100vh-4.5rem)]' : 'h-[calc(100vh-2.25rem)]'
 	)}
 	style={`width: ${$pageSidebarWidth}px`}
 >

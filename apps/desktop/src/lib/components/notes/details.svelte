@@ -7,6 +7,7 @@
 		editor,
 		isNoteDetailSidebarOpen,
 		noteDetailSidebarWidth,
+		platform,
 		resizingNoteDetailSidebar
 	} from '@/store';
 	import { type NoteMetadataParams } from '@/types';
@@ -142,8 +143,9 @@
 
 <div
 	class={cn(
-		'fixed right-0 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
-		!$isNoteDetailSidebarOpen && 'translate-x-full'
+		'fixed right-0 flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
+		!$isNoteDetailSidebarOpen && 'translate-x-full',
+		$platform === 'darwin' ? 'h-[calc(100vh-4.5rem)]' : 'h-[calc(100vh-2.25rem)]'
 	)}
 	style={`width: ${$noteDetailSidebarWidth}px`}
 >

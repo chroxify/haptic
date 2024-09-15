@@ -7,7 +7,8 @@
 		editor,
 		isPageSidebarOpen,
 		pageSidebarWidth,
-		resizingPageSidebar
+		resizingPageSidebar,
+		platform
 	} from '@/store';
 	import { Calendar } from '@haptic/ui/components/calendar';
 	import Label from '@haptic/ui/components/label/label.svelte';
@@ -172,8 +173,9 @@
 
 <div
 	class={cn(
-		'fixed left-12 h-[calc(100vh-4.5rem)] flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
-		!$isPageSidebarOpen && '-translate-x-52'
+		'fixed left-12 flex flex-col justify-start items-center bg-background overflow-y-auto transform transition-transform duration-300',
+		!$isPageSidebarOpen && '-translate-x-52',
+		$platform === 'darwin' ? 'h-[calc(100vh-4.5rem)]' : 'h-[calc(100vh-2.25rem)]'
 	)}
 	style={`width: ${$pageSidebarWidth}px`}
 >
