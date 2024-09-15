@@ -8,15 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    # Only if there are changes in apps/web/** or packages/ui/**
-    if: |
-      github.event.release &&
-      (
-        contains(github.event.release.body, '[web]') ||
-        contains(github.event.release.body, '[ui]')
-      )
-
+    
     steps:
       - uses: actions/checkout@v3
 

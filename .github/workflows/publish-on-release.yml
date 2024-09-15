@@ -10,14 +10,6 @@ jobs:
     permissions:
       contents: write
 
-    # Only if there are changes in apps/desktop/** or packages/ui/**
-    if: |
-      github.event.release &&
-      (
-        contains(github.event.release.body, '[desktop]') ||
-        contains(github.event.release.body, '[ui]')
-      )
-
     strategy:
       fail-fast: false
       matrix:
