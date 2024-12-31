@@ -5,6 +5,7 @@ import { get } from 'svelte/store';
 import { open } from '@tauri-apps/api/dialog';
 import { writeTextFile, readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
 import type { CollectionParams } from '@/types';
+import { sortFileEntry } from '@/components/shared/command-menu/helpers';
 
 // Fetch the collection entries
 export const fetchCollectionEntries = async (
@@ -19,7 +20,7 @@ export const fetchCollectionEntries = async (
 	let files = await readDir(dirPath, { recursive: true });
 
 	if (sort === 'name') {
-		files.sort((a, b) => a.name!.localeCompare(b.name!));
+		files.sort((a, b) => sortFileEntry(a, b));
 	}
 
 	// Hide dotfiles

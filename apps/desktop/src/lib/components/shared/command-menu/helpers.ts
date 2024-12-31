@@ -36,3 +36,19 @@ export const getAllItems = async (
 
 	return items;
 };
+
+export const sortFileEntry = (a: FileEntry, b: FileEntry): number => {
+	const isDirectory = (file: FileEntry) => file.children != null;
+
+	if (isDirectory(a) && isDirectory(b)) {
+		return a.name!.localeCompare(b.name!);
+	}
+	if (isDirectory(a)) {
+		return -1;
+	}
+	if (isDirectory(b)) {
+		return 1;
+	}
+
+	return a.name!.localeCompare(b.name!);
+};
