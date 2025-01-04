@@ -275,11 +275,6 @@
 		// Remove dragover event listener from document
 		document.removeEventListener('dragover', handleDragOver);
 	}
-
-	function sort(entry: FileEntry) {
-		entry.children!.sort((a, b) => sortFileEntry(a, b));
-		return entry.children;
-	}
 </script>
 
 {#each entries as entry, i}
@@ -469,7 +464,7 @@
 			<Collapsible.Content
 				class={cn('space-y-1.5 pt-1.5', entry.children.length === 0 && 'hidden')}
 			>
-				<svelte:self entries={sort(entry)} />
+				<svelte:self entries={entry.children.sort((a, b) => sortFileEntry(a, b))} />
 			</Collapsible.Content>
 		</Collapsible.Root>
 	{:else}
