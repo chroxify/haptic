@@ -104,6 +104,7 @@
 			src="https://cloud.umami.is/script.js"
 			data-website-id="279d8c15-20ea-4cc9-91b0-647c90767f15"
 		></script>
+		<script async src="https://cdn.seline.so/seline.js" data-token="d028e058129b859"></script>
 	{/if}
 </svelte:head>
 
