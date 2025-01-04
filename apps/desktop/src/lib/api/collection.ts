@@ -1,11 +1,10 @@
 import { activeFile, collection, noteHistory } from '@/store';
-import { hideDotFiles, validateHapticFolder } from '@/utils';
+import { hideDotFiles, validateHapticFolder, sortFileEntry } from '@/utils';
 import { readDir } from '@tauri-apps/api/fs';
 import { get } from 'svelte/store';
 import { open } from '@tauri-apps/api/dialog';
 import { writeTextFile, readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
 import type { CollectionParams } from '@/types';
-import { sortFileEntry } from '@/components/shared/command-menu/helpers';
 
 // Fetch the collection entries
 export const fetchCollectionEntries = async (

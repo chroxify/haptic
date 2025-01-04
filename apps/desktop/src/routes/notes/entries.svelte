@@ -12,7 +12,6 @@
 	import { cn } from '@haptic/ui/lib/utils';
 	import type { FileEntry } from '@tauri-apps/api/fs';
 	import { get } from 'svelte/store';
-	import { sortFileEntry } from '@/components/shared/command-menu/helpers';
 
 	export let entries: FileEntry[];
 	export let toggleState: 'collapse' | 'expand';
@@ -464,7 +463,7 @@
 			<Collapsible.Content
 				class={cn('space-y-1.5 pt-1.5', entry.children.length === 0 && 'hidden')}
 			>
-				<svelte:self entries={entry.children.sort((a, b) => sortFileEntry(a, b))} />
+				<svelte:self entries={entry.children} />
 			</Collapsible.Content>
 		</Collapsible.Root>
 	{:else}
