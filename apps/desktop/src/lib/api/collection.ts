@@ -1,5 +1,5 @@
 import { activeFile, collection, noteHistory } from '@/store';
-import { hideDotFiles, validateHapticFolder } from '@/utils';
+import { hideDotFiles, validateHapticFolder, sortFileEntry } from '@/utils';
 import { readDir } from '@tauri-apps/api/fs';
 import { get } from 'svelte/store';
 import { open } from '@tauri-apps/api/dialog';
@@ -19,7 +19,7 @@ export const fetchCollectionEntries = async (
 	let files = await readDir(dirPath, { recursive: true });
 
 	if (sort === 'name') {
-		files.sort((a, b) => a.name!.localeCompare(b.name!));
+		files.sort((a, b) => sortFileEntry(a, b));
 	}
 
 	// Hide dotfiles

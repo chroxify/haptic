@@ -303,3 +303,17 @@ export const getNextUntitledName = (files: FileEntry[], prefix: string, extensio
 	// This should never happen, but just in case
 	return `${prefix} ${maxNumber + 1}${extension}`;
 };
+
+export const sortFileEntry = (a: FileEntry, b: FileEntry): number => {
+	const isDirectory = (file: FileEntry) => file.children != null;
+	if (isDirectory(a) && isDirectory(b)) {
+		return naturalSort(a.name!, b.name!);
+	}
+	if (isDirectory(a)) return -1;
+	if (isDirectory(b)) return 1;
+	return naturalSort(a.name!, b.name!);
+};
+
+const naturalSort = (a: string, b: string): number => {
+	return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+};

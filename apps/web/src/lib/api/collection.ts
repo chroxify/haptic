@@ -2,7 +2,7 @@ import { db } from '@/database/client';
 import { collection as collectionTable, entry as entryTable } from '@/database/schema';
 import { activeFile, collection, collectionEntries, noteHistory } from '@/store';
 import type { FileEntry } from '@/types';
-import { buildFileTree } from '@/utils';
+import { buildFileTree, sortFileEntry } from '@/utils';
 import { and, eq } from 'drizzle-orm';
 import { get } from 'svelte/store';
 
@@ -41,7 +41,7 @@ export const fetchCollectionEntries = async (
 	const sortEntries = (entries: FileEntry[]) => {
 		entries.sort((a, b) => {
 			if (sort === 'name' && a.name && b.name) {
-				return a.name.localeCompare(b.name);
+				return sortFileEntry(a, b);
 			} else if (sort === 'date') {
 				console.warn('Sorting by date is not implemented yet');
 			}
