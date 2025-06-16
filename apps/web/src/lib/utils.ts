@@ -94,6 +94,14 @@ export function setEditorContent(content: string) {
 	});
 	$editor.view.updateState(newEditorState);
 
+	// Update word count
+	const text = $editor.getText();
+	const words = text
+		.trim()
+		.split(/\s+/)
+		.filter((word) => word.length > 0);
+	wordCount.set(words.length);
+
 	// Focus first line
 	$editor.chain().focus().run();
 }

@@ -7,7 +7,7 @@ import { cubicOut } from 'svelte/easing';
 import { get } from 'svelte/store';
 import type { TransitionConfig } from 'svelte/transition';
 import { twMerge } from 'tailwind-merge';
-import { appTheme, editor, platform } from './store';
+import { appTheme, editor, platform, wordCount } from './store';
 import type { ShortcutParams } from './types';
 
 export function cn(...inputs: ClassValue[]) {
@@ -92,6 +92,14 @@ export function setEditorContent(content: string) {
 		schema: $editor.state.schema
 	});
 	$editor.view.updateState(newEditorState);
+
+	// Update word count
+	const text = $editor.getText();
+	const words = text
+		.trim()
+		.split(/\s+/)
+		.filter((word) => word.length > 0);
+	wordCount.set(words.length);
 
 	// Focus first line
 	$editor.chain().focus().run();
