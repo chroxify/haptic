@@ -168,10 +168,10 @@
 			{/if}
 		</p>
 		{#if $wordCount > 0}
-			<p class="text-xs text-muted-foreground ml-2">
-				{$wordCount}
-				{$wordCount === 1 ? 'word' : 'words'}
-			</p>
+			<div class="flex items-center gap-1 ml-2 text-muted-foreground">
+				<Icon name="circleInfo" class="w-3.5 h-3.5" />
+				<span class="text-[13px]">{$wordCount} {$wordCount === 1 ? 'word' : 'words'}</span>
+			</div>
 		{/if}
 	</div>
 	<div class="flex gap-1.5 w-fit">
