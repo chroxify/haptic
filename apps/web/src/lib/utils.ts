@@ -8,7 +8,7 @@ import { get, readable } from 'svelte/store';
 import type { TransitionConfig } from 'svelte/transition';
 import { twMerge } from 'tailwind-merge';
 import { pgClient } from './database/client';
-import { collection, editor } from './store';
+import { collection, editor, wordCount } from './store';
 import type { FileEntry, SearchResultParams, ShortcutParams } from './types';
 
 export function cn(...inputs: ClassValue[]) {
