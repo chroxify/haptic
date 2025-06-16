@@ -5,6 +5,7 @@ import type { AppSettingsParams, CollectionSettingsParams, SettingsStateParams }
 
 const editor = createEditorStore();
 const platform = writable<'darwin' | 'linux' | 'windows'>();
+const wordCount = writable<number>(0);
 
 const activeFile = writable<string | null>(null);
 const noteHistory = writable<string[]>([]);
@@ -51,5 +52,6 @@ export {
 	pageSidebarWidth,
 	resizingNoteDetailSidebar,
 	resizingPageSidebar,
-	tooltipsOpen
+	tooltipsOpen,
+	wordCount
 };

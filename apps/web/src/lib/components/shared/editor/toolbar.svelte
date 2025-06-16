@@ -12,7 +12,8 @@
 		editorSearchActive,
 		isNoteDetailSidebarOpen,
 		isPageSidebarOpen,
-		noteHistory
+		noteHistory,
+		wordCount
 	} from '@/store';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import { cn } from '@haptic/ui/lib/utils';
@@ -166,6 +167,12 @@
 				</Button>
 			{/if}
 		</p>
+		{#if $wordCount > 0}
+			<p class="text-xs text-muted-foreground ml-2">
+				{$wordCount}
+				{$wordCount === 1 ? 'word' : 'words'}
+			</p>
+		{/if}
 	</div>
 	<div class="flex gap-1.5">
 		<Tooltip

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
-	import { editor, activeFile, collectionSettings } from '@/store';
+	import { editor, activeFile, collectionSettings, wordCount } from '@/store';
 	import StarterKit from '@tiptap/starter-kit';
 	import Document from '@tiptap/extension-document';
 	import { Typography } from '@tiptap/extension-typography';
@@ -68,6 +68,14 @@
 				// force re-render so `editor.isActive` works as expected
 				tiptapEditor = tiptapEditor;
 				editor.set(tiptapEditor);
+
+				// Calculate word count
+				const text = tiptapEditor.getText();
+				const words = text
+					.trim()
+					.split(/\s+/)
+					.filter((word) => word.length > 0);
+				wordCount.set(words.length);
 			},
 			onUpdate: async () => {
 				// If timeout before 500ms, clear it
