@@ -169,7 +169,7 @@
 		</p>
 		{#if $wordCount > 0}
 			<div class="flex items-center gap-1 ml-2 text-muted-foreground">
-				<Icon name="circleInfo" class="w-3.5 h-3.5" />
+				<Icon name="layer" class="w-3.5 h-3.5" />
 				<span class="text-[13px]">{$wordCount} {$wordCount === 1 ? 'word' : 'words'}</span>
 			</div>
 		{/if}
