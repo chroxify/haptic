@@ -8,7 +8,7 @@ import { get, readable } from 'svelte/store';
 import type { TransitionConfig } from 'svelte/transition';
 import { twMerge } from 'tailwind-merge';
 import { pgClient } from './database/client';
-import { collection, editor } from './store';
+import { collection, editor, wordCount } from './store';
 import type { FileEntry, SearchResultParams, ShortcutParams } from './types';
 
 export function cn(...inputs: ClassValue[]) {
@@ -93,6 +93,14 @@ export function setEditorContent(content: string) {
 		schema: $editor.state.schema
 	});
 	$editor.view.updateState(newEditorState);
+
+	// Update word count
+	const text = $editor.getText();
+	const words = text
+		.trim()
+		.split(/\s+/)
+		.filter((word) => word.length > 0);
+	wordCount.set(words.length);
 
 	// Focus first line
 	$editor.chain().focus().run();

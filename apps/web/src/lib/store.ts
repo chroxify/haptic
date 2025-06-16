@@ -15,6 +15,7 @@ const noteHistory = writable<string[]>([]);
 const editorMode = writable<'edit' | 'view'>('edit');
 const editorSearchValue = writable<string>('');
 const editorSearchActive = writable<boolean>(false);
+const wordCount = writable<number>(0);
 
 const collection = writable<string>();
 const collectionEntries = writable<FileEntry[]>([]);
@@ -54,5 +55,6 @@ export {
 	pageSidebarWidth,
 	resizingNoteDetailSidebar,
 	resizingPageSidebar,
-	tooltipsOpen
+	tooltipsOpen,
+	wordCount
 };

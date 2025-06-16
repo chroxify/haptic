@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { saveNote } from '@/api/notes';
 	import { SHORTCUTS } from '@/constants';
-	import { activeFile, collectionSettings, editor } from '@/store';
+	import { activeFile, collectionSettings, editor, wordCount } from '@/store';
 	import { Editor } from '@tiptap/core';
 	import CharacterCount from '@tiptap/extension-character-count';
 	import Document from '@tiptap/extension-document';
@@ -68,6 +68,14 @@
 				// force re-render so `editor.isActive` works as expected
 				tiptapEditor = tiptapEditor;
 				editor.set(tiptapEditor);
+
+				// Calculate word count
+				const text = tiptapEditor.getText();
+				const words = text
+					.trim()
+					.split(/\s+/)
+					.filter((word) => word.length > 0);
+				wordCount.set(words.length);
 			},
 			onUpdate: async () => {
 				// If timeout before 500ms, clear it

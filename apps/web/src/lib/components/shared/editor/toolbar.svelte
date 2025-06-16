@@ -12,7 +12,8 @@
 		editorSearchActive,
 		isNoteDetailSidebarOpen,
 		isPageSidebarOpen,
-		noteHistory
+		noteHistory,
+		wordCount
 	} from '@/store';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import { cn } from '@haptic/ui/lib/utils';
@@ -164,6 +165,14 @@
 				>
 					{$activeFile?.replace($collection, '').split('/')?.slice(-1)[0] ?? ''}
 				</Button>
+			{/if}
+			{#if $wordCount > 0}
+				<div class="flex items-center gap-1 ml-2">
+					<Icon name="layer" class="w-3.5 h-3.5" />
+					<span class="text-[13px] font-normal"
+						>{$wordCount} {$wordCount === 1 ? 'word' : 'words'}</span
+					>
+				</div>
 			{/if}
 		</p>
 	</div>
