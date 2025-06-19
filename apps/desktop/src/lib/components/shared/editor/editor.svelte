@@ -61,6 +61,7 @@
 	// Custom Wikilink mark
 	const WikiLink = Mark.create({
 		name: 'wikilink',
+		inclusive: false,
 
 		addAttributes() {
 			return {
@@ -132,6 +133,7 @@
 							}
 
 							// Check for completed wikilink pattern
+							// In the handleTextInput function, update the completed match handling:
 							const completedMatch = fullText.match(/\[\[([^\]]+)\]\]$/);
 							if (completedMatch) {
 								hideAutocomplete();
@@ -143,6 +145,9 @@
 								// For now, just create the text without the mark
 								tr.delete(matchStart, matchEnd);
 								tr.insertText(linkText, matchStart);
+
+								// Insert a space after to exit the mark
+								tr.insertText(' ', matchStart + linkText.length);
 
 								// Store position for async path resolution
 								const tempMark = {
@@ -164,10 +169,17 @@
 										// Create a new transaction with the mark
 										const markTr = tiptapEditor.state.tr;
 										const mark = this.type.create({
-											'data-note': matchedNote.path // FULL PATH
+											'data-note': matchedNote.path
 										});
 
+										// Add mark only to the link text, not the space
 										markTr.addMark(tempMark.start, tempMark.end, mark);
+
+										// Ensure cursor is after the space
+										markTr.setSelection(
+											tiptapEditor.state.selection.constructor.create(markTr.doc, tempMark.end + 1)
+										);
+
 										tiptapEditor.view.dispatch(markTr);
 									}
 								});
@@ -452,12 +464,18 @@
 
 			// Add the wikilink mark with the FULL PATH
 			const mark = tiptapEditor.schema.marks.wikilink.create({
-				'data-note': suggestion.path // This is the full path!
+				'data-note': suggestion.path
 			});
 			tr.addMark(matchStart, matchStart + linkText.length, mark);
 
-			// Move cursor after the link
-			tr.setSelection(state.selection.constructor.create(tr.doc, matchStart + linkText.length));
+			// Insert a space after the link and move cursor there
+			tr.insertText(' ', matchStart + linkText.length);
+
+			// Remove the mark from the space
+			tr.removeMark(matchStart + linkText.length, matchStart + linkText.length + 1, mark);
+
+			// Set cursor position after the space
+			tr.setSelection(state.selection.constructor.create(tr.doc, matchStart + linkText.length + 1));
 
 			tiptapEditor.view.dispatch(tr);
 		}
