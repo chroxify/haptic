@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '@haptic/ui/app.web.css';
 	import { Button } from '@haptic/ui/components/button';
+	const currentYear = new Date().getFullYear();
 </script>
 
 <svelte:head>
@@ -81,7 +82,7 @@
 
 	<!-- Footer -->
 	<footer class="flex items-start justify-between w-full h-16 z-10 max-w-screen-2xl px-7">
-		<p class="text-secondary-foreground/70 text-sm sm:text-[15px]">© 2024 Haptic</p>
+		<p class="text-secondary-foreground/70 text-sm sm:text-[15px]">© {currentYear} Haptic</p>
 
 		<nav class="items-center gap-4 ml-4 text-sm sm:text-[15px] hidden sm:flex -ml-20">
 			<a href="/download" class="text-secondary-foreground/70 hover:text-foreground transition-all"
