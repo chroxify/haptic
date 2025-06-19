@@ -14,8 +14,8 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@haptic/tailwind-config": "workspace:*",
 		"@haptic/eslint-config": "workspace:*",
+		"@haptic/tailwind-config": "workspace:*",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": ">=2.4.3",
@@ -60,6 +60,7 @@
 		"clsx": "^2.1.0",
 		"lucide-svelte": "^0.321.0",
 		"markdown-it": "^14.1.0",
+		"remark-wiki-link": "^2.0.1",
 		"tailwind-merge": "^2.2.1",
 		"tailwind-variants": "^0.1.20",
 		"tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra#v1",
