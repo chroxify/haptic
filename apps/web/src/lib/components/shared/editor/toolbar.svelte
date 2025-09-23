@@ -16,6 +16,7 @@
 	} from '@/store';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import { cn } from '@haptic/ui/lib/utils';
+	import { formatDisplayName } from '@/utils';
 
 	export let hideHistory: boolean = false;
 	export let hideParentDirectories: boolean = false;
@@ -148,7 +149,7 @@
 									'text-foreground font-medium'
 							)}
 						>
-							{folder}
+							{formatDisplayName(folder)}
 						</Button>
 						{#if i !== ($activeFile?.replace($collection, '').split('/') ?? [])?.length - 1}
 							<Icon name="chevron" class="w-3.5 h-3.5 inline-block" />
@@ -162,7 +163,7 @@
 					scale="sm"
 					class="h-6 text-[13px] w-fit px-1.5 text-foreground transition-all font-medium"
 				>
-					{$activeFile?.replace($collection, '').split('/')?.slice(-1)[0] ?? ''}
+					{formatDisplayName($activeFile?.replace($collection, '').split('/')?.slice(-1)[0] ?? '')}
 				</Button>
 			{/if}
 		</p>

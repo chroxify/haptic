@@ -5,7 +5,7 @@
 	import Shortcut from '@/components/shared/shortcut.svelte';
 	import { SHORTCUTS } from '@/constants';
 	import { activeFile, collection, editor, platform } from '@/store';
-	import { shortcutToString, showInFolder } from '@/utils';
+	import { shortcutToString, showInFolder, formatDisplayName } from '@/utils';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import * as Collapsible from '@haptic/ui/components/collapsible';
 	import * as ContextMenu from '@haptic/ui/components/context-menu';
@@ -333,7 +333,7 @@
 										class={cn('w-[18px] h-[18px] shrink-0', !folderOpenStates[i] && 'hidden')}
 									/>
 									<span class="text-xs truncate outline-none" autocorrect="off" spellcheck="false"
-										>{entry.name}</span
+										>{formatDisplayName(entry.name)}</span
 									>
 								</div>
 								<!-- TODO: Make this an optional feature -->
@@ -506,7 +506,9 @@
 							options={SHORTCUTS['note:show-in-folder']}
 							callback={() => !isRenaming && showInFolder(entry.path)}
 						/>
-						<span class="text-xs truncate" autocorrect="off" spellcheck="false">{entry.name}</span>
+						<span class="text-xs truncate" autocorrect="off" spellcheck="false"
+							>{formatDisplayName(entry.name)}</span
+						>
 					</Button>
 				</div>
 			</ContextMenu.Trigger>

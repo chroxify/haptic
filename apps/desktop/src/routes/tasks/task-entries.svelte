@@ -4,6 +4,7 @@
 	import * as Collapsible from '@haptic/ui/components/collapsible';
 	import Label from '@haptic/ui/components/label/label.svelte';
 	import { cn } from '@haptic/ui/lib/utils';
+	import { formatDisplayName } from '@/utils';
 	import { invoke } from '@tauri-apps/api/tauri';
 	import { ChevronDown, Loader } from 'lucide-svelte';
 	import markdownit from 'markdown-it';
@@ -132,7 +133,7 @@
 						!openState[path] ? '-rotate-90' : 'rotate-0'
 					)}
 				/>
-				<p class="truncate">{path.split('/').pop()}</p>
+				<p class="truncate">{formatDisplayName(path.split('/').pop())}</p>
 			</Collapsible.Trigger>
 			<Collapsible.Content class="mt-0.5 w-full gap-1.5 flex flex-col">
 				{#each groupedTasks[path] as result, index (result.context_preview)}

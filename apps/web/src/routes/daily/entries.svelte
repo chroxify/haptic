@@ -5,7 +5,7 @@
 	import { SHORTCUTS } from '@/constants';
 	import { activeFile } from '@/store';
 	import type { FileEntry } from '@/types';
-	import { shortcutToString } from '@/utils';
+	import { shortcutToString, formatDisplayName } from '@/utils';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import * as ContextMenu from '@haptic/ui/components/context-menu';
 	import Label from '@haptic/ui/components/label/label.svelte';
@@ -115,7 +115,7 @@
 									options={SHORTCUTS['note:delete']}
 									callback={() => deleteNote(entry.path)}
 								/>
-								<span class="text-xs truncate">{entry.name}</span>
+								<span class="text-xs truncate">{formatDisplayName(entry.name)}</span>
 							</Button>
 						</div>
 					</ContextMenu.Trigger>

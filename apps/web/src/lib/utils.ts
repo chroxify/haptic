@@ -349,6 +349,11 @@ export const getNextUntitledName = (
 	return `${prefix} ${maxNumber + 1}${extension}`;
 };
 
+export const formatDisplayName = (filename?: string): string => {
+	if (!filename) return '';
+	return filename.endsWith('.md') ? filename.slice(0, -3) : filename;
+};
+
 interface DeviceInfo {
 	isDesktop: boolean;
 	isMobileOrTablet: boolean;

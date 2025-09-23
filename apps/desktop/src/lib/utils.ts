@@ -304,6 +304,11 @@ export const getNextUntitledName = (files: FileEntry[], prefix: string, extensio
 	return `${prefix} ${maxNumber + 1}${extension}`;
 };
 
+export const formatDisplayName = (filename?: string): string => {
+	if (!filename) return '';
+	return filename.endsWith('.md') ? filename.slice(0, -3) : filename;
+};
+
 export const sortFileEntry = (a: FileEntry, b: FileEntry): number => {
 	const isDirectory = (file: FileEntry) => file.children != null;
 	if (isDirectory(a) && isDirectory(b)) {

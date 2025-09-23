@@ -4,7 +4,7 @@
 	import { getCollections, loadCollection } from '@/api/collection';
 	import { moveNote, openNote } from '@/api/notes';
 	import { activeFile, appTheme, collection } from '@/store';
-	import { formatTimeAgo, shortcutToString } from '@/utils';
+	import { formatTimeAgo, shortcutToString, formatDisplayName } from '@/utils';
 	import * as Command from '@haptic/ui/components/command';
 	import { open as browserOpen } from '@tauri-apps/api/shell';
 	import { Twitter } from 'lucide-svelte';
@@ -169,7 +169,7 @@
 								}}
 							>
 								<Icon name="folder" />
-								{folder.name.slice(1).replaceAll('/', ' > ')}
+								{formatDisplayName(folder.name.slice(1).replaceAll('/', ' > '))}
 							</Command.Item>
 						{/if}
 					{/each}
@@ -194,7 +194,7 @@
 							}}
 						>
 							<Icon name="note" />
-							{note.name.slice(1).replaceAll('/', ' > ')}
+							{formatDisplayName(note.name.slice(1).replaceAll('/', ' > '))}
 						</Command.Item>
 					{/each}
 				{:catch error}

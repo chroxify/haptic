@@ -6,7 +6,7 @@
 	import { activeFile, platform } from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
 	import { deleteNote, openNote } from '@/api/notes';
-	import { shortcutToString, showInFolder } from '@/utils';
+	import { shortcutToString, showInFolder, formatDisplayName } from '@/utils';
 	import Shortcut from '@/components/shared/shortcut.svelte';
 	import { SHORTCUTS } from '@/constants';
 	import Label from '@haptic/ui/components/label/label.svelte';
@@ -121,7 +121,7 @@
 									options={SHORTCUTS['note:show-in-folder']}
 									callback={() => showInFolder(entry.path)}
 								/>
-								<span class="text-xs truncate">{entry.name}</span>
+								<span class="text-xs truncate">{formatDisplayName(entry.name)}</span>
 							</Button>
 						</div>
 					</ContextMenu.Trigger>
