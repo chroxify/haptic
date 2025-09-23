@@ -309,6 +309,26 @@ export const formatDisplayName = (filename?: string): string => {
 	return filename.endsWith('.md') ? filename.slice(0, -3) : filename;
 };
 
+export const formatFolderPath = (path?: string): string => {
+	if (!path) return '';
+	return formatDisplayName(path.slice(1).replaceAll('/', ' > '));
+};
+
+export const formatActiveFileName = (activeFile?: string, collection?: string): string => {
+	if (!activeFile) return '';
+	const filename =
+		activeFile
+			.replace(collection || '', '')
+			.split('/')
+			.slice(-1)[0] || '';
+	return formatDisplayName(filename);
+};
+
+export const formatFileNameFromPath = (path?: string): string => {
+	if (!path) return '';
+	return formatDisplayName(path.split('/').pop() || '');
+};
+
 export const sortFileEntry = (a: FileEntry, b: FileEntry): number => {
 	const isDirectory = (file: FileEntry) => file.children != null;
 	if (isDirectory(a) && isDirectory(b)) {

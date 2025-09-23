@@ -16,7 +16,7 @@
 	} from '@/store';
 	import Button from '@haptic/ui/components/button/button.svelte';
 	import { cn } from '@haptic/ui/lib/utils';
-	import { formatDisplayName } from '@/utils';
+	import { formatDisplayName, formatActiveFileName } from '@/utils';
 
 	export let hideHistory: boolean = false;
 	export let hideParentDirectories: boolean = false;
@@ -163,7 +163,7 @@
 					scale="sm"
 					class="h-6 text-[13px] w-fit px-1.5 text-foreground transition-all font-medium"
 				>
-					{formatDisplayName($activeFile?.replace($collection, '').split('/')?.slice(-1)[0] ?? '')}
+					{formatActiveFileName($activeFile, $collection)}
 				</Button>
 			{/if}
 		</p>

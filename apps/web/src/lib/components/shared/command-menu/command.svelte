@@ -6,7 +6,7 @@
 	import { getCollections, loadCollection } from '@/api/collection';
 	import { moveNote, openNote } from '@/api/notes';
 	import { activeFile, collection } from '@/store';
-	import { formatTimeAgo, shortcutToString, formatDisplayName } from '@/utils';
+	import { formatTimeAgo, shortcutToString, formatFolderPath } from '@/utils';
 	import * as Command from '@haptic/ui/components/command';
 	import { Loader, Twitter } from 'lucide-svelte';
 	import { setMode, userPrefersMode } from 'mode-watcher';
@@ -266,7 +266,7 @@
 								}}
 							>
 								<Icon name="folder" />
-								{formatDisplayName(folder.name.slice(1).replaceAll('/', ' > '))}
+								{formatFolderPath(folder.name)}
 							</Command.Item>
 						{/if}
 					{/each}
@@ -291,7 +291,7 @@
 							}}
 						>
 							<Icon name="note" />
-							{formatDisplayName(note.name.slice(1).replaceAll('/', ' > '))}
+							{formatFolderPath(note.name)}
 						</Command.Item>
 					{/each}
 				{:catch error}

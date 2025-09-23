@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { activeFile, editor, editorSearchActive, editorSearchValue } from '@/store';
 	import { cn } from '@haptic/ui/lib/utils';
-	import { formatDisplayName } from '@/utils';
+	import { formatFileNameFromPath } from '@/utils';
 	import { openNote } from '@/api/notes';
 	import Label from '@haptic/ui/components/label/label.svelte';
 	import * as Collapsible from '@haptic/ui/components/collapsible';
@@ -99,7 +99,7 @@
 						!openState[path] ? '-rotate-90' : 'rotate-0'
 					)}
 				/>
-				<p class="truncate">{formatDisplayName(path.split('/').pop())}</p>
+				<p class="truncate">{formatFileNameFromPath(path)}</p>
 			</Collapsible.Trigger>
 			<Collapsible.Content class="mt-0.5 w-full gap-1.5 flex flex-col">
 				{#each groupedResults[path] as result, index}
